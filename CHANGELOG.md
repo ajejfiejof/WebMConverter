@@ -1,5 +1,10 @@
 - Improved updater usability and security.
 - Improved icon. (Thanks, unknown-- on GitHub)
+- Updated FFMS to 2.21
+ - You can now load videos with more than 32 tracks/attachments.
+ - Animated gifs will now preview correctly in filter forms.
+- Updated ffmpeg to git-5750d6c (2015-08-03)
+ - Is now Large Address Aware
 
 v2.18.0
 =======
