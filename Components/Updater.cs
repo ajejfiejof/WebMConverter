@@ -54,7 +54,7 @@ namespace WebMConverter.Components
             Start();
             WaitForExit();
 
-            var outputString = output.ToString();
+            var outputString = output.ToString().Trim();
 
             if (ExitCode != 0)
                 return new Tuple<bool, bool, string, string>(false, false, output.ToString(), null);

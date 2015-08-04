@@ -247,6 +247,7 @@ namespace WebMConverter
                     {
                         showToolTip("Up to date!", 1000);
                     });
+                    return;
                 }
 
                 this.InvokeIfRequired(() =>
