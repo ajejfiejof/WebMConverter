@@ -108,6 +108,7 @@ namespace WebMConverter.Updater
             if (!exeCertificate.Equals(nixxCertificate))
             {
                 Abort("The downloaded executable is not signed by a trusted developer.");
+                return;
             }
 #endif
 
