@@ -44,21 +44,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\FFMSSharp.2.0.1.0\lib\net40-Client\FFMSsharp.dll</HintPath>
     </Reference>
-    <Reference Include="GitHubUpdate, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\GitHubUpdate.1.2.0.0\lib\net45\GitHubUpdate.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Octokit">
-      <HintPath>packages\Octokit.0.3.4\lib\net45\Octokit.dll</HintPath>
-    </Reference>
-    <Reference Include="Semver">
-      <HintPath>packages\semver.1.1.2\lib\net45\Semver.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -73,11 +58,20 @@
     <Compile Include="Components\mkvextract.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Components\Updater.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Dialogs\ConverterDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dialogs\ConverterDialog.Designer.cs">
       <DependentUpon>ConverterDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\UpdateNotifyDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\UpdateNotifyDialog.designer.cs">
+      <DependentUpon>UpdateNotifyDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Filters\Deinterlace.cs" />
     <Compile Include="Filters\Denoise.cs" />

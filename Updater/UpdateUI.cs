@@ -92,7 +92,7 @@ namespace WebMConverter.Updater
             await Task.Run(() => ZipFile.ExtractToDirectory(updateZipPath, updateTempPath));
             File.Delete(updateZipPath);
 
-            X509Certificate2 nixxCertificate = new X509Certificate2("nixx.cer");
+            X509Certificate2 nixxCertificate = new X509Certificate2("trusted.cer");
             X509Certificate exeCertificate;
 #if !DEBUG
             try

@@ -8,12 +8,12 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
 using StopWatch = System.Timers.Timer;
 
-using GitHubUpdate;
 using WebMConverter.Components;
 using WebMConverter.Dialogs;
 
@@ -222,6 +222,7 @@ namespace WebMConverter
                 }
             }
 
+            /*
             try
             {
                 var checker = new UpdateChecker("nixxquality", "WebMConverter");
@@ -255,6 +256,46 @@ namespace WebMConverter
                     showToolTip("Update checking failed! " + e.Message, 2000);
                 });
             }
+            */
+
+            var checker = new Updater();
+
+            await Task.Run(() =>
+            {
+                var checkerResult = checker.Check(Application.ProductVersion);
+
+                var success = checkerResult.Item1;
+                var updateAvailable = checkerResult.Item2;
+                var newVersionOrMessage = checkerResult.Item3;
+                var changelog = checkerResult.Item4;
+
+                if (success == false)
+                {
+                    this.InvokeIfRequired(() =>
+                    {
+                        showToolTip("Update checking failed! " + newVersionOrMessage, 2000);
+                    });
+                }
+
+                if (updateAvailable == false)
+                {
+                    this.InvokeIfRequired(() =>
+                    {
+                        showToolTip("Up to date!", 1000);
+                    });
+                }
+
+                this.InvokeIfRequired(() =>
+                {
+                    var result = new UpdateNotifyDialog(newVersionOrMessage, changelog).ShowDialog(this);
+                    if (result == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(checker.UpdaterPath, @"update");
+                        Application.Exit();
+                    }
+                });
+            });
+
         }
 
         [System.Diagnostics.DebuggerStepThrough]
