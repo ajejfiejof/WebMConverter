@@ -231,19 +231,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Binaries\Win32\avcodec-55.dll">
+    <Content Include="Binaries\Win32\avcodec-56.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Binaries\Win32\avdevice-55.dll">
+    <Content Include="Binaries\Win32\avdevice-56.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Binaries\Win32\avfilter-4.dll">
+    <Content Include="Binaries\Win32\avfilter-5.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Binaries\Win32\avformat-55.dll">
+    <Content Include="Binaries\Win32\avformat-56.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Binaries\Win32\avutil-52.dll">
+    <Content Include="Binaries\Win32\avutil-54.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Binaries\Win32\ffmpeg.exe">
@@ -267,13 +267,13 @@
     <Content Include="Binaries\Win32\mkvextract.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Binaries\Win32\postproc-52.dll">
+    <Content Include="Binaries\Win32\postproc-53.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Binaries\Win32\swresample-0.dll">
+    <Content Include="Binaries\Win32\swresample-1.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Binaries\Win32\swscale-2.dll">
+    <Content Include="Binaries\Win32\swscale-3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Binaries\Win32\TDeint.dll">
