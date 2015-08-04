@@ -239,6 +239,7 @@ namespace WebMConverter
                     {
                         showToolTip("Update checking failed! " + newVersionOrMessage, 2000);
                     });
+                    return;
                 }
 
                 if (updateAvailable == false)
