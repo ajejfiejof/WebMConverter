@@ -1,4 +1,4 @@
-WebM for Retards [![Build status](https://ci.appveyor.com/api/projects/status/2pekcy840jr7atft)](https://ci.appveyor.com/project/nixxquality/webmconverter)
+WebM for Retards [![Build status](https://ci.appveyor.com/api/projects/status/g0gybayk8rw86aa1/branch/master?svg=true)](https://ci.appveyor.com/project/nixxquality/webmconverter/branch/master)
 =============
 A wrapper around ffmpeg and AviSynth made for converting videos to WebM without having to use the command line.
 
