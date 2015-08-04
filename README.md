@@ -2,7 +2,7 @@ WebM for Retards [![Build status](https://ci.appveyor.com/api/projects/status/g0
 =============
 A wrapper around ffmpeg and AviSynth made for converting videos to WebM without having to use the command line.
 
-- Download it [here](http://nixx.is-fantabulo.us/WebM for Retards/latest.zip).
+- **Download it [here](http://nixx.is-fantabulo.us/WebM for Retards/latest.zip).**
 - Don't run ffmpeg.exe you retard, run WebMConverter.exe.
 - And I shouldn't have to tell you to extract the zip file first.
 
