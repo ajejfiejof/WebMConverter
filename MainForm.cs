@@ -185,14 +185,14 @@ namespace WebMConverter
 
         async void CheckUpdate()
         {
-            if (!Properties.Settings.Default.SeenNotice)
+            if (!Properties.Settings.Default.SeenNotice2)
             {
                 try
                 {
                     using (var noticeChecker = new WebClient())
                     {
                         const string caption = "Notice";
-                        var result = await noticeChecker.DownloadStringTaskAsync(@"https://raw.githubusercontent.com/nixxquality/WebMConverter/master/NOTICE");
+                        var result = await noticeChecker.DownloadStringTaskAsync(@"http://nixx.is-fantabulo.us/WebM for Retards/NOTICE");
                         var urlAndMessage = result.Split(new[] { '\n' }, 2);
                         switch (MessageBox.Show(urlAndMessage[1], caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                         {
@@ -203,7 +203,7 @@ namespace WebMConverter
                                 Application.Exit();
                                 break;
                             case DialogResult.No:
-                                Properties.Settings.Default.SeenNotice = true;
+                                Properties.Settings.Default.SeenNotice2 = true;
                                 Properties.Settings.Default.Save();
                                 break;
                         }
@@ -221,42 +221,6 @@ namespace WebMConverter
                     }
                 }
             }
-
-            /*
-            try
-            {
-                var checker = new UpdateChecker("nixxquality", "WebMConverter");
-
-                var update = await checker.CheckUpdate();
-
-                if (update == UpdateType.None)
-                {
-                    this.InvokeIfRequired(() =>
-                    {
-                        showToolTip("Up to date!", 1000);
-                    });
-                }
-                else
-                {
-                    this.InvokeIfRequired(() =>
-                    {
-                        var result = new UpdateNotifyDialog(checker).ShowDialog(this);
-                        if (result == DialogResult.Yes)
-                        {
-                            checker.DownloadAsset("Converter.zip");
-                            Application.Exit();
-                        }
-                    });
-                }
-            }
-            catch (Exception e)
-            {
-                this.InvokeIfRequired(() =>
-                {
-                    showToolTip("Update checking failed! " + e.Message, 2000);
-                });
-            }
-            */
 
             var checker = new Updater();
 
