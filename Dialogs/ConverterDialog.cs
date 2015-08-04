@@ -205,7 +205,7 @@ namespace WebMConverter.Dialogs
                 else
                 {
                     boxOutput.AppendText(string.Format("\n\nffmpeg.exe exited with exit code {0}. That's usually bad.", process.ExitCode));
-                    boxOutput.AppendText("\nIf you have no idea what went wrong, open an issue on GitHub and copy paste the output of this window there.");
+                    boxOutput.AppendText("\nIf you have no idea what went wrong, open an issue on GitGud and copy paste the output of this window there.");
                 }
                 pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
 
