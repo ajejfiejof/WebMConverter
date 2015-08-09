@@ -1689,7 +1689,7 @@ namespace WebMConverter
                 arguments = new[] { string.Format(Template, output, options, "") };
             else
             {
-                var passlogfile = GetTemporaryFile();
+                var passlogfile = GetTemporaryLogFile();
                 arguments = new string[2]; //           vvv is Windows only
                 arguments[0] = string.Format(Template, "NUL", options, string.Format(PassArgument, 1, passlogfile));
                 arguments[1] = string.Format(Template, output, options, string.Format(PassArgument, 2, passlogfile));
@@ -2044,6 +2044,14 @@ namespace WebMConverter
         {
             var temporaryFile = Path.GetTempFileName();
             _temporaryFilesList.Add(temporaryFile);
+            return temporaryFile;
+        }
+
+        private string GetTemporaryLogFile()
+        {
+            var temporaryFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            var temporaryFileRealName = temporaryFile + "-0.log";
+            _temporaryFilesList.Add(temporaryFileRealName);
             return temporaryFile;
         }
 
