@@ -1,3 +1,6 @@
+- Fixed a bug where update checker would say "Up to date!" if Updater.exe was removed.
+- Fixed a bug where Updater.exe would crash if downloaded executable was untrusted.
+
 v2.19.0
 =======
 - Improved updater usability and security.
