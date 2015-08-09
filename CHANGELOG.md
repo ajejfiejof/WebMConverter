@@ -1,3 +1,5 @@
+v2.19.0
+=======
 - Improved updater usability and security.
 - Improved icon. (Thanks, unknown-- on GitHub)
 - Updated FFMS to 2.21
