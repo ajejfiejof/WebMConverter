@@ -1,3 +1,12 @@
+v2.19.1
+=======
+- Fixed a bug where update checker would say "Up to date!" if Updater.exe was removed.
+- Fixed a bug where Updater.exe would crash if downloaded executable was untrusted.
+- Fixed a bug where 2-pass log files would be left behind in your %temp% folder after encoding.
+- Fixed a bug where updating would fail if %temp% was on a different drive than the program.
+- Updated ffmpeg to git-1bbb5ea (2015-08-13)
+ - Fixes issue introduced in 2.19.0 where Previewing filters would be laggy
+
 v2.19.0
 =======
 - Improved updater usability and security.

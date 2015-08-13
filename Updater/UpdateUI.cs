@@ -94,7 +94,7 @@ namespace WebMConverter.Updater
 
             X509Certificate2 nixxCertificate = new X509Certificate2("trusted.cer");
             X509Certificate exeCertificate;
-#if !DEBUG
+
             try
             {
                 exeCertificate = X509Certificate.CreateFromSignedFile(updateExePath);
@@ -108,8 +108,8 @@ namespace WebMConverter.Updater
             if (!exeCertificate.Equals(nixxCertificate))
             {
                 Abort("The downloaded executable is not signed by a trusted developer.");
+                return;
             }
-#endif
 
             Step4_OverwriteAndRestart();
         }
@@ -118,30 +118,17 @@ namespace WebMConverter.Updater
         {
             try
             {
-                var entries = Directory.EnumerateFileSystemEntries(updateTempPath);
+                var source = new DirectoryInfo(updateTempPath);
+                var target = new DirectoryInfo(Environment.CurrentDirectory);
 
-                foreach (var entry in entries)
-                {
-                    var name = Path.GetFileName(entry);
-                    var entryAttributes = File.GetAttributes(entry);
-
-                    Console.WriteLine(entry);
-                    Console.WriteLine(name);
-
-                    if (Directory.Exists(name))
-                        Directory.Delete(name, true);
-                    if (File.Exists(name))
-                        File.Delete(name);
-
-                    Directory.Move(entry, name);
-                }
+                CopyAll(source, target);
             }
             catch (Exception e)
             {
                 Abort(e.Message);
             }
 
-            Directory.Delete(updateTempPath);
+            Directory.Delete(updateTempPath, true);
             Process.Start("WebMConverter.exe");
             Application.Exit();
         }
@@ -156,6 +143,25 @@ namespace WebMConverter.Updater
 
             MessageBox.Show(message, "Update failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Application.Exit();
+        }
+
+        private static void CopyAll(DirectoryInfo source, DirectoryInfo target)
+        {
+            if (Directory.Exists(target.FullName) == false)
+            {
+                Directory.CreateDirectory(target.FullName);
+            }
+
+            foreach (FileInfo fi in source.GetFiles())
+            {
+                fi.CopyTo(Path.Combine(target.ToString(), fi.Name), true);
+            }
+
+            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+            {
+                DirectoryInfo nextTargetSubDir = target.CreateSubdirectory(diSourceSubDir.Name);
+                CopyAll(diSourceSubDir, nextTargetSubDir);
+            }
         }
     }
 }
