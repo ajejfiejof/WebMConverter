@@ -36,6 +36,7 @@ namespace WebMConverter
             Levels = null;
             MultipleTrim = null;
             Overlay = null;
+            Rate = null;
             Resize = null;
             Reverse = null;
             Subtitle = null;
