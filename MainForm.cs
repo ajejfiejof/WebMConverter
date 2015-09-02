@@ -1053,6 +1053,7 @@ namespace WebMConverter
             boxAdvancedScripting.Enabled = true;
             textBoxProcessingScript.Hide();
             listViewProcessingScript.Show();
+            SarCompensate = false;
 
             if (Path.GetExtension(path) == ".avs")
             {
