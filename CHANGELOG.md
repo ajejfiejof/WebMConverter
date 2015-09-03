@@ -1,3 +1,6 @@
+- Fixed a bug where the Change Rate filter would sneakily stay around if you loaded a new input file.
+- Fixed a bug where SAR compensation settings would not be reset if you loaded a new input file.
+
 v2.19.1
 =======
 - Fixed a bug where update checker would say "Up to date!" if Updater.exe was removed.
