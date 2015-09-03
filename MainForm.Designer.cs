@@ -108,6 +108,7 @@ namespace WebMConverter
             this.buttonExportProcessing = new System.Windows.Forms.ToolStripButton();
             this.buttonPreview = new System.Windows.Forms.ToolStripButton();
             this.buttonDub = new System.Windows.Forms.ToolStripButton();
+            this.buttonRate = new System.Windows.Forms.ToolStripButton();
             this.listViewProcessingScript = new System.Windows.Forms.ListView();
             this.imageListFilters = new System.Windows.Forms.ImageList(this.components);
             this.textBoxProcessingScript = new System.Windows.Forms.TextBox();
@@ -147,7 +148,7 @@ namespace WebMConverter
             this.labelIndexingProgress = new System.Windows.Forms.Label();
             this.progressBarIndexing = new System.Windows.Forms.ProgressBar();
             this.panelHideTheOptions = new System.Windows.Forms.Panel();
-            this.buttonRate = new System.Windows.Forms.ToolStripButton();
+            this.buttonRotate = new System.Windows.Forms.ToolStripButton();
             tableMainForm = new System.Windows.Forms.TableLayoutPanel();
             groupMain = new System.Windows.Forms.GroupBox();
             tableMain = new System.Windows.Forms.TableLayoutPanel();
@@ -423,7 +424,8 @@ namespace WebMConverter
             this.buttonExportProcessing,
             this.buttonPreview,
             this.buttonDub,
-            this.buttonRate});
+            this.buttonRate,
+            this.buttonRotate});
             toolStripProcessing.Location = new System.Drawing.Point(0, 0);
             toolStripProcessing.Name = "toolStripProcessing";
             toolStripProcessing.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -450,7 +452,7 @@ namespace WebMConverter
             // 
             this.buttonMultipleTrim.AccessibleDescription = "Select many clips from your video, and sort them on a timeline.";
             this.buttonMultipleTrim.Name = "buttonMultipleTrim";
-            this.buttonMultipleTrim.Size = new System.Drawing.Size(152, 22);
+            this.buttonMultipleTrim.Size = new System.Drawing.Size(146, 22);
             this.buttonMultipleTrim.Text = "Multiple Trim";
             this.buttonMultipleTrim.Click += new System.EventHandler(this.buttonMultipleTrim_Click);
             this.buttonMultipleTrim.MouseEnter += new System.EventHandler(this.ToolStripItemTooltip);
@@ -577,6 +579,18 @@ namespace WebMConverter
             this.buttonDub.Click += new System.EventHandler(this.buttonDub_Click);
             this.buttonDub.MouseEnter += new System.EventHandler(this.ToolStripItemTooltip);
             this.buttonDub.MouseLeave += new System.EventHandler(this.clearToolTip);
+            // 
+            // buttonRate
+            // 
+            this.buttonRate.AccessibleDescription = "Speed up or slow down your video.";
+            this.buttonRate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.buttonRate.Enabled = false;
+            this.buttonRate.Name = "buttonRate";
+            this.buttonRate.Size = new System.Drawing.Size(78, 22);
+            this.buttonRate.Text = "Change Rate";
+            this.buttonRate.Click += new System.EventHandler(this.buttonRate_Click);
+            this.buttonRate.MouseEnter += new System.EventHandler(this.ToolStripItemTooltip);
+            this.buttonRate.MouseLeave += new System.EventHandler(this.clearToolTip);
             // 
             // panelProcessingInput
             // 
@@ -1820,17 +1834,17 @@ namespace WebMConverter
             this.panelHideTheOptions.Size = new System.Drawing.Size(1067, 356);
             this.panelHideTheOptions.TabIndex = 3;
             // 
-            // buttonRate
+            // buttonRotate
             // 
-            this.buttonRate.AccessibleDescription = "Speed up or slow down your video.";
-            this.buttonRate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.buttonRate.Enabled = false;
-            this.buttonRate.Name = "buttonRate";
-            this.buttonRate.Size = new System.Drawing.Size(78, 22);
-            this.buttonRate.Text = "Change Rate";
-            this.buttonRate.Click += new System.EventHandler(this.buttonRate_Click);
-            this.buttonRate.MouseEnter += new System.EventHandler(this.ToolStripItemTooltip);
-            this.buttonRate.MouseLeave += new System.EventHandler(this.clearToolTip);
+            this.buttonRotate.AccessibleDescription = "Rotate or flip your video.";
+            this.buttonRotate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.buttonRotate.Enabled = false;
+            this.buttonRotate.Name = "buttonRotate";
+            this.buttonRotate.Size = new System.Drawing.Size(45, 22);
+            this.buttonRotate.Text = "Rotate";
+            this.buttonRotate.Click += new System.EventHandler(this.buttonRotate_Click);
+            this.buttonRotate.MouseEnter += new System.EventHandler(this.ToolStripItemTooltip);
+            this.buttonRotate.MouseLeave += new System.EventHandler(this.clearToolTip);
             // 
             // MainForm
             // 
@@ -1970,5 +1984,6 @@ namespace WebMConverter
         private System.Windows.Forms.ToolStripButton buttonDub;
         private System.Windows.Forms.Button buttonAudioEnabledDefault;
         private System.Windows.Forms.ToolStripButton buttonRate;
+        private System.Windows.Forms.ToolStripButton buttonRotate;
     }
 }

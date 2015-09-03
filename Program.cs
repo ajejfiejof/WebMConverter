@@ -23,6 +23,7 @@ namespace WebMConverter
         internal static RateFilter Rate = null;
         internal static ResizeFilter Resize = null;
         internal static ReverseFilter Reverse = null;
+        internal static RotateFilter Rotate;
         internal static SubtitleFilter Subtitle = null;
         internal static TrimFilter Trim = null;
 
@@ -39,6 +40,7 @@ namespace WebMConverter
             Rate = null;
             Resize = null;
             Reverse = null;
+            Rotate = null;
             Subtitle = null;
             Trim = null;
         }
