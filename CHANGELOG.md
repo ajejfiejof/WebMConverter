@@ -1,5 +1,7 @@
 - Fixed a bug where the Change Rate filter would sneakily stay around if you loaded a new input file.
 - Fixed a bug where SAR compensation settings would not be reset if you loaded a new input file.
+- Added a workaround for files with corrupted audio.
+ - *You will not be able to make audio webms out of these, but you can use the video.*
 
 v2.19.1
 =======
