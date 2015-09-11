@@ -1150,15 +1150,15 @@ namespace WebMConverter
                 }
                 catch (Exception error)
                 {
-                    if (error.Message.StartsWith("Audio format change detected"))
+                    if (error.Message.StartsWith("Audio format change detected") || error.Message.StartsWith("Audio decoding error"))
                     {
-                        const string message = "\nIf you were planning on making a WebM with audio, I'm afraid that's not going to happen.\nWould you like to index the file without audio?";
+                        const string message = "Indexing error: {0}\nIf you were planning on making a WebM with audio, I'm afraid that's not going to happen.\nWould you like to index the file without audio?";
                         const string caption = "Error";
                         DialogResult result = DialogResult.Cancel;
 
                         this.InvokeIfRequired(() =>
                         {
-                            result = MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                            result = MessageBox.Show(string.Format(message, error.Message), caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                         });
 
                         audioDisabled = (result == DialogResult.OK);
