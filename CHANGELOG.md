@@ -1,3 +1,5 @@
+v2.20.0
+=======
 - Added a **Rotate** filter.
 - Fixed a bug where the Change Rate filter would sneakily stay around if you loaded a new input file.
 - Fixed a bug where SAR compensation settings would not be reset if you loaded a new input file.
