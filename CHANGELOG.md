@@ -1,6 +1,8 @@
 v2.20.0
 =======
 - Added a **Rotate** filter.
+- Updated FFMS2 to 2.22.
+ - This should fix some issues such as audio possibly going out-of-sync on ShadowPlay files and some videos repeating their first 10 frames or so.
 - Fixed a bug where the Change Rate filter would sneakily stay around if you loaded a new input file.
 - Fixed a bug where SAR compensation settings would not be reset if you loaded a new input file.
 - Added a workaround for files with corrupted audio.
