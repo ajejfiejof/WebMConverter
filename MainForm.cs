@@ -562,6 +562,26 @@ namespace WebMConverter
             }
         }
 
+        void buttonRotate_Click(object sender, EventArgs e)
+        {
+            using (var form = new RotateForm())
+            {
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    if (boxAdvancedScripting.Checked)
+                    {
+                        textBoxProcessingScript.AppendText(Environment.NewLine + form.GeneratedFilter);
+                    }
+                    else
+                    {
+                        Filters.Rotate = form.GeneratedFilter;
+                        listViewProcessingScript.Items.Add("Rotate", "rotate");
+                        (sender as ToolStripItem).Enabled = false;
+                    }
+                }
+            }
+        }
+
         void buttonSubtitle_Click(object sender, EventArgs e)
         {
             using (var form = new SubtitleForm())
@@ -643,6 +663,7 @@ namespace WebMConverter
             buttonRate.Enabled = enabled;
             buttonResize.Enabled = enabled;
             buttonReverse.Enabled = enabled;
+            buttonRotate.Enabled = enabled;
             buttonSubtitle.Enabled = enabled;
             buttonTrim.Enabled = enabled;
             buttonExportProcessing.Enabled = enabled;
@@ -692,6 +713,10 @@ namespace WebMConverter
                             Filters.Resize = null;
                             buttonResize.Enabled = true;
                             SetSlices();
+                            break;
+                        case "Rotate":
+                            Filters.Rotate = null;
+                            buttonRotate.Enabled = true;
                             break;
                         case "Reverse":
                             Filters.Reverse = null;
@@ -783,6 +808,15 @@ namespace WebMConverter
                         {
                             Filters.Resize = form.GeneratedFilter;
                             SetSlices();
+                        }
+                    }
+                    break;
+                case "Rotate":
+                    using (var form = new RotateForm(Filters.Rotate))
+                    {
+                        if (form.ShowDialog(this) == DialogResult.OK)
+                        {
+                            Filters.Rotate = form.GeneratedFilter;
                         }
                     }
                     break;
@@ -1053,6 +1087,7 @@ namespace WebMConverter
             boxAdvancedScripting.Enabled = true;
             textBoxProcessingScript.Hide();
             listViewProcessingScript.Show();
+            SarCompensate = false;
 
             if (Path.GetExtension(path) == ".avs")
             {
@@ -1149,15 +1184,15 @@ namespace WebMConverter
                 }
                 catch (Exception error)
                 {
-                    if (error.Message.StartsWith("Audio format change detected"))
+                    if (error.Message.StartsWith("Audio format change detected") || error.Message.StartsWith("Audio decoding error"))
                     {
-                        const string message = "\nIf you were planning on making a WebM with audio, I'm afraid that's not going to happen.\nWould you like to index the file without audio?";
+                        const string message = "Indexing error: {0}\nIf you were planning on making a WebM with audio, I'm afraid that's not going to happen.\nWould you like to index the file without audio?";
                         const string caption = "Error";
                         DialogResult result = DialogResult.Cancel;
 
                         this.InvokeIfRequired(() =>
                         {
-                            result = MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                            result = MessageBox.Show(string.Format(message, error.Message), caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                         });
 
                         audioDisabled = (result == DialogResult.OK);
@@ -1752,10 +1787,10 @@ namespace WebMConverter
                         if (duration > 0)
                             videobitrate = (int)(limit / duration / 100) - audiobitrate;
 
-                        videobitrate = (int)(videobitrate * 0.90); // VP8 a shit
+                        videobitrate = (int)(videobitrate - 200); // VP8 a shit
 
                         if (videobitrate < 0)
-                            throw new ArgumentException("Audio bitrate is too high! With that size limit, you won't be able to fit any video!");
+                            throw new ArgumentException("Your size constraints are too tight! Trim your video or lower your audio bitrate.");
                     }
 
                     /*
@@ -1954,6 +1989,8 @@ namespace WebMConverter
                 script.AppendLine(Filters.Reverse.ToString());
             if (Filters.Dub != null)
                 script.AppendLine(Filters.Dub.ToString());
+            if (Filters.Rotate != null)
+                script.AppendLine(Filters.Rotate.ToString());
 
             textBoxProcessingScript.Text = script.ToString();
         }

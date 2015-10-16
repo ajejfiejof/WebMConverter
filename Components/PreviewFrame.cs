@@ -13,12 +13,20 @@ namespace WebMConverter
         uint framenumber;
         FFMSSharp.Frame frame;
         int cachedframenumber;
+        private RotateFlipType rotateFlipType;
 
         [DefaultValue(0)]
         public int Frame
         {
             get { return (int)framenumber; }
             set { framenumber = (uint)value; GeneratePreview(); }
+        }
+
+        [DefaultValue(RotateFlipType.RotateNoneFlipNone)]
+        public RotateFlipType RotateFlip
+        {
+            get { return rotateFlipType; }
+            set { rotateFlipType = value; GeneratePreview(); }
         }
 
         public PreviewFrame()
@@ -80,6 +88,8 @@ namespace WebMConverter
                     graphics.DrawImage(frame.Bitmap, destRect, 0, 0, frame.EncodedResolution.Width, frame.EncodedResolution.Height, GraphicsUnit.Pixel, wrapMode);
                 }
             }
+
+            destImage.RotateFlip(rotateFlipType);
 
             Picture.BackgroundImage = destImage;
             Picture.ClientSize = new Size(width, height);
