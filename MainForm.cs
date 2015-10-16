@@ -562,6 +562,26 @@ namespace WebMConverter
             }
         }
 
+        void buttonRotate_Click(object sender, EventArgs e)
+        {
+            using (var form = new RotateForm())
+            {
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    if (boxAdvancedScripting.Checked)
+                    {
+                        textBoxProcessingScript.AppendText(Environment.NewLine + form.GeneratedFilter);
+                    }
+                    else
+                    {
+                        Filters.Rotate = form.GeneratedFilter;
+                        listViewProcessingScript.Items.Add("Rotate", "rotate");
+                        (sender as ToolStripItem).Enabled = false;
+                    }
+                }
+            }
+        }
+
         void buttonSubtitle_Click(object sender, EventArgs e)
         {
             using (var form = new SubtitleForm())
@@ -643,6 +663,7 @@ namespace WebMConverter
             buttonRate.Enabled = enabled;
             buttonResize.Enabled = enabled;
             buttonReverse.Enabled = enabled;
+            buttonRotate.Enabled = enabled;
             buttonSubtitle.Enabled = enabled;
             buttonTrim.Enabled = enabled;
             buttonExportProcessing.Enabled = enabled;
@@ -692,6 +713,10 @@ namespace WebMConverter
                             Filters.Resize = null;
                             buttonResize.Enabled = true;
                             SetSlices();
+                            break;
+                        case "Rotate":
+                            Filters.Rotate = null;
+                            buttonRotate.Enabled = true;
                             break;
                         case "Reverse":
                             Filters.Reverse = null;
@@ -783,6 +808,15 @@ namespace WebMConverter
                         {
                             Filters.Resize = form.GeneratedFilter;
                             SetSlices();
+                        }
+                    }
+                    break;
+                case "Rotate":
+                    using (var form = new RotateForm(Filters.Rotate))
+                    {
+                        if (form.ShowDialog(this) == DialogResult.OK)
+                        {
+                            Filters.Rotate = form.GeneratedFilter;
                         }
                     }
                     break;
@@ -1955,6 +1989,8 @@ namespace WebMConverter
                 script.AppendLine(Filters.Reverse.ToString());
             if (Filters.Dub != null)
                 script.AppendLine(Filters.Dub.ToString());
+            if (Filters.Rotate != null)
+                script.AppendLine(Filters.Rotate.ToString());
 
             textBoxProcessingScript.Text = script.ToString();
         }
