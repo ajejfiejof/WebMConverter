@@ -1787,7 +1787,7 @@ namespace WebMConverter
                         if (duration > 0)
                             videobitrate = (int)(limit / duration / 100) - audiobitrate;
 
-                        videobitrate = (int)(videobitrate - 300); // VP8 a shit
+                        videobitrate = (int)(videobitrate - 200); // VP8 a shit
 
                         if (videobitrate < 0)
                             throw new ArgumentException("Your size constraints are too tight! Trim your video or lower your audio bitrate.");
