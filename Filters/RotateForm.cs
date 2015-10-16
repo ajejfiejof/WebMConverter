@@ -1,5 +1,5 @@
-﻿
-using System;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using WebMConverter.Dialogs;
 
@@ -44,6 +44,8 @@ namespace WebMConverter
             {
                 previewFrame.Frame = Filters.MultipleTrim.Trims[0].TrimStart;
             }
+
+            rotatePictureFrame();
         }
 
         private void frameToolStripMenuItem_Click(object sender, EventArgs e)
@@ -80,12 +82,25 @@ namespace WebMConverter
             previewFrame.Frame = Filters.Trim.TrimEnd;
         }
 
+        private void checkUpdate(object sender, EventArgs e)
+        {
+            if (ReferenceEquals(sender, checkTurnNormal) ||
+                ReferenceEquals(sender, checkTurnRight) ||
+                ReferenceEquals(sender, checkTurnTwice) ||
+                ReferenceEquals(sender, checkTurnLeft))
+            {
+                checkTurnOnlyOne(sender, e);
+            }
+
+            rotatePictureFrame();
+        }
+
         private void checkTurnOnlyOne(object sender, EventArgs e)
         {
-            checkTurnNormal.CheckedChanged -= checkTurnOnlyOne;
-            checkTurnRight.CheckedChanged -= checkTurnOnlyOne;
-            checkTurnTwice.CheckedChanged -= checkTurnOnlyOne;
-            checkTurnLeft.CheckedChanged -= checkTurnOnlyOne;
+            checkTurnNormal.CheckedChanged -= checkUpdate;
+            checkTurnRight.CheckedChanged -= checkUpdate;
+            checkTurnTwice.CheckedChanged -= checkUpdate;
+            checkTurnLeft.CheckedChanged -= checkUpdate;
 
             if (!ReferenceEquals(sender, checkTurnNormal))
                 checkTurnNormal.Checked = false;
@@ -105,10 +120,60 @@ namespace WebMConverter
                 !checkTurnLeft.Checked)
                 checkTurnNormal.Checked = true;
 
-            checkTurnNormal.CheckedChanged += checkTurnOnlyOne;
-            checkTurnRight.CheckedChanged += checkTurnOnlyOne;
-            checkTurnTwice.CheckedChanged += checkTurnOnlyOne;
-            checkTurnLeft.CheckedChanged += checkTurnOnlyOne;
+            checkTurnNormal.CheckedChanged += checkUpdate;
+            checkTurnRight.CheckedChanged += checkUpdate;
+            checkTurnTwice.CheckedChanged += checkUpdate;
+            checkTurnLeft.CheckedChanged += checkUpdate;
+        }
+
+        private void rotatePictureFrame()
+        {
+            var rotateFlip = RotateFlipType.RotateNoneFlipNone;
+
+            if (checkTurnRight.Checked)
+                rotateFlip = RotateFlipType.Rotate90FlipNone;
+            if (checkTurnTwice.Checked)
+                rotateFlip = RotateFlipType.Rotate180FlipNone;
+            if (checkTurnLeft.Checked)
+                rotateFlip = RotateFlipType.Rotate270FlipNone;
+
+            switch (rotateFlip)
+            {
+                case RotateFlipType.RotateNoneFlipNone:
+                    if (checkFlipHorizontal.Checked && checkFlipVertical.Checked)
+                        rotateFlip = RotateFlipType.RotateNoneFlipXY;
+                    else if (checkFlipHorizontal.Checked)
+                        rotateFlip = RotateFlipType.RotateNoneFlipX;
+                    else if (checkFlipVertical.Checked)
+                        rotateFlip = RotateFlipType.RotateNoneFlipY;
+                    break;
+                case RotateFlipType.Rotate90FlipNone:
+                    if (checkFlipHorizontal.Checked && checkFlipVertical.Checked)
+                        rotateFlip = RotateFlipType.Rotate90FlipXY;
+                    else if(checkFlipHorizontal.Checked)
+                        rotateFlip = RotateFlipType.Rotate90FlipX;
+                    else if(checkFlipVertical.Checked)
+                        rotateFlip = RotateFlipType.Rotate90FlipY;
+                    break;
+                case RotateFlipType.Rotate180FlipNone:
+                    if (checkFlipHorizontal.Checked && checkFlipVertical.Checked)
+                        rotateFlip = RotateFlipType.Rotate180FlipXY;
+                    else if (checkFlipHorizontal.Checked)
+                        rotateFlip = RotateFlipType.Rotate180FlipX;
+                    else if (checkFlipVertical.Checked)
+                        rotateFlip = RotateFlipType.Rotate180FlipY;
+                    break;
+                case RotateFlipType.Rotate270FlipNone:
+                    if (checkFlipHorizontal.Checked && checkFlipVertical.Checked)
+                        rotateFlip = RotateFlipType.Rotate270FlipXY;
+                    else if (checkFlipHorizontal.Checked)
+                        rotateFlip = RotateFlipType.Rotate270FlipX;
+                    else if (checkFlipVertical.Checked)
+                        rotateFlip = RotateFlipType.Rotate270FlipY;
+                    break;
+            }
+
+            previewFrame.RotateFlip = rotateFlip;
         }
 
         private void buttonConfirm_Click(object sender, EventArgs e)

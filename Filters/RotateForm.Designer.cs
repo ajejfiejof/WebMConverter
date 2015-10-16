@@ -39,10 +39,10 @@
             this.endToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.previewFrame = new WebMConverter.PreviewFrame();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonConfirm = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.previewFrame = new WebMConverter.PreviewFrame();
             this.checkTurnNormal = new System.Windows.Forms.CheckBox();
             this.checkTurnRight = new System.Windows.Forms.CheckBox();
             this.checkTurnTwice = new System.Windows.Forms.CheckBox();
@@ -159,15 +159,6 @@
             this.timeToolStripMenuItem.Text = "Time";
             this.timeToolStripMenuItem.Click += new System.EventHandler(this.timeToolStripMenuItem_Click);
             // 
-            // previewFrame
-            // 
-            this.previewFrame.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.previewFrame.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.previewFrame.Location = new System.Drawing.Point(3, 3);
-            this.previewFrame.Name = "previewFrame";
-            this.previewFrame.Size = new System.Drawing.Size(738, 438);
-            this.previewFrame.TabIndex = 0;
-            // 
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -204,6 +195,16 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(744, 544);
             this.tableLayoutPanel1.TabIndex = 11;
             // 
+            // previewFrame
+            // 
+            this.previewFrame.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.previewFrame.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.previewFrame.Location = new System.Drawing.Point(3, 3);
+            this.previewFrame.Name = "previewFrame";
+            this.previewFrame.RotateFlip = System.Drawing.RotateFlipType.Rotate90FlipXY;
+            this.previewFrame.Size = new System.Drawing.Size(738, 438);
+            this.previewFrame.TabIndex = 0;
+            // 
             // checkTurnNormal
             // 
             this.checkTurnNormal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -217,7 +218,7 @@
             this.checkTurnNormal.TabIndex = 2;
             this.checkTurnNormal.Text = "é";
             this.checkTurnNormal.UseVisualStyleBackColor = true;
-            this.checkTurnNormal.CheckedChanged += new System.EventHandler(this.checkTurnOnlyOne);
+            this.checkTurnNormal.CheckedChanged += new System.EventHandler(this.checkUpdate);
             // 
             // checkTurnRight
             // 
@@ -230,7 +231,7 @@
             this.checkTurnRight.TabIndex = 3;
             this.checkTurnRight.Text = "è";
             this.checkTurnRight.UseVisualStyleBackColor = true;
-            this.checkTurnRight.CheckedChanged += new System.EventHandler(this.checkTurnOnlyOne);
+            this.checkTurnRight.CheckedChanged += new System.EventHandler(this.checkUpdate);
             // 
             // checkTurnTwice
             // 
@@ -243,7 +244,7 @@
             this.checkTurnTwice.TabIndex = 4;
             this.checkTurnTwice.Text = "ê";
             this.checkTurnTwice.UseVisualStyleBackColor = true;
-            this.checkTurnTwice.CheckedChanged += new System.EventHandler(this.checkTurnOnlyOne);
+            this.checkTurnTwice.CheckedChanged += new System.EventHandler(this.checkUpdate);
             // 
             // checkTurnLeft
             // 
@@ -256,7 +257,7 @@
             this.checkTurnLeft.TabIndex = 5;
             this.checkTurnLeft.Text = "ç";
             this.checkTurnLeft.UseVisualStyleBackColor = true;
-            this.checkTurnLeft.CheckedChanged += new System.EventHandler(this.checkTurnOnlyOne);
+            this.checkTurnLeft.CheckedChanged += new System.EventHandler(this.checkUpdate);
             // 
             // checkFlipHorizontal
             // 
@@ -269,6 +270,7 @@
             this.checkFlipHorizontal.TabIndex = 6;
             this.checkFlipHorizontal.Text = "ó";
             this.checkFlipHorizontal.UseVisualStyleBackColor = true;
+            this.checkFlipHorizontal.CheckedChanged += new System.EventHandler(this.checkUpdate);
             // 
             // checkFlipVertical
             // 
@@ -281,6 +283,7 @@
             this.checkFlipVertical.TabIndex = 7;
             this.checkFlipVertical.Text = "ô";
             this.checkFlipVertical.UseVisualStyleBackColor = true;
+            this.checkFlipVertical.CheckedChanged += new System.EventHandler(this.checkUpdate);
             // 
             // RotateForm
             // 
