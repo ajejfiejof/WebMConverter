@@ -73,18 +73,17 @@ namespace WebMConverter
         public static Dictionary<int, Tuple<string, SubtitleType, string>> SubtitleTracks; // stream id, <tag:title OR codec_name, textsub/vobsub, extension>
         public static List<string> AttachmentList;
 
-        const double closeenough = 0.1;
         static int TimeToFrame(double time)
         {
             int frame = (int)((float)VideoSource.FPSNumerator / (float)VideoSource.FPSDenominator * time);
-            double difference;
-            bool? subtracted = null;
+            double closest = double.MaxValue;
 
             FFMSSharp.Track VideoTrack = VideoSource.Track;
             FFMSSharp.FrameInfo frameinfo;
             while (true)
             {
                 frameinfo = VideoTrack.GetFrameInfo(frame);
+                double difference;
 
                 try
                 {
@@ -97,19 +96,18 @@ namespace WebMConverter
                     break;
                 }
 
-                if (Math.Abs(difference) < closeenough) break; // We've seeked close enough.
+                if (Math.Abs(difference) == closest) break; // We've seeked as close as possible.
+
+                if (Math.Abs(difference) < closest)
+                    closest = Math.Abs(difference);
 
                 if (difference < 0)
                 {
-                    if (subtracted == true) break; // This prevents us from flipping in an infinite loop, in the rare case that we can't get close enough.
                     frame += 1;
-                    subtracted = false;
                 }
                 else
                 {
-                    if (subtracted == false) break;
                     frame -= 1;
-                    subtracted = true;
                 }
 
             }

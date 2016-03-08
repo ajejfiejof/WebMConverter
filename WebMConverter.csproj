@@ -40,9 +40,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FFMSsharp, Version=2.0.1.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\FFMSSharp.2.0.1.0\lib\net40-Client\FFMSsharp.dll</HintPath>
+    <Reference Include="FFMSSharp, Version=3.0.1.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>packages\FFMSSharp.3.0.1.0\lib\net40\FFMSSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -41,7 +41,7 @@ namespace WebMConverter
         /// {1} is amount of threads to use
         /// {2} is amount of slices to split the frame into
         /// {3} is ' -metadata title="TITLE"' when specifying a title, otherwise blank
-        /// {4} is ' -quality best -lag-in-frames 16 -auto-alt-ref 1' when using HQ mode, otherwise blank
+        /// {4} is ' -lag-in-frames 16 -auto-alt-ref 1' when using HQ mode, otherwise blank
         /// {5} is 'libvpx(-vp9)' changing depending on NGOV mode
         /// {6} is ' -ac 2 -c:a libopus/libvorbis' if audio is enabled, changing depending on NGOV mode
         /// {7} is ' -r XX' if frame rate is modified, otherwise blank
@@ -55,7 +55,7 @@ namespace WebMConverter
         /// {2} is bufsize
         /// {3} is rc_init_occupancy
         /// </summary>
-        private const string ConstantVideoArguments = " -minrate:v {0}K -b:v {0}K -maxrate:v {0}K -bufsize {2}K -rc_init_occupancy {3}K -qcomp 1{1}";
+        private const string ConstantVideoArguments = " -minrate:v {0}K -b:v {0}K -maxrate:v {0}K -bufsize {2}K -rc_init_occupancy {3}K -qcomp 0{1}";
         /// <summary>
         /// {0} is audio bitrate
         /// </summary>
@@ -66,7 +66,7 @@ namespace WebMConverter
         /// {1} is crf
         /// {2} is qmax
         /// </summary>
-        private const string VariableVideoArguments = " -qmin {0} -crf {1} -qmax {2} -qcomp 0";
+        private const string VariableVideoArguments = " -qmin {0} -crf {1} -qmax {2} -qcomp 1 -b:v 0";
         /// <summary>
         /// {0} is audio quality scale
         /// </summary>
@@ -324,6 +324,17 @@ namespace WebMConverter
         #endregion
 
         #region groupMain
+
+        void textBoxIn_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (string.IsNullOrWhiteSpace(textBoxIn.Text))
+                    return;
+
+                SetFile(textBoxIn.Text);
+            }
+        }
 
         void buttonBrowseIn_Click(object sender, EventArgs e)
         {
@@ -1166,15 +1177,11 @@ namespace WebMConverter
 
                 try
                 {
-                    if (audioDisabled) // Indexing failed because of the audio, so the user disabled it.
+                    if (!audioDisabled) // Indexing failed because of the audio, so the user disabled it.
                     {
-                        List<int> indexList = new List<int>(); // An empty list means index no tracks.
-                        index = indexer.Index(indexList);
+                        indexer.SetTrackTypeIndexSettings(FFMSSharp.TrackType.Audio, true);
                     }
-                    else
-                    {
-                        index = indexer.Index();
-                    }
+                    index = indexer.Index();
                 }
                 catch (OperationCanceledException)
                 {
@@ -1184,6 +1191,8 @@ namespace WebMConverter
                 }
                 catch (Exception error)
                 {
+                    logIndexingProgress(error.Message);
+
                     if (error.Message.StartsWith("Audio format change detected") || error.Message.StartsWith("Audio decoding error"))
                     {
                         const string message = "Indexing error: {0}\nIf you were planning on making a WebM with audio, I'm afraid that's not going to happen.\nWould you like to index the file without audio?";
@@ -1439,6 +1448,7 @@ namespace WebMConverter
             {
                 if (audioDisabled == true && e.Cancelled)
                 {
+                    logIndexingProgress("Restarting indexing without audio");
                     indexbw.RunWorkerAsync();
                     return;
                 }
@@ -1787,7 +1797,7 @@ namespace WebMConverter
                         if (duration > 0)
                             videobitrate = (int)(limit / duration / 100) - audiobitrate;
 
-                        videobitrate = (int)(videobitrate - 200); // VP8 a shit
+                        videobitrate = (int)(videobitrate * 0.9); // Undershoot a slight bit
 
                         if (videobitrate < 0)
                             throw new ArgumentException("Your size constraints are too tight! Trim your video or lower your audio bitrate.");
@@ -1842,7 +1852,7 @@ namespace WebMConverter
 
             var hq = "";
             if (boxHQ.Checked)
-                hq = @" -quality best -lag-in-frames 16 -auto-alt-ref 1";
+                hq = @" -lag-in-frames 16 -auto-alt-ref 1";
 
             var vcodec = boxNGOV.Checked ? @"libvpx-vp9" : @"libvpx";
             var acodec = boxNGOV.Checked ? @"libopus" : @"libvorbis";

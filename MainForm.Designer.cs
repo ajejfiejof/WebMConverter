@@ -109,6 +109,7 @@ namespace WebMConverter
             this.buttonPreview = new System.Windows.Forms.ToolStripButton();
             this.buttonDub = new System.Windows.Forms.ToolStripButton();
             this.buttonRate = new System.Windows.Forms.ToolStripButton();
+            this.buttonRotate = new System.Windows.Forms.ToolStripButton();
             this.listViewProcessingScript = new System.Windows.Forms.ListView();
             this.imageListFilters = new System.Windows.Forms.ImageList(this.components);
             this.textBoxProcessingScript = new System.Windows.Forms.TextBox();
@@ -148,7 +149,6 @@ namespace WebMConverter
             this.labelIndexingProgress = new System.Windows.Forms.Label();
             this.progressBarIndexing = new System.Windows.Forms.ProgressBar();
             this.panelHideTheOptions = new System.Windows.Forms.Panel();
-            this.buttonRotate = new System.Windows.Forms.ToolStripButton();
             tableMainForm = new System.Windows.Forms.TableLayoutPanel();
             groupMain = new System.Windows.Forms.GroupBox();
             tableMain = new System.Windows.Forms.TableLayoutPanel();
@@ -317,6 +317,7 @@ namespace WebMConverter
             this.textBoxIn.Name = "textBoxIn";
             this.textBoxIn.Size = new System.Drawing.Size(835, 20);
             this.textBoxIn.TabIndex = 1;
+            this.textBoxIn.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxIn_KeyUp);
             // 
             // buttonBrowseIn
             // 
@@ -591,6 +592,18 @@ namespace WebMConverter
             this.buttonRate.Click += new System.EventHandler(this.buttonRate_Click);
             this.buttonRate.MouseEnter += new System.EventHandler(this.ToolStripItemTooltip);
             this.buttonRate.MouseLeave += new System.EventHandler(this.clearToolTip);
+            // 
+            // buttonRotate
+            // 
+            this.buttonRotate.AccessibleDescription = "Rotate or flip your video.";
+            this.buttonRotate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.buttonRotate.Enabled = false;
+            this.buttonRotate.Name = "buttonRotate";
+            this.buttonRotate.Size = new System.Drawing.Size(45, 22);
+            this.buttonRotate.Text = "Rotate";
+            this.buttonRotate.Click += new System.EventHandler(this.buttonRotate_Click);
+            this.buttonRotate.MouseEnter += new System.EventHandler(this.ToolStripItemTooltip);
+            this.buttonRotate.MouseLeave += new System.EventHandler(this.clearToolTip);
             // 
             // panelProcessingInput
             // 
@@ -1833,18 +1846,6 @@ namespace WebMConverter
             this.panelHideTheOptions.Name = "panelHideTheOptions";
             this.panelHideTheOptions.Size = new System.Drawing.Size(1067, 356);
             this.panelHideTheOptions.TabIndex = 3;
-            // 
-            // buttonRotate
-            // 
-            this.buttonRotate.AccessibleDescription = "Rotate or flip your video.";
-            this.buttonRotate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.buttonRotate.Enabled = false;
-            this.buttonRotate.Name = "buttonRotate";
-            this.buttonRotate.Size = new System.Drawing.Size(45, 22);
-            this.buttonRotate.Text = "Rotate";
-            this.buttonRotate.Click += new System.EventHandler(this.buttonRotate_Click);
-            this.buttonRotate.MouseEnter += new System.EventHandler(this.ToolStripItemTooltip);
-            this.buttonRotate.MouseLeave += new System.EventHandler(this.clearToolTip);
             // 
             // MainForm
             // 
