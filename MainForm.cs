@@ -325,6 +325,17 @@ namespace WebMConverter
 
         #region groupMain
 
+        void textBoxIn_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (string.IsNullOrWhiteSpace(textBoxIn.Text))
+                    return;
+
+                SetFile(textBoxIn.Text);
+            }
+        }
+
         void buttonBrowseIn_Click(object sender, EventArgs e)
         {
             using (var dialog = new OpenFileDialog())
