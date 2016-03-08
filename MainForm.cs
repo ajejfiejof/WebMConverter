@@ -1166,15 +1166,11 @@ namespace WebMConverter
 
                 try
                 {
-                    if (audioDisabled) // Indexing failed because of the audio, so the user disabled it.
+                    if (!audioDisabled) // Indexing failed because of the audio, so the user disabled it.
                     {
-                        List<int> indexList = new List<int>(); // An empty list means index no tracks.
-                        index = indexer.Index(indexList);
+                        indexer.SetTrackTypeIndexSettings(FFMSSharp.TrackType.Audio, true);
                     }
-                    else
-                    {
-                        index = indexer.Index();
-                    }
+                    index = indexer.Index();
                 }
                 catch (OperationCanceledException)
                 {
