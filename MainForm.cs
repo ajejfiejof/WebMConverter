@@ -325,7 +325,7 @@ namespace WebMConverter
 
         #region groupMain
 
-        private void textBoxIn_KeyUp(object sender, KeyEventArgs e)
+        void textBoxIn_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
