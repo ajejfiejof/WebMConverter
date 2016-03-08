@@ -1,3 +1,9 @@
+v2.20.1
+=======
+- Updated FFMS# to 3.0.1.
+- Tweaked ffmpeg arguments. Filesize targeting may be better now.
+- You can now type the name of an input file and press Enter to load it without browsing.
+
 v2.20.0
 =======
 - Added a **Rotate** filter.
