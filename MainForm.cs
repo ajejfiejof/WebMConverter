@@ -1180,6 +1180,8 @@ namespace WebMConverter
                 }
                 catch (Exception error)
                 {
+                    logIndexingProgress(error.Message);
+
                     if (error.Message.StartsWith("Audio format change detected") || error.Message.StartsWith("Audio decoding error"))
                     {
                         const string message = "Indexing error: {0}\nIf you were planning on making a WebM with audio, I'm afraid that's not going to happen.\nWould you like to index the file without audio?";
@@ -1435,6 +1437,7 @@ namespace WebMConverter
             {
                 if (audioDisabled == true && e.Cancelled)
                 {
+                    logIndexingProgress("Restarting indexing without audio");
                     indexbw.RunWorkerAsync();
                     return;
                 }
