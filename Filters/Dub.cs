@@ -121,7 +121,8 @@ namespace WebMConverter
                 };
                 _worker.DoWork += (bw, workArgs) =>
                 {
-                    var indexer = new Indexer(audioFile, Source.Lavf);
+                    var indexer = new Indexer(audioFile);
+                    indexer.SetTrackTypeIndexSettings(TrackType.Audio, true);
 
                     indexer.UpdateIndexProgress += (ind, updateArgs) =>
                     {
