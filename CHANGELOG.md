@@ -1,3 +1,7 @@
+v2.20.2
+=======
+- Fixed Dub filter (broken since 2.20.1).
+
 v2.20.1
 =======
 - Updated FFMS# to 3.0.1.
