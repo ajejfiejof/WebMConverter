@@ -997,7 +997,7 @@ namespace WebMConverter
             labelVideoBitrateUnit.Name = "labelVideoBitrateUnit";
             labelVideoBitrateUnit.Size = new System.Drawing.Size(30, 28);
             labelVideoBitrateUnit.TabIndex = 0;
-            labelVideoBitrateUnit.Text = "Kb/s";
+            labelVideoBitrateUnit.Text = "kb/s";
             labelVideoBitrateUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelVideoBitrateHint
@@ -1062,7 +1062,7 @@ namespace WebMConverter
             this.numericCrf.TabIndex = 1;
             this.numericCrf.TabStop = false;
             this.numericCrf.Value = new decimal(new int[] {
-            10,
+            30,
             0,
             0,
             0});
@@ -1106,7 +1106,7 @@ namespace WebMConverter
             this.numericCrfTolerance.TabIndex = 2;
             this.numericCrfTolerance.TabStop = false;
             this.numericCrfTolerance.Value = new decimal(new int[] {
-            20,
+            2,
             0,
             0,
             0});
@@ -1289,7 +1289,7 @@ namespace WebMConverter
             labelAudioBitrateUnit.Name = "labelAudioBitrateUnit";
             labelAudioBitrateUnit.Size = new System.Drawing.Size(30, 28);
             labelAudioBitrateUnit.TabIndex = 0;
-            labelAudioBitrateUnit.Text = "Kb/s";
+            labelAudioBitrateUnit.Text = "kb/s";
             labelAudioBitrateUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelAudioBitrateHint

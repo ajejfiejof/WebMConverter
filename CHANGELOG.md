@@ -1,3 +1,10 @@
+v2.20.3
+=======
+- Improve automatic bitrate generation. It *should* be good now.
+- Fix default values of CRF and Tolerance.
+- Fixed a crash if you tried to Play Result after you moved the output file.
+- Fixed an issue where some encoding settings wouldn't update the ffmpeg arguments properly if you pressed Enter to encode.
+
 v2.20.2
 =======
 - Fixed Dub filter (broken since 2.20.1).
