@@ -997,7 +997,7 @@ namespace WebMConverter
             labelVideoBitrateUnit.Name = "labelVideoBitrateUnit";
             labelVideoBitrateUnit.Size = new System.Drawing.Size(30, 28);
             labelVideoBitrateUnit.TabIndex = 0;
-            labelVideoBitrateUnit.Text = "Kb/s";
+            labelVideoBitrateUnit.Text = "kb/s";
             labelVideoBitrateUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelVideoBitrateHint
@@ -1289,7 +1289,7 @@ namespace WebMConverter
             labelAudioBitrateUnit.Name = "labelAudioBitrateUnit";
             labelAudioBitrateUnit.Size = new System.Drawing.Size(30, 28);
             labelAudioBitrateUnit.TabIndex = 0;
-            labelAudioBitrateUnit.Text = "Kb/s";
+            labelAudioBitrateUnit.Text = "kb/s";
             labelAudioBitrateUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelAudioBitrateHint
