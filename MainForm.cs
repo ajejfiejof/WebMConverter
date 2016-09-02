@@ -382,6 +382,11 @@ namespace WebMConverter
                 return;
             }
 
+            // access the values of the numeric boxes to force TextChanged to happen
+            var junk = numericCrf.Value;
+            junk = numericCrfTolerance.Value;
+            junk = numericAudioQuality.Value;
+
             try
             {
                 Convert();
