@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -257,7 +258,10 @@ namespace WebMConverter.Dialogs
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            Process.Start(((MainForm) Owner).textBoxOut.Text); //Play result video
+            if (!File.Exists(((MainForm)Owner).textBoxOut.Text))
+                MessageBox.Show("Output file not found! Did you move it?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+                Process.Start(((MainForm) Owner).textBoxOut.Text); //Play result video
         }
     }
 }
