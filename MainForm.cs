@@ -1795,9 +1795,7 @@ namespace WebMConverter
                         var duration = GetDuration();
 
                         if (duration > 0)
-                            videobitrate = (int)(limit / duration / 1000 * 8) - audiobitrate;
-
-                        videobitrate = (int)(videobitrate * 0.9); // Undershoot a slight bit
+                            videobitrate = (int)(limit / duration / 1024 * 8) - audiobitrate;
 
                         if (videobitrate < 0)
                             throw new ArgumentException("Your size constraints are too tight! Trim your video or lower your audio bitrate.");
