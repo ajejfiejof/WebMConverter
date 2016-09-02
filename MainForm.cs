@@ -55,11 +55,11 @@ namespace WebMConverter
         /// {2} is bufsize
         /// {3} is rc_init_occupancy
         /// </summary>
-        private const string ConstantVideoArguments = " -minrate:v {0}K -b:v {0}K -maxrate:v {0}K -bufsize {2}K -rc_init_occupancy {3}K -qcomp 0{1}";
+        private const string ConstantVideoArguments = " -minrate:v {0}k -b:v {0}k -maxrate:v {0}k -bufsize {2}k -rc_init_occupancy {3}k -qcomp 0{1}";
         /// <summary>
         /// {0} is audio bitrate
         /// </summary>
-        private const string ConstantAudioArguments = " -b:a {0}K";
+        private const string ConstantAudioArguments = " -b:a {0}k";
 
         /// <summary>
         /// {0} is qmin
@@ -1795,7 +1795,7 @@ namespace WebMConverter
                         var duration = GetDuration();
 
                         if (duration > 0)
-                            videobitrate = (int)(limit / duration / 100) - audiobitrate;
+                            videobitrate = (int)(limit / duration / 1000 * 8) - audiobitrate;
 
                         videobitrate = (int)(videobitrate * 0.9); // Undershoot a slight bit
 
