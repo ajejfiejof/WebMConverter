@@ -1062,7 +1062,7 @@ namespace WebMConverter
             this.numericCrf.TabIndex = 1;
             this.numericCrf.TabStop = false;
             this.numericCrf.Value = new decimal(new int[] {
-            10,
+            30,
             0,
             0,
             0});
@@ -1106,7 +1106,7 @@ namespace WebMConverter
             this.numericCrfTolerance.TabIndex = 2;
             this.numericCrfTolerance.TabStop = false;
             this.numericCrfTolerance.Value = new decimal(new int[] {
-            20,
+            2,
             0,
             0,
             0});
