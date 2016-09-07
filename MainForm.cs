@@ -1041,8 +1041,8 @@ namespace WebMConverter
 
             boxAudio.Checked = Properties.Settings.Default.AudioEnabled;
 
-            numericCrf.Value = 10;
-            numericCrfTolerance.Value = 20;
+            numericCrf.Value = 30;
+            numericCrfTolerance.Value = 2;
             numericAudioQuality.Value = 3;
 
             comboLevels.SelectedIndex = 0;
