@@ -10,6 +10,7 @@ namespace WebMConverter.Dialogs
     public partial class ConverterDialog : Form
     {
         private readonly string _infile;
+        private readonly string _outfile;
         private readonly string[] _arguments;
         private FFmpeg _ffmpegProcess;
 
@@ -24,12 +25,16 @@ namespace WebMConverter.Dialogs
         private readonly bool _needToPipe;
         private FFmpeg _pipeFFmpeg;
 
-        public ConverterDialog(string input, string[] args)
+        private double _induration;
+        private double _outduration;
+
+        public ConverterDialog(string input, string[] args, string output)
         {
             InitializeComponent();
             pictureStatus.BackgroundImage = StatusImages.Images["Happening"];
 
             _infile = input;
+            _outfile = output;
             _arguments = args;
             _needToPipe = Environment.Is64BitOperatingSystem;
 
@@ -60,6 +65,8 @@ namespace WebMConverter.Dialogs
                 _twopass = false;
                 argument = _arguments[0];
             }
+
+            _induration = Program.ProbeDuration(_infile, true);
 
             if (_twopass)
             {
@@ -215,8 +222,21 @@ namespace WebMConverter.Dialogs
             }
             else
             {
-                boxOutput.AppendText("\n\nVideo converted succesfully!");
-                pictureStatus.BackgroundImage = StatusImages.Images["Success"];
+                _outduration = Program.ProbeDuration(_outfile, false);
+                if (Math.Abs(_induration - _outduration) > 0.02)
+                {
+                    boxOutput.AppendText("\n\nRestraints are too high!");
+
+                    boxOutput.AppendText("\n\nYour output file was encoded successfully, but because of your filesize constraints, it's missing a bit at the end.");
+                    boxOutput.AppendText("\n\nEither raise your limit, or lower your resolution and/or bitrate.");
+
+                    pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
+                }
+                else
+                {
+                    boxOutput.AppendText("\n\nVideo converted succesfully!");
+                    pictureStatus.BackgroundImage = StatusImages.Images["Success"];
+                }
 
                 buttonPlay.Enabled = true;
             }

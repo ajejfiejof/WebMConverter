@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.XPath;
 
 namespace WebMConverter
 {
@@ -130,6 +132,22 @@ namespace WebMConverter
         internal static string FrameToTimeStamp(int frame)
         {
             return FrameToTimeSpan(frame).ToString(@"hh\:mm\:ss");
+        }
+
+        internal static double ProbeDuration(string filename, bool avs)
+        {
+            using (var prober = new FFprobe(filename, format: avs ? "-f avisynth" : "", argument: "-show_format"))
+            {
+                string streamInfo = prober.Probe();
+
+                using (var s = new System.IO.StringReader(streamInfo))
+                {
+                    var doc = new XPathDocument(s);
+                    var duration = doc.CreateNavigator()
+                        .SelectSingleNode("//ffprobe/format").GetAttribute("duration", "");
+                    return Convert.ToDouble(duration, CultureInfo.InvariantCulture);
+                }
+            }
         }
 
         /// <summary>
