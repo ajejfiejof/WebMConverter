@@ -183,6 +183,61 @@ namespace WebMConverter
                 }
             }
         }
+
+        private const int arrowKeyIncrement = 1;
+        private const int arrowKeyShiftIncrement = 10;
+        private void CaptionForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyData)
+            {
+                case Keys.Up:
+                    point.Y -= arrowKeyIncrement;
+                    break;
+                case Keys.Left:
+                    point.X -= arrowKeyIncrement;
+                    break;
+                case Keys.Right:
+                    point.X += arrowKeyIncrement;
+                    break;
+                case Keys.Down:
+                    point.Y += arrowKeyIncrement;
+                    break;
+                case Keys.Shift | Keys.Up:
+                    point.Y -= arrowKeyShiftIncrement;
+                    break;
+                case Keys.Shift | Keys.Left:
+                    point.X -= arrowKeyShiftIncrement;
+                    break;
+                case Keys.Shift | Keys.Right:
+                    point.X += arrowKeyShiftIncrement;
+                    break;
+                case Keys.Shift | Keys.Down:
+                    point.Y += arrowKeyShiftIncrement;
+                    break;
+                default:
+                    return;
+            }
+            e.SuppressKeyPress = true;
+
+            previewFrame.Picture.Invalidate();
+        }
+
+        protected override bool IsInputKey(Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Up:
+                case Keys.Left:
+                case Keys.Right:
+                case Keys.Down:
+                case Keys.Shift | Keys.Up:
+                case Keys.Shift | Keys.Left:
+                case Keys.Shift | Keys.Right:
+                case Keys.Shift | Keys.Down:
+                    return true;
+            }
+            return base.IsInputKey(keyData);
+        }
     }
 
     public class CaptionFilter

@@ -187,7 +187,6 @@
             this.previewFrame.BackColor = System.Drawing.SystemColors.ControlDark;
             this.previewFrame.Cursor = System.Windows.Forms.Cursors.SizeAll;
             this.previewFrame.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.previewFrame.Frame = 0;
             this.previewFrame.Location = new System.Drawing.Point(0, 27);
             this.previewFrame.Name = "previewFrame";
             this.previewFrame.Size = new System.Drawing.Size(744, 517);
@@ -207,6 +206,7 @@
             this.Controls.Add(this.buttonConfirm);
             this.Controls.Add(this.previewFrame);
             this.Controls.Add(this.menuStrip);
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip;
             this.MinimumSize = new System.Drawing.Size(466, 310);
             this.Name = "CaptionForm";
@@ -214,6 +214,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Caption";
             this.Load += new System.EventHandler(this.CaptionForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CaptionForm_KeyDown);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericBorderThickness)).EndInit();
