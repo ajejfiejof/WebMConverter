@@ -186,9 +186,9 @@ namespace WebMConverter
 
         private const int arrowKeyIncrement = 1;
         private const int arrowKeyShiftIncrement = 10;
-        private void CaptionForm_KeyDown(object sender, KeyEventArgs e)
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            switch (e.KeyData)
+            switch (keyData)
             {
                 case Keys.Up:
                     point.Y -= arrowKeyIncrement;
@@ -215,28 +215,11 @@ namespace WebMConverter
                     point.Y += arrowKeyShiftIncrement;
                     break;
                 default:
-                    return;
+                    return base.ProcessCmdKey(ref msg, keyData);
             }
-            e.SuppressKeyPress = true;
 
             previewFrame.Picture.Invalidate();
-        }
-
-        protected override bool IsInputKey(Keys keyData)
-        {
-            switch (keyData)
-            {
-                case Keys.Up:
-                case Keys.Left:
-                case Keys.Right:
-                case Keys.Down:
-                case Keys.Shift | Keys.Up:
-                case Keys.Shift | Keys.Left:
-                case Keys.Shift | Keys.Right:
-                case Keys.Shift | Keys.Down:
-                    return true;
-            }
-            return base.IsInputKey(keyData);
+            return true;
         }
     }
 
