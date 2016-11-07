@@ -346,6 +346,68 @@ namespace WebMConverter
         {
             previewFrame.Frame = Filters.Trim.TrimEnd;
         }
+
+        private const float arrowKeyIncrement = 0.001f;
+        private const float arrowKeyShiftIncrement = 0.01f;
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Up:
+                    cropPercent.Y -= arrowKeyIncrement;
+                    break;
+                case Keys.Left:
+                    cropPercent.X -= arrowKeyIncrement;
+                    break;
+                case Keys.Right:
+                    cropPercent.X += arrowKeyIncrement;
+                    break;
+                case Keys.Down:
+                    cropPercent.Y += arrowKeyIncrement;
+                    break;
+                case Keys.Shift | Keys.Up:
+                    cropPercent.Y -= arrowKeyShiftIncrement;
+                    break;
+                case Keys.Shift | Keys.Left:
+                    cropPercent.X -= arrowKeyShiftIncrement;
+                    break;
+                case Keys.Shift | Keys.Right:
+                    cropPercent.X += arrowKeyShiftIncrement;
+                    break;
+                case Keys.Shift | Keys.Down:
+                    cropPercent.Y += arrowKeyShiftIncrement;
+                    break;
+                case Keys.Alt | Keys.Up:
+                    cropPercent.Height = Math.Max(0, cropPercent.Height - arrowKeyIncrement);
+                    break;
+                case Keys.Alt | Keys.Left:
+                    cropPercent.Width = Math.Max(0, cropPercent.Width - arrowKeyIncrement);
+                    break;
+                case Keys.Alt | Keys.Right:
+                    cropPercent.Width += arrowKeyIncrement;
+                    break;
+                case Keys.Alt | Keys.Down:
+                    cropPercent.Height += arrowKeyIncrement;
+                    break;
+                case Keys.Alt | Keys.Shift | Keys.Up:
+                    cropPercent.Height = Math.Max(0, cropPercent.Height - arrowKeyShiftIncrement);
+                    break;
+                case Keys.Alt | Keys.Shift | Keys.Left:
+                    cropPercent.Width = Math.Max(0, cropPercent.Width - arrowKeyShiftIncrement);
+                    break;
+                case Keys.Alt | Keys.Shift | Keys.Right:
+                    cropPercent.Width += arrowKeyShiftIncrement;
+                    break;
+                case Keys.Alt | Keys.Shift | Keys.Down:
+                    cropPercent.Height += arrowKeyShiftIncrement;
+                    break;
+                default:
+                    return base.ProcessCmdKey(ref msg, keyData);
+            }
+
+            previewFrame.Picture.Invalidate();
+            return true;
+        }
     }
 
     public class CropFilter
