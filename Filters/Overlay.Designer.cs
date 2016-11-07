@@ -149,7 +149,6 @@
             this.Controls.Add(this.buttonConfirm);
             this.Controls.Add(this.previewFrame);
             this.Controls.Add(this.menuStrip);
-            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip;
             this.MinimumSize = new System.Drawing.Size(466, 310);
             this.Name = "OverlayForm";
@@ -157,7 +156,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Overlay";
             this.Load += new System.EventHandler(this.OverlayForm_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OverlayForm_KeyDown);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
