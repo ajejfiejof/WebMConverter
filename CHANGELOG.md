@@ -1,3 +1,5 @@
+v2.21.0
+=======
 - Update FFMS2 to 2.23
  - FRAPS videos work again!
  - GIFs work again!
