@@ -183,6 +183,44 @@ namespace WebMConverter
                 }
             }
         }
+
+        private const int arrowKeyIncrement = 1;
+        private const int arrowKeyShiftIncrement = 10;
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Up:
+                    point.Y -= arrowKeyIncrement;
+                    break;
+                case Keys.Left:
+                    point.X -= arrowKeyIncrement;
+                    break;
+                case Keys.Right:
+                    point.X += arrowKeyIncrement;
+                    break;
+                case Keys.Down:
+                    point.Y += arrowKeyIncrement;
+                    break;
+                case Keys.Shift | Keys.Up:
+                    point.Y -= arrowKeyShiftIncrement;
+                    break;
+                case Keys.Shift | Keys.Left:
+                    point.X -= arrowKeyShiftIncrement;
+                    break;
+                case Keys.Shift | Keys.Right:
+                    point.X += arrowKeyShiftIncrement;
+                    break;
+                case Keys.Shift | Keys.Down:
+                    point.Y += arrowKeyShiftIncrement;
+                    break;
+                default:
+                    return base.ProcessCmdKey(ref msg, keyData);
+            }
+
+            previewFrame.Picture.Invalidate();
+            return true;
+        }
     }
 
     public class CaptionFilter
