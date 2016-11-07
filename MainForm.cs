@@ -691,64 +691,7 @@ namespace WebMConverter
             {
                 foreach (ListViewItem item in (sender as ListView).SelectedItems)
                 {
-                    switch (item.Text)
-                    {
-                        case "Caption":
-                            Filters.Caption = null;
-                            buttonCaption.Enabled = true;
-                            break;
-                        case "Crop":
-                            Filters.Crop = null;
-                            buttonCrop.Enabled = true;
-                            SetSlices();
-                            break;
-                        case @"Dub":
-                            var oldfilter = Filters.Dub;
-                            Filters.Dub = null;
-                            buttonDub.Enabled = true;
-                            if (oldfilter.Mode != DubMode.TrimAudio) // the video duration may have changed
-                                UpdateArguments(sender, e);
-                            if (!Program.InputHasAudio)
-                                boxAudio.Checked = boxAudio.Enabled = false;
-                            break;
-                        case "Multiple Trim":
-                            Filters.MultipleTrim = null;
-                            buttonTrim.Enabled = true;
-                            UpdateArguments(sender, e);
-                            break;
-                        case "Overlay":
-                            Filters.Overlay = null;
-                            buttonOverlay.Enabled = true;
-                            break;
-                        case "Rate":
-                            Filters.Rate = null;
-                            buttonRate.Enabled = true;
-                            UpdateArguments(sender, e);
-                            break;
-                        case "Resize":
-                            Filters.Resize = null;
-                            buttonResize.Enabled = true;
-                            SetSlices();
-                            break;
-                        case "Rotate":
-                            Filters.Rotate = null;
-                            buttonRotate.Enabled = true;
-                            break;
-                        case "Reverse":
-                            Filters.Reverse = null;
-                            buttonReverse.Enabled = true;
-                            break;
-                        case "Subtitle":
-                            Filters.Subtitle = null;
-                            buttonSubtitle.Enabled = true;
-                            break;
-                        case "Trim":
-                            Filters.Trim = null;
-                            buttonTrim.Enabled = true;
-                            GenerateArguments();
-                            break;
-                    }
-                    (sender as ListView).Items.Remove(item);
+                    removeFilter(item);
                 }
             }
         }
@@ -857,6 +800,89 @@ namespace WebMConverter
                     break;
                 default:
                     MessageBox.Show("This filter has no options.");
+                    break;
+            }
+        }
+
+        private void listViewProcessingScript_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (listViewProcessingScript.FocusedItem.Bounds.Contains(e.Location))
+                {
+                    listViewContextMenu.Show(listViewProcessingScript, e.Location);
+                }
+            }
+        }
+
+        private void listViewContextMenuEdit_Click(object sender, EventArgs e)
+        {
+            listViewProcessingScript_ItemActivate(listViewProcessingScript, e);
+        }
+
+        private void listViewContextMenuDelete_Click(object sender, EventArgs e)
+        {
+            removeFilter(listViewProcessingScript.FocusedItem);
+        }
+
+        void removeFilter(ListViewItem filterListViewItem)
+        {
+            listViewProcessingScript.Items.Remove(filterListViewItem);
+            switch (filterListViewItem.Text)
+            {
+                case "Caption":
+                    Filters.Caption = null;
+                    buttonCaption.Enabled = true;
+                    break;
+                case "Crop":
+                    Filters.Crop = null;
+                    buttonCrop.Enabled = true;
+                    SetSlices();
+                    break;
+                case @"Dub":
+                    var oldfilter = Filters.Dub;
+                    Filters.Dub = null;
+                    buttonDub.Enabled = true;
+                    if (oldfilter.Mode != DubMode.TrimAudio) // the video duration may have changed
+                        UpdateArguments();
+                    if (!Program.InputHasAudio)
+                        boxAudio.Checked = boxAudio.Enabled = false;
+                    break;
+                case "Multiple Trim":
+                    Filters.MultipleTrim = null;
+                    buttonTrim.Enabled = true;
+                    UpdateArguments();
+                    break;
+                case "Overlay":
+                    Filters.Overlay = null;
+                    buttonOverlay.Enabled = true;
+                    break;
+                case "Rate":
+                    Filters.Rate = null;
+                    buttonRate.Enabled = true;
+                    UpdateArguments();
+                    break;
+                case "Resize":
+                    Filters.Resize = null;
+                    buttonResize.Enabled = true;
+                    SetSlices();
+                    break;
+                case "Rotate":
+                    Filters.Rotate = null;
+                    buttonRotate.Enabled = true;
+                    break;
+                case "Reverse":
+                    Filters.Reverse = null;
+                    buttonReverse.Enabled = true;
+                    break;
+                case "Subtitle":
+                    Filters.Subtitle = null;
+                    buttonSubtitle.Enabled = true;
+                    break;
+                case "Trim":
+                    Filters.Trim = null;
+                    buttonTrim.Enabled = true;
+                    GenerateArguments();
                     break;
             }
         }
@@ -1041,8 +1067,8 @@ namespace WebMConverter
 
             boxAudio.Checked = Properties.Settings.Default.AudioEnabled;
 
-            numericCrf.Value = 10;
-            numericCrfTolerance.Value = 20;
+            numericCrf.Value = 30;
+            numericCrfTolerance.Value = 2;
             numericAudioQuality.Value = 3;
 
             comboLevels.SelectedIndex = 0;
@@ -1599,6 +1625,10 @@ namespace WebMConverter
 
         void UpdateArguments(object sender, EventArgs e)
         {
+            UpdateArguments();
+        }
+        void UpdateArguments()
+        {
             if (Program.InputFile == null)
                 return;
 
@@ -1748,7 +1778,7 @@ namespace WebMConverter
                     arguments[0] = arguments[0].Replace("-c:v libvpx", "-an -c:v libvpx"); // ugly as hell
             }
 
-            new ConverterDialog(avsFileName, arguments).ShowDialog(this);
+            new ConverterDialog(avsFileName, arguments, output).ShowDialog(this);
         }
 
         string GenerateArguments()

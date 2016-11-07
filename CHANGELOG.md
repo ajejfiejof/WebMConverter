@@ -1,3 +1,15 @@
+v2.21.0
+=======
+- Update FFMS2 to 2.23
+ - FRAPS videos work again!
+ - GIFs work again!
+ - Hi444p videos work!
+- Double-fix default values of CTF and Tolerance.
+- You now get a warning if your file was cut off during encoding, due to too harsh constraints.
+- You can now use your arrow keys for greater precision when editing Caption, Overlay and Crop filters.
+ - Hold Shift to go faster and Alt to resize (Crop only)
+- You can now right click filters in the list view for a context menu.
+
 v2.20.3
 =======
 - Improve automatic bitrate generation. It *should* be good now.

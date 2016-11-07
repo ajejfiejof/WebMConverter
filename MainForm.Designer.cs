@@ -149,6 +149,9 @@ namespace WebMConverter
             this.labelIndexingProgress = new System.Windows.Forms.Label();
             this.progressBarIndexing = new System.Windows.Forms.ProgressBar();
             this.panelHideTheOptions = new System.Windows.Forms.Panel();
+            this.listViewContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.listViewContextMenuEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.listViewContextMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
             tableMainForm = new System.Windows.Forms.TableLayoutPanel();
             groupMain = new System.Windows.Forms.GroupBox();
             tableMain = new System.Windows.Forms.TableLayoutPanel();
@@ -247,6 +250,7 @@ namespace WebMConverter
             statusStrip.SuspendLayout();
             this.panelContainTheProgressBar.SuspendLayout();
             this.panelHideTheOptions.SuspendLayout();
+            this.listViewContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableMainForm
@@ -629,6 +633,7 @@ namespace WebMConverter
             this.listViewProcessingScript.UseCompatibleStateImageBehavior = false;
             this.listViewProcessingScript.ItemActivate += new System.EventHandler(this.listViewProcessingScript_ItemActivate);
             this.listViewProcessingScript.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewProcessingScript_KeyUp);
+            this.listViewProcessingScript.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listViewProcessingScript_MouseClick);
             this.listViewProcessingScript.MouseEnter += new System.EventHandler(this.ControlTooltip);
             this.listViewProcessingScript.MouseLeave += new System.EventHandler(this.clearToolTip);
             // 
@@ -1847,6 +1852,28 @@ namespace WebMConverter
             this.panelHideTheOptions.Size = new System.Drawing.Size(1067, 356);
             this.panelHideTheOptions.TabIndex = 3;
             // 
+            // listViewContextMenu
+            // 
+            this.listViewContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.listViewContextMenuEdit,
+            this.listViewContextMenuDelete});
+            this.listViewContextMenu.Name = "listViewContextMenu";
+            this.listViewContextMenu.Size = new System.Drawing.Size(153, 70);
+            // 
+            // listViewContextMenuEdit
+            // 
+            this.listViewContextMenuEdit.Name = "listViewContextMenuEdit";
+            this.listViewContextMenuEdit.Size = new System.Drawing.Size(152, 22);
+            this.listViewContextMenuEdit.Text = "Edit...";
+            this.listViewContextMenuEdit.Click += new System.EventHandler(this.listViewContextMenuEdit_Click);
+            // 
+            // listViewContextMenuDelete
+            // 
+            this.listViewContextMenuDelete.Name = "listViewContextMenuDelete";
+            this.listViewContextMenuDelete.Size = new System.Drawing.Size(152, 22);
+            this.listViewContextMenuDelete.Text = "Delete";
+            this.listViewContextMenuDelete.Click += new System.EventHandler(this.listViewContextMenuDelete_Click);
+            // 
             // MainForm
             // 
             this.AcceptButton = this.buttonGo;
@@ -1922,6 +1949,7 @@ namespace WebMConverter
             this.panelContainTheProgressBar.PerformLayout();
             this.panelHideTheOptions.ResumeLayout(false);
             this.panelHideTheOptions.PerformLayout();
+            this.listViewContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1986,5 +2014,8 @@ namespace WebMConverter
         private System.Windows.Forms.Button buttonAudioEnabledDefault;
         private System.Windows.Forms.ToolStripButton buttonRate;
         private System.Windows.Forms.ToolStripButton buttonRotate;
+        private System.Windows.Forms.ContextMenuStrip listViewContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem listViewContextMenuEdit;
+        private System.Windows.Forms.ToolStripMenuItem listViewContextMenuDelete;
     }
 }
