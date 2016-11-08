@@ -1347,6 +1347,9 @@ namespace WebMConverter
                                         // See: https://github.com/nixxquality/WebMConverter/issues/89
                                     }
 
+                                    // Check if this is a Hi444p video - if so, we'll need to do something weird if you wanna add subs later.
+                                    Program.InputHasWeirdPixelFormat = nav.GetAttribute("pix_fmt", "").StartsWith("yuv444p");
+
                                     // Probe for sample aspect ratio
                                     string[] sar = null, dar = null;
 

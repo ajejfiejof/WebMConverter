@@ -70,6 +70,7 @@ namespace WebMConverter
         public static string InputFile;
         public static FileType InputType;
         public static bool InputHasAudio;
+        public static bool InputHasWeirdPixelFormat; // for something that xy-VSFilter can't render on
         public static string FileMd5;
         public static string AttachmentDirectory;
         public static Dictionary<int, Tuple<string, SubtitleType, string>> SubtitleTracks; // stream id, <tag:title OR codec_name, textsub/vobsub, extension>
