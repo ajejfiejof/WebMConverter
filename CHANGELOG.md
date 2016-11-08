@@ -1,3 +1,8 @@
+v2.21.1
+=======
+- Fixed cutoff detection.
+- Will now detect and convert Hi444p video if you wanna hardsub something, cause xy-VSFilter doesn't support it.
+
 v2.21.0
 =======
 - Update FFMS2 to 2.23

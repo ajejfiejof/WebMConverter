@@ -223,7 +223,7 @@ namespace WebMConverter.Dialogs
             else
             {
                 _outduration = Program.ProbeDuration(_outfile, false);
-                if (Math.Abs(_induration - _outduration) > 0.02)
+                if (Math.Abs(_induration - _outduration) > 0.001)
                 {
                     boxOutput.AppendText("\n\nRestraints are too high!");
 

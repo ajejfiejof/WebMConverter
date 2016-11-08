@@ -70,6 +70,7 @@ namespace WebMConverter
         public static string InputFile;
         public static FileType InputType;
         public static bool InputHasAudio;
+        public static bool InputHasWeirdPixelFormat; // for something that xy-VSFilter can't render on
         public static string FileMd5;
         public static string AttachmentDirectory;
         public static Dictionary<int, Tuple<string, SubtitleType, string>> SubtitleTracks; // stream id, <tag:title OR codec_name, textsub/vobsub, extension>
@@ -143,9 +144,11 @@ namespace WebMConverter
                 using (var s = new System.IO.StringReader(streamInfo))
                 {
                     var doc = new XPathDocument(s);
-                    var duration = doc.CreateNavigator()
-                        .SelectSingleNode("//ffprobe/format").GetAttribute("duration", "");
-                    return Convert.ToDouble(duration, CultureInfo.InvariantCulture);
+                    var format = doc.CreateNavigator()
+                        .SelectSingleNode("//ffprobe/format");
+                    var duration = Convert.ToDouble(format.GetAttribute("duration", ""), CultureInfo.InvariantCulture);
+                    var startTime = Convert.ToDouble(format.GetAttribute("start_time", ""), CultureInfo.InvariantCulture);
+                    return duration - startTime;
                 }
             }
         }

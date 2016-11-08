@@ -13,6 +13,13 @@ namespace WebMConverter
         {
             InitializeComponent();
 
+            if (Program.InputHasWeirdPixelFormat)
+            {
+                MessageBox.Show(
+                    "Your input video is Hi444p! That's cool, but the subtitle renderer can't deal with that pixel format.\nIf you add subtitles to your webm, we'll have to convert it to something a bit less cool.\nIt's handed automatically, though. Don't worry.",
+                    "FYI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
             if (Program.SubtitleTracks.Count == 0)
             {
                 checkBoxInternalSubs.Checked = false;
@@ -113,12 +120,14 @@ namespace WebMConverter
 
         public override string ToString()
         {
+            var conversion = Program.InputHasWeirdPixelFormat ? "ConvertToYV12() " : "";
+
             switch (Type)
             {
                 case SubtitleType.TextSub:
-                    return string.Format(@"textsub(""{0}"")", FileName);
+                    return string.Format(@"{1}textsub(""{0}"")", FileName, conversion);
                 case SubtitleType.VobSub:
-                    return string.Format(@"vobsub(""{0}"")", FileName);
+                    return string.Format(@"{1}vobsub(""{0}"")", FileName, conversion);
                 default:
                     throw new NotImplementedException();
             }
