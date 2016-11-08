@@ -223,12 +223,14 @@ namespace WebMConverter.Dialogs
             else
             {
                 _outduration = Program.ProbeDuration(_outfile, false);
-                if (Math.Abs(_induration - _outduration) > 0.001)
+                if (Math.Abs(_induration - _outduration) > 0.01)
                 {
                     boxOutput.AppendText("\n\nRestraints are too high!");
 
                     boxOutput.AppendText("\n\nYour output file was encoded successfully, but because of your filesize constraints, it's missing a bit at the end.");
                     boxOutput.AppendText("\n\nEither raise your limit, or lower your resolution and/or bitrate.");
+
+                    boxOutput.AppendText(string.Format("\n\nAmount of video lost: {0}s", Math.Abs(_induration - _outduration)));
 
                     pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
                 }

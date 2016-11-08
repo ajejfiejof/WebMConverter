@@ -1,3 +1,5 @@
+- Double-fixed cutoff detection.
+
 v2.21.1
 =======
 - Fixed cutoff detection.
