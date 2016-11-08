@@ -1,3 +1,5 @@
+- Fixed cutoff detection.
+
 v2.21.0
 =======
 - Update FFMS2 to 2.23

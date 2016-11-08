@@ -143,9 +143,11 @@ namespace WebMConverter
                 using (var s = new System.IO.StringReader(streamInfo))
                 {
                     var doc = new XPathDocument(s);
-                    var duration = doc.CreateNavigator()
-                        .SelectSingleNode("//ffprobe/format").GetAttribute("duration", "");
-                    return Convert.ToDouble(duration, CultureInfo.InvariantCulture);
+                    var format = doc.CreateNavigator()
+                        .SelectSingleNode("//ffprobe/format");
+                    var duration = Convert.ToDouble(format.GetAttribute("duration", ""), CultureInfo.InvariantCulture);
+                    var startTime = Convert.ToDouble(format.GetAttribute("start_time", ""), CultureInfo.InvariantCulture);
+                    return duration - startTime;
                 }
             }
         }
