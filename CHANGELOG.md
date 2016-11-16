@@ -1,4 +1,5 @@
 - Double-fixed cutoff detection.
+- Fixed an issue with cutoff detection where a broken input file would cause an application crash.
 
 v2.21.1
 =======

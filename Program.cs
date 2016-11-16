@@ -146,6 +146,10 @@ namespace WebMConverter
                     var doc = new XPathDocument(s);
                     var format = doc.CreateNavigator()
                         .SelectSingleNode("//ffprobe/format");
+                    
+                    if (format == null)
+                        return -1;
+
                     var duration = Convert.ToDouble(format.GetAttribute("duration", ""), CultureInfo.InvariantCulture);
                     var startTime = Convert.ToDouble(format.GetAttribute("start_time", ""), CultureInfo.InvariantCulture);
                     return duration - startTime;
