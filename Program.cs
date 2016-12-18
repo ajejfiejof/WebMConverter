@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Management;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -157,6 +159,29 @@ namespace WebMConverter
             }
         }
 
+        internal static void KillProcessAndChildren(int pid)
+        {
+            var processSearcher = new ManagementObjectSearcher
+              ("Select * From Win32_Process Where ParentProcessID=" + pid);
+            var processCollection = processSearcher.Get();
+
+            try
+            {
+                var proc = Process.GetProcessById(pid);
+                if (!proc.HasExited) proc.Kill();
+            }
+            catch (ArgumentException)
+            {
+                // Process already exited.
+            }
+
+            foreach (var mo in processCollection)
+            {
+                KillProcessAndChildren(Convert.ToInt32(mo["ProcessID"])); //kill child processes(also kills childrens of childrens etc.)
+            }
+
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -178,6 +203,8 @@ namespace WebMConverter
                 Properties.Settings.Default.TryUpgrade = false;
                 Properties.Settings.Default.Save();
             }
+
+            Task.Factory.StartNew(VideoDownload.CheckIfDownloadIsEnabled);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

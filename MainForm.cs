@@ -327,10 +327,27 @@ namespace WebMConverter
 
         void textBoxIn_KeyUp(object sender, KeyEventArgs e)
         {
+            if (textBoxIn.Text.StartsWith("http"))
+            {
+                // turn buttonBrowseIn into a download button
+                buttonBrowseIn.Text = "Download";
+            }
+            else
+            {
+                buttonBrowseIn.Text = "Browse";
+            }
+
             if (e.KeyCode == Keys.Enter)
             {
                 if (string.IsNullOrWhiteSpace(textBoxIn.Text))
                     return;
+
+                if (textBoxIn.Text.StartsWith("http"))
+                {
+                    // download
+                    buttonBrowseIn_Click(sender, null);
+                    return;
+                }
 
                 SetFile(textBoxIn.Text);
             }
@@ -338,19 +355,52 @@ namespace WebMConverter
 
         void buttonBrowseIn_Click(object sender, EventArgs e)
         {
-            using (var dialog = new OpenFileDialog())
+            if (textBoxIn.Text.StartsWith("http"))
             {
-                dialog.CheckFileExists = true;
-                dialog.CheckPathExists = true;
-                dialog.ValidateNames = true;
-                dialog.InitialDirectory = Properties.Settings.Default.RememberedFolderIn;
+                // we're a download button right now
+                if (!VideoDownload.DownloadEnabled)
+                {
+                    var result = MessageBox.Show(
+                        "Couldn't find Youtube-DL. Either download it and put it somewhere in your %PATH%, or place it next to WebMConverter.exe.\nYou can download it from http://yt-dl.org/",
+                        "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                    if (result == DialogResult.Retry)
+                    {
+                        VideoDownload.CheckIfDownloadIsEnabled();
+                        buttonBrowseIn_Click(sender, e);
+                        return;
+                    }
+                }
 
-                if (dialog.ShowDialog(this) != DialogResult.OK || string.IsNullOrWhiteSpace(dialog.FileName))
-                    return;
+                using (var dialog = new DownloadDialog(textBoxIn.Text))
+                {
+                    var result = dialog.ShowDialog(this);
 
-                SetFile(dialog.FileName);
-                Properties.Settings.Default.RememberedFolderIn = Path.GetDirectoryName(dialog.FileName);
-                Properties.Settings.Default.Save();
+                    if (result == DialogResult.OK)
+                    {
+                        var url = textBoxIn.Text;
+                        textBoxIn.Text = dialog.Outfile;
+                        buttonBrowseIn.Text = "Browse";
+                        SetFile(textBoxIn.Text);
+                        boxTitle.Text = url;
+                    }
+                }
+            }
+            else
+            {
+                using (var dialog = new OpenFileDialog())
+                {
+                    dialog.CheckFileExists = true;
+                    dialog.CheckPathExists = true;
+                    dialog.ValidateNames = true;
+                    dialog.InitialDirectory = Properties.Settings.Default.RememberedFolderIn;
+
+                    if (dialog.ShowDialog(this) != DialogResult.OK || string.IsNullOrWhiteSpace(dialog.FileName))
+                        return;
+
+                    SetFile(dialog.FileName);
+                    Properties.Settings.Default.RememberedFolderIn = Path.GetDirectoryName(dialog.FileName);
+                    Properties.Settings.Default.Save();
+                }
             }
         }
 
