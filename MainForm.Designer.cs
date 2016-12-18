@@ -285,7 +285,7 @@ namespace WebMConverter
             tableMain.ColumnCount = 4;
             tableMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 69F));
             tableMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 68F));
+            tableMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
             tableMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
             tableMain.Controls.Add(labelInputFile, 0, 0);
             tableMain.Controls.Add(this.textBoxIn, 1, 0);
@@ -319,16 +319,16 @@ namespace WebMConverter
             this.textBoxIn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxIn.Location = new System.Drawing.Point(72, 4);
             this.textBoxIn.Name = "textBoxIn";
-            this.textBoxIn.Size = new System.Drawing.Size(835, 20);
+            this.textBoxIn.Size = new System.Drawing.Size(826, 20);
             this.textBoxIn.TabIndex = 1;
             this.textBoxIn.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxIn_KeyUp);
             // 
             // buttonBrowseIn
             // 
             this.buttonBrowseIn.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonBrowseIn.Location = new System.Drawing.Point(913, 3);
+            this.buttonBrowseIn.Location = new System.Drawing.Point(904, 3);
             this.buttonBrowseIn.Name = "buttonBrowseIn";
-            this.buttonBrowseIn.Size = new System.Drawing.Size(62, 23);
+            this.buttonBrowseIn.Size = new System.Drawing.Size(71, 23);
             this.buttonBrowseIn.TabIndex = 2;
             this.buttonBrowseIn.Text = "Browse";
             this.buttonBrowseIn.UseVisualStyleBackColor = true;
@@ -350,15 +350,15 @@ namespace WebMConverter
             this.textBoxOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOut.Location = new System.Drawing.Point(72, 34);
             this.textBoxOut.Name = "textBoxOut";
-            this.textBoxOut.Size = new System.Drawing.Size(835, 20);
+            this.textBoxOut.Size = new System.Drawing.Size(826, 20);
             this.textBoxOut.TabIndex = 3;
             // 
             // buttonBrowseOut
             // 
             buttonBrowseOut.Dock = System.Windows.Forms.DockStyle.Fill;
-            buttonBrowseOut.Location = new System.Drawing.Point(913, 32);
+            buttonBrowseOut.Location = new System.Drawing.Point(904, 32);
             buttonBrowseOut.Name = "buttonBrowseOut";
-            buttonBrowseOut.Size = new System.Drawing.Size(62, 24);
+            buttonBrowseOut.Size = new System.Drawing.Size(71, 24);
             buttonBrowseOut.TabIndex = 4;
             buttonBrowseOut.Text = "Browse";
             buttonBrowseOut.UseVisualStyleBackColor = true;
@@ -1858,19 +1858,19 @@ namespace WebMConverter
             this.listViewContextMenuEdit,
             this.listViewContextMenuDelete});
             this.listViewContextMenu.Name = "listViewContextMenu";
-            this.listViewContextMenu.Size = new System.Drawing.Size(153, 70);
+            this.listViewContextMenu.Size = new System.Drawing.Size(108, 48);
             // 
             // listViewContextMenuEdit
             // 
             this.listViewContextMenuEdit.Name = "listViewContextMenuEdit";
-            this.listViewContextMenuEdit.Size = new System.Drawing.Size(152, 22);
+            this.listViewContextMenuEdit.Size = new System.Drawing.Size(107, 22);
             this.listViewContextMenuEdit.Text = "Edit...";
             this.listViewContextMenuEdit.Click += new System.EventHandler(this.listViewContextMenuEdit_Click);
             // 
             // listViewContextMenuDelete
             // 
             this.listViewContextMenuDelete.Name = "listViewContextMenuDelete";
-            this.listViewContextMenuDelete.Size = new System.Drawing.Size(152, 22);
+            this.listViewContextMenuDelete.Size = new System.Drawing.Size(107, 22);
             this.listViewContextMenuDelete.Text = "Delete";
             this.listViewContextMenuDelete.Click += new System.EventHandler(this.listViewContextMenuDelete_Click);
             // 
