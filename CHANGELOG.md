@@ -1,3 +1,5 @@
+v2.22.0
+=======
 - Will now automatically download and load videos if your input is a link.
  - Uses Youtube-DL for downloading magic. If you do not already have it installed, you will be required to do so.
 - Double-fixed cutoff detection.
