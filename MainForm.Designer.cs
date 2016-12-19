@@ -1841,7 +1841,6 @@ namespace WebMConverter
             this.progressBarIndexing.Size = new System.Drawing.Size(457, 23);
             this.progressBarIndexing.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBarIndexing.TabIndex = 0;
-            this.progressBarIndexing.Value = 30;
             // 
             // panelHideTheOptions
             // 

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
+using Microsoft.WindowsAPICodePack.Taskbar;
 using StopWatch = System.Timers.Timer;
 
 using WebMConverter.Components;
@@ -98,6 +99,8 @@ namespace WebMConverter
         public int SarWidth;
         public int SarHeight;
 
+        private TaskbarManager taskbarManager;
+
         #region MainForm
 
         public MainForm()
@@ -112,6 +115,8 @@ namespace WebMConverter
                 boxVariable.Checked = true;
             }
             boxAudio.Checked = Properties.Settings.Default.AudioEnabled;
+
+            taskbarManager = TaskbarManager.Instance;
         }
 
         void MainForm_Load(object sender, EventArgs e)
@@ -1160,7 +1165,7 @@ namespace WebMConverter
             audioDisabled = false;
 
             progressBarIndexing.Style = ProgressBarStyle.Marquee;
-            progressBarIndexing.Value = 30;
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate);
             boxIndexingProgress.Text = "";
             panelHideTheOptions.BringToFront();
 
@@ -1244,6 +1249,7 @@ namespace WebMConverter
             indexbw.ProgressChanged += new ProgressChangedEventHandler(delegate(object sender, ProgressChangedEventArgs e)
             {
                 this.progressBarIndexing.Value = e.ProgressPercentage;
+                taskbarManager.SetProgressValue(e.ProgressPercentage, 100);
             });
             indexbw.DoWork += delegate(object sender, DoWorkEventArgs e)
             {
@@ -1548,8 +1554,8 @@ namespace WebMConverter
                 else
                 {
                     labelIndexingProgress.Text = "Extracting subtitle tracks and attachments...";
-                    progressBarIndexing.Value = 30;
                     progressBarIndexing.Style = ProgressBarStyle.Marquee;
+                    taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate);
 
                     extractbw.RunWorkerAsync();
                 }
@@ -1602,6 +1608,7 @@ namespace WebMConverter
                         boxDeinterlace.Checked = true;
 
                 panelHideTheOptions.SendToBack();
+                taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
             };
 
             if (File.Exists(_indexFile))
@@ -1622,8 +1629,8 @@ namespace WebMConverter
                         }
 
                         labelIndexingProgress.Text = "Extracting subtitle tracks and attachments...";
-                        progressBarIndexing.Value = 30;
                         progressBarIndexing.Style = ProgressBarStyle.Marquee;
+                        taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate);
 
                         extractbw.RunWorkerAsync();
                         return;
@@ -1640,6 +1647,7 @@ namespace WebMConverter
             buttonGo.Text = "Cancel";
             progressBarIndexing.Value = 0;
             progressBarIndexing.Style = ProgressBarStyle.Continuous;
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
             labelIndexingProgress.Text = "Indexing...";
             indexbw.RunWorkerAsync();
         }
@@ -1652,6 +1660,7 @@ namespace WebMConverter
             Program.FileMd5 = null;
             buttonBrowseIn.Enabled = true;
             textBoxIn.Enabled = true;
+            taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
             panelHideTheOptions.SendToBack();
         }
 
