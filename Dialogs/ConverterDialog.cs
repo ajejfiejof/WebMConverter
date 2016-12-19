@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -47,13 +48,41 @@ namespace WebMConverter.Dialogs
         private void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs args)
         {
             if (args.Data != null)
+            {
                 boxOutput.Invoke((Action)(() => boxOutput.AppendText('\n' + args.Data)));
+
+                if (DataContainsProgress(args.Data))
+                    ParseAndUpdateProgress(args.Data);
+            }
         }
 
         private void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs args)
         {
             if (args.Data != null)
                 boxOutput.Invoke((Action)(() => boxOutput.AppendText('\n' + args.Data)));
+        }
+
+        // example ffmpeg line:
+        // frame=  121 fps= 48 q=0.0 size=     552kB time=00:00:05.08 bitrate= 888.7kbits/s
+
+        private bool DataContainsProgress(string data)
+        {
+            return data.StartsWith("frame=");
+        }
+
+        private void ParseAndUpdateProgress(string input)
+        {
+            var r = new Regex(@"time=([^ ]+)");
+            var m = r.Match(input);
+            if (m.Success)
+            {
+                var time = TimeSpan.Parse(m.Groups[1].Value); // happens to be the same format as TimeSpan so yay
+                var progress = (float)time.TotalSeconds/(float)_induration;
+                progressBar1.InvokeIfRequired(() =>
+                {
+                    progressBar1.Value = (int)(progress * 100);
+                });
+            }
         }
 
         private void ConverterForm_Load(object sender, EventArgs e)

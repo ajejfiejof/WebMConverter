@@ -36,6 +36,7 @@
             this.buttonPlay = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.StatusImages = new System.Windows.Forms.ImageList(this.components);
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             table = new System.Windows.Forms.TableLayoutPanel();
             table.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureStatus)).BeginInit();
@@ -48,15 +49,18 @@
             table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             table.Controls.Add(this.boxOutput, 0, 0);
-            table.Controls.Add(this.pictureStatus, 0, 1);
-            table.Controls.Add(this.buttonPlay, 1, 1);
-            table.Controls.Add(this.buttonCancel, 2, 1);
+            table.Controls.Add(this.pictureStatus, 0, 2);
+            table.Controls.Add(this.buttonPlay, 1, 2);
+            table.Controls.Add(this.buttonCancel, 2, 2);
+            table.Controls.Add(this.progressBar1, 0, 1);
             table.Dock = System.Windows.Forms.DockStyle.Fill;
             table.Location = new System.Drawing.Point(3, 3);
             table.Name = "table";
-            table.RowCount = 2;
+            table.RowCount = 3;
             table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
+            table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
+            table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             table.Size = new System.Drawing.Size(678, 435);
             table.TabIndex = 0;
             // 
@@ -70,7 +74,7 @@
             this.boxOutput.Location = new System.Drawing.Point(3, 3);
             this.boxOutput.Name = "boxOutput";
             this.boxOutput.ReadOnly = true;
-            this.boxOutput.Size = new System.Drawing.Size(672, 398);
+            this.boxOutput.Size = new System.Drawing.Size(672, 367);
             this.boxOutput.TabIndex = 0;
             this.boxOutput.Text = "";
             // 
@@ -117,6 +121,15 @@
             this.StatusImages.Images.SetKeyName(1, "Failure");
             this.StatusImages.Images.SetKeyName(2, "Success");
             // 
+            // progressBar1
+            // 
+            table.SetColumnSpan(this.progressBar1, 3);
+            this.progressBar1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBar1.Location = new System.Drawing.Point(3, 376);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(672, 25);
+            this.progressBar1.TabIndex = 6;
+            // 
             // ConverterDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -144,6 +157,7 @@
         private System.Windows.Forms.Button buttonPlay;
         private System.Windows.Forms.ImageList StatusImages;
         private System.Windows.Forms.RichTextBox boxOutput;
+        private System.Windows.Forms.ProgressBar progressBar1;
 
 
     }
