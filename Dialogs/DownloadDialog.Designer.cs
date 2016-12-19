@@ -124,7 +124,6 @@
             this.ClientSize = new System.Drawing.Size(684, 441);
             this.ControlBox = false;
             this.Controls.Add(table);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "DownloadDialog";
             this.Padding = new System.Windows.Forms.Padding(3);
             this.ShowInTaskbar = false;
