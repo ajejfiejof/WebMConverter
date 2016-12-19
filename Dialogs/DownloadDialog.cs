@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Taskbar;
 using Timer = System.Windows.Forms.Timer;
 
 namespace WebMConverter.Dialogs
@@ -21,6 +22,8 @@ namespace WebMConverter.Dialogs
         private bool _panic;
         private bool _gettingFilename;
 
+        private TaskbarManager taskbarManager;
+
         public DownloadDialog(string url)
         {
             InitializeComponent();
@@ -28,7 +31,8 @@ namespace WebMConverter.Dialogs
 
             _infile = '"' + url.Replace(@"""", @"\""") + '"';
             Outfile = Path.GetTempPath();
-            Trace.TraceInformation(_infile);
+
+            taskbarManager = TaskbarManager.Instance;
         }
 
         private void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs args)
@@ -73,11 +77,14 @@ namespace WebMConverter.Dialogs
                 {
                     progressBar.Value = (int)(progress * 10); // progressBar maximum is 1000
                 });
+                taskbarManager.SetProgressValue((int)(progress * 10), 1000);
             }
         }
 
         private void DownloadDialog_Load(object sender, EventArgs e)
         {
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
+
             _filenameGetterProcess = new YoutubeDL("--get-filename " + _infile);
             _downloaderProcess = new YoutubeDL(null);
 
@@ -140,6 +147,7 @@ namespace WebMConverter.Dialogs
                 boxOutput.AppendText("\nIf you have no idea what went wrong, open an issue on GitGud and copy paste the output of this window there.");
                 pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
                 buttonCancel.Enabled = true;
+                taskbarManager.SetProgressState(TaskbarProgressBarState.Error);
             }
             else
             {
@@ -178,6 +186,7 @@ namespace WebMConverter.Dialogs
         {
             _panic = true; //Shut down while avoiding exceptions
             buttonCancel_Click(sender, e);
+            taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
         }
 
         private void ConverterForm_FormClosed(object sender, FormClosedEventArgs e)

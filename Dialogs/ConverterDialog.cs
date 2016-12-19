@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Taskbar;
 using Timer = System.Windows.Forms.Timer;
 
 namespace WebMConverter.Dialogs
@@ -29,6 +30,8 @@ namespace WebMConverter.Dialogs
         private double _induration;
         private double _outduration;
 
+        private TaskbarManager taskbarManager;
+
         public ConverterDialog(string input, string[] args, string output)
         {
             InitializeComponent();
@@ -43,6 +46,8 @@ namespace WebMConverter.Dialogs
             {
                 AddInputFileToArguments(ref args[i]);
             }
+
+            taskbarManager = TaskbarManager.Instance;
         }
 
         private void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs args)
@@ -83,11 +88,14 @@ namespace WebMConverter.Dialogs
                 {
                     progressBar.Value = (int)(progress * 1000); // progressBar maximum is 1000
                 });
+                taskbarManager.SetProgressValue((int)(progress * 1000), 1000);
             }
         }
 
         private void ConverterForm_Load(object sender, EventArgs e)
         {
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
+
             string argument = null;
             _twopass = true;
             if (_arguments.Length == 1)
@@ -245,6 +253,7 @@ namespace WebMConverter.Dialogs
                     boxOutput.AppendText(string.Format("\n\nffmpeg.exe exited with exit code {0}. That's usually bad.", process.ExitCode));
                     boxOutput.AppendText("\nIf you have no idea what went wrong, open an issue on GitGud and copy paste the output of this window there.");
                 }
+                taskbarManager.SetProgressState(TaskbarProgressBarState.Error);
                 pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
 
                 if (process.ExitCode == -1073741819) //This error keeps happening for me if I set threads to anything above 1, might happen for other people too
@@ -262,6 +271,7 @@ namespace WebMConverter.Dialogs
 
                     boxOutput.AppendText(string.Format("\n\nAmount of video lost: {0}s", Math.Abs(_induration - _outduration)));
 
+                    taskbarManager.SetProgressState(TaskbarProgressBarState.Error);
                     pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
                 }
                 else
@@ -301,6 +311,7 @@ namespace WebMConverter.Dialogs
         {
             _panic = true; //Shut down while avoiding exceptions
             buttonCancel_Click(sender, e);
+            taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
         }
 
         private void ConverterForm_FormClosed(object sender, FormClosedEventArgs e)
