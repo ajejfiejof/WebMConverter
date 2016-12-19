@@ -1,3 +1,8 @@
+- Added progress bars!
+ - Downloading and Converting dialogs now have a progress bar in the window.
+ - Additionaly, the taskbar icon will show progress during Indexing, Downloading and Converting
+
+
 v2.22.0
 =======
 - Will now automatically download and load videos if your input is a link.
