@@ -70,8 +70,12 @@ namespace WebMConverter.Dialogs
         // example ffmpeg line:
         // frame=  121 fps= 48 q=0.0 size=     552kB time=00:00:05.08 bitrate= 888.7kbits/s
 
+        private bool dontUpdateProgress = false;
         private bool DataContainsProgress(string data)
         {
+            if (dontUpdateProgress)
+                return false;
+
             return data.StartsWith("frame=");
         }
 
@@ -94,7 +98,7 @@ namespace WebMConverter.Dialogs
 
         private void ConverterForm_Load(object sender, EventArgs e)
         {
-            taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate);
 
             string argument = null;
             _twopass = true;
@@ -200,6 +204,7 @@ namespace WebMConverter.Dialogs
                 _timer.Start();
             }));
 
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
             _ffmpegProcess.Start();
             StartPipe(_ffmpegProcess);
         }
@@ -207,6 +212,7 @@ namespace WebMConverter.Dialogs
         private void MultiPass(string[] arguments)
         {
             int passes = arguments.Length;
+            dontUpdateProgress = passes != _currentPass + 1;
 
             _ffmpegProcess = new FFmpeg(arguments[_currentPass]);
 
@@ -222,6 +228,7 @@ namespace WebMConverter.Dialogs
                 {
                     boxOutput.AppendText(string.Format("\n--- ENTERING PASS {0} ---", _currentPass + 1));
 
+                    taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
                     MultiPass(arguments); //Sort of recursion going on here, be careful with stack overflows and shit
                     return;
                 }

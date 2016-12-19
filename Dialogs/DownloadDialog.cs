@@ -83,8 +83,6 @@ namespace WebMConverter.Dialogs
 
         private void DownloadDialog_Load(object sender, EventArgs e)
         {
-            taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
-
             _filenameGetterProcess = new YoutubeDL("--get-filename " + _infile);
             _downloaderProcess = new YoutubeDL(null);
 
@@ -116,6 +114,8 @@ namespace WebMConverter.Dialogs
                 _timer.Start();
             }));
 
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate); // can't get progress for filename getter
+            progressBar.Style = ProgressBarStyle.Marquee;
             _filenameGetterProcess.Start();
         }
 
@@ -136,6 +136,8 @@ namespace WebMConverter.Dialogs
                 else
                 {
                     _gettingFilename = false;
+                    taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
+                    progressBar.Style = ProgressBarStyle.Blocks;
                     _downloaderProcess.Start();
                 }
                 return;

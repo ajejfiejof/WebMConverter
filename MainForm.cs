@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
+using Microsoft.WindowsAPICodePack.Taskbar;
 using StopWatch = System.Timers.Timer;
 
 using WebMConverter.Components;
@@ -98,6 +99,8 @@ namespace WebMConverter
         public int SarWidth;
         public int SarHeight;
 
+        private TaskbarManager taskbarManager;
+
         #region MainForm
 
         public MainForm()
@@ -112,6 +115,8 @@ namespace WebMConverter
                 boxVariable.Checked = true;
             }
             boxAudio.Checked = Properties.Settings.Default.AudioEnabled;
+
+            taskbarManager = TaskbarManager.Instance;
         }
 
         void MainForm_Load(object sender, EventArgs e)
