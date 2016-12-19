@@ -78,9 +78,9 @@ namespace WebMConverter.Dialogs
             {
                 var time = TimeSpan.Parse(m.Groups[1].Value); // happens to be the same format as TimeSpan so yay
                 var progress = (float)time.TotalSeconds/(float)_induration;
-                progressBar1.InvokeIfRequired(() =>
+                progressBar.InvokeIfRequired(() =>
                 {
-                    progressBar1.Value = (int)(progress * 100);
+                    progressBar.Value = (int)(progress * 100);
                 });
             }
         }

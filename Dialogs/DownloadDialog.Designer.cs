@@ -36,6 +36,7 @@
             this.buttonLoad = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.StatusImages = new System.Windows.Forms.ImageList(this.components);
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             table = new System.Windows.Forms.TableLayoutPanel();
             table.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureStatus)).BeginInit();
@@ -48,14 +49,16 @@
             table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             table.Controls.Add(this.boxOutput, 0, 0);
-            table.Controls.Add(this.pictureStatus, 0, 1);
-            table.Controls.Add(this.buttonLoad, 1, 1);
-            table.Controls.Add(this.buttonCancel, 2, 1);
+            table.Controls.Add(this.pictureStatus, 0, 2);
+            table.Controls.Add(this.buttonLoad, 1, 2);
+            table.Controls.Add(this.buttonCancel, 2, 2);
+            table.Controls.Add(this.progressBar, 0, 1);
             table.Dock = System.Windows.Forms.DockStyle.Fill;
             table.Location = new System.Drawing.Point(3, 3);
             table.Name = "table";
-            table.RowCount = 2;
+            table.RowCount = 3;
             table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
             table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
             table.Size = new System.Drawing.Size(678, 435);
             table.TabIndex = 0;
@@ -70,7 +73,7 @@
             this.boxOutput.Location = new System.Drawing.Point(3, 3);
             this.boxOutput.Name = "boxOutput";
             this.boxOutput.ReadOnly = true;
-            this.boxOutput.Size = new System.Drawing.Size(672, 398);
+            this.boxOutput.Size = new System.Drawing.Size(672, 367);
             this.boxOutput.TabIndex = 0;
             this.boxOutput.Text = "";
             // 
@@ -93,7 +96,7 @@
             this.buttonLoad.Location = new System.Drawing.Point(34, 407);
             this.buttonLoad.Name = "buttonLoad";
             this.buttonLoad.Size = new System.Drawing.Size(317, 25);
-            this.buttonLoad.TabIndex = 5;
+            this.buttonLoad.TabIndex = 1;
             this.buttonLoad.Text = "Load";
             this.buttonLoad.UseVisualStyleBackColor = true;
             this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
@@ -104,7 +107,7 @@
             this.buttonCancel.Location = new System.Drawing.Point(357, 407);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(318, 25);
-            this.buttonCancel.TabIndex = 3;
+            this.buttonCancel.TabIndex = 2;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
@@ -116,6 +119,15 @@
             this.StatusImages.Images.SetKeyName(0, "Happening");
             this.StatusImages.Images.SetKeyName(1, "Failure");
             this.StatusImages.Images.SetKeyName(2, "Success");
+            // 
+            // progressBar
+            // 
+            table.SetColumnSpan(this.progressBar, 3);
+            this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBar.Location = new System.Drawing.Point(3, 376);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(672, 25);
+            this.progressBar.TabIndex = 0;
             // 
             // DownloadDialog
             // 
@@ -144,6 +156,7 @@
         private System.Windows.Forms.ImageList StatusImages;
         private System.Windows.Forms.RichTextBox boxOutput;
         private System.Windows.Forms.Button buttonLoad;
+        private System.Windows.Forms.ProgressBar progressBar;
 
 
     }

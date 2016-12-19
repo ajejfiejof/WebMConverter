@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -45,7 +46,34 @@ namespace WebMConverter.Dialogs
         private void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs args)
         {
             if (args.Data != null)
+            {
                 boxOutput.Invoke((Action)(() => boxOutput.AppendText('\n' + args.Data)));
+
+                if (DataContainsProgress(args.Data))
+                    ParseAndUpdateProgress(args.Data);
+            }
+        }
+
+        // example youtube-dl line:
+        // [download]  51.5% of ~3.85MiB at 20.49MiB/s ETA 00:00
+
+        private bool DataContainsProgress(string data)
+        {
+            return data.StartsWith("[download]");
+        }
+
+        private void ParseAndUpdateProgress(string input)
+        {
+            var r = new Regex(@"([0-9.]+)%");
+            var m = r.Match(input);
+            if (m.Success)
+            {
+                var progress = float.Parse(m.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+                progressBar.InvokeIfRequired(() =>
+                {
+                    progressBar.Value = (int)(progress);
+                });
+            }
         }
 
         private void DownloadDialog_Load(object sender, EventArgs e)
