@@ -35,8 +35,8 @@
             this.pictureStatus = new System.Windows.Forms.PictureBox();
             this.buttonLoad = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.StatusImages = new System.Windows.Forms.ImageList(this.components);
             this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.StatusImages = new System.Windows.Forms.ImageList(this.components);
             table = new System.Windows.Forms.TableLayoutPanel();
             table.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureStatus)).BeginInit();
@@ -112,6 +112,16 @@
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
+            // progressBar
+            // 
+            table.SetColumnSpan(this.progressBar, 3);
+            this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBar.Location = new System.Drawing.Point(3, 376);
+            this.progressBar.Maximum = 1000;
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(672, 25);
+            this.progressBar.TabIndex = 0;
+            // 
             // StatusImages
             // 
             this.StatusImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("StatusImages.ImageStream")));
@@ -119,15 +129,6 @@
             this.StatusImages.Images.SetKeyName(0, "Happening");
             this.StatusImages.Images.SetKeyName(1, "Failure");
             this.StatusImages.Images.SetKeyName(2, "Success");
-            // 
-            // progressBar
-            // 
-            table.SetColumnSpan(this.progressBar, 3);
-            this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.progressBar.Location = new System.Drawing.Point(3, 376);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(672, 25);
-            this.progressBar.TabIndex = 0;
             // 
             // DownloadDialog
             // 

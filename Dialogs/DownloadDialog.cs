@@ -71,7 +71,7 @@ namespace WebMConverter.Dialogs
                 var progress = float.Parse(m.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
                 progressBar.InvokeIfRequired(() =>
                 {
-                    progressBar.Value = (int)(progress);
+                    progressBar.Value = (int)(progress * 10); // progressBar maximum is 1000
                 });
             }
         }

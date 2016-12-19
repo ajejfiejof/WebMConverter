@@ -78,9 +78,10 @@ namespace WebMConverter.Dialogs
             {
                 var time = TimeSpan.Parse(m.Groups[1].Value); // happens to be the same format as TimeSpan so yay
                 var progress = (float)time.TotalSeconds/(float)_induration;
+                progress = Math.Min(progress, 1); // sometimes progress becomes more than 100%, which breaks the progressBar
                 progressBar.InvokeIfRequired(() =>
                 {
-                    progressBar.Value = (int)(progress * 100);
+                    progressBar.Value = (int)(progress * 1000); // progressBar maximum is 1000
                 });
             }
         }
