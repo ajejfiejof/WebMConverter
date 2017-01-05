@@ -1,8 +1,8 @@
+- The program will no longer disappear from alt-tabbing during a conversion.
 - Added progress bars!
  - Downloading and Converting dialogs now have a progress bar in the window.
  - Additionaly, the taskbar icon will show progress during Indexing, Downloading and Converting
 - Updater will now warn if downloaded certificate does not match current one.
-
 
 v2.22.0
 =======
