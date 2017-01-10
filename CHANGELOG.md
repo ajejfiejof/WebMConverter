@@ -3,6 +3,7 @@
  - Downloading and Converting dialogs now have a progress bar in the window.
  - Additionaly, the taskbar icon will show progress during Indexing, Downloading and Converting
 - Updater will now warn if downloaded certificate does not match current one.
+- Fixed Subtitle and Overlay filters breaking with non-english filenames.
 
 v2.22.0
 =======
