@@ -76,6 +76,7 @@
             this.boxOutput.Size = new System.Drawing.Size(672, 367);
             this.boxOutput.TabIndex = 0;
             this.boxOutput.Text = "";
+            this.boxOutput.TextChanged += new System.EventHandler(this.boxOutput_TextChanged);
             // 
             // pictureStatus
             // 

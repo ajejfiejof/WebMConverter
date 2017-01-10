@@ -9,6 +9,7 @@
  - Dropping a .png, .jpeg or .jpg file will add an Overlay filter
  - Dropping a .wav, .mp3 or .ogg file will add a Dub filter
 - Added drag and drop support to Subtitle filter dialog
+- Downloading and Converting dialogs will now scroll the output even if WfR doesn't have focus.
 
 v2.22.0
 =======

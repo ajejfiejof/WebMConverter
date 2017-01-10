@@ -62,6 +62,8 @@ namespace WebMConverter
         public static extern int AddFontResourceEx(string lpszFilename, uint fl, IntPtr pdv);
         [DllImport("gdi32", CharSet = CharSet.Auto)]
         public static extern bool RemoveFontResourceEx(string lpFileName, uint fl, IntPtr pdv);
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessage(IntPtr window, int message, int wparam, int lparam);
     }
 
     static class Program

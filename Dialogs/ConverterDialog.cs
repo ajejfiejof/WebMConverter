@@ -333,5 +333,12 @@ namespace WebMConverter.Dialogs
             else
                 Process.Start(((MainForm) Owner).textBoxOut.Text); //Play result video
         }
+
+        private void boxOutput_TextChanged(object sender, EventArgs e)
+        {
+            // manually scroll to bottom cause AppendText doesn't do it if it doesn't have focus
+            NativeMethods.SendMessage(boxOutput.Handle, 0x115, 7, 0);
+            // 0x115: WM_VSCROLL, 7: SB_BOTTOM
+        }
     }
 }

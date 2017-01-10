@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -201,6 +200,11 @@ namespace WebMConverter.Dialogs
         {
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        private void boxOutput_TextChanged(object sender, EventArgs e)
+        {
+            NativeMethods.SendMessage(boxOutput.Handle, 0x115, 7, 0);
         }
     }
 }

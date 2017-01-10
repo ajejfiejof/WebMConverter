@@ -33,10 +33,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConverterDialog));
             this.boxOutput = new System.Windows.Forms.RichTextBox();
             this.pictureStatus = new System.Windows.Forms.PictureBox();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.buttonPlay = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.StatusImages = new System.Windows.Forms.ImageList(this.components);
-            this.progressBar = new System.Windows.Forms.ProgressBar();
             table = new System.Windows.Forms.TableLayoutPanel();
             table.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureStatus)).BeginInit();
@@ -77,6 +77,7 @@
             this.boxOutput.Size = new System.Drawing.Size(672, 367);
             this.boxOutput.TabIndex = 0;
             this.boxOutput.Text = "";
+            this.boxOutput.TextChanged += new System.EventHandler(this.boxOutput_TextChanged);
             // 
             // pictureStatus
             // 
@@ -88,6 +89,16 @@
             this.pictureStatus.Size = new System.Drawing.Size(25, 25);
             this.pictureStatus.TabIndex = 4;
             this.pictureStatus.TabStop = false;
+            // 
+            // progressBar
+            // 
+            table.SetColumnSpan(this.progressBar, 3);
+            this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBar.Location = new System.Drawing.Point(3, 376);
+            this.progressBar.Maximum = 1000;
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(672, 25);
+            this.progressBar.TabIndex = 0;
             // 
             // buttonPlay
             // 
@@ -119,16 +130,6 @@
             this.StatusImages.Images.SetKeyName(0, "Happening");
             this.StatusImages.Images.SetKeyName(1, "Failure");
             this.StatusImages.Images.SetKeyName(2, "Success");
-            // 
-            // progressBar
-            // 
-            table.SetColumnSpan(this.progressBar, 3);
-            this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.progressBar.Location = new System.Drawing.Point(3, 376);
-            this.progressBar.Maximum = 1000;
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(672, 25);
-            this.progressBar.TabIndex = 0;
             // 
             // ConverterDialog
             // 
