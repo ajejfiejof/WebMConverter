@@ -16,12 +16,14 @@ namespace WebMConverter.Updater
         private string updateZipPath;
         private string updateTempPath;
         private string updateExePath;
+        private string updateCertPath;
 
         public UpdateUI()
         {
             updateZipPath = Path.Combine(Path.GetTempPath(), "WebM-for-Retards-update.zip");
             updateTempPath = Path.Combine(Path.GetTempPath(), "WebM-for-Retards-update");
             updateExePath = Path.Combine(updateTempPath, "WebMConverter.exe");
+            updateCertPath = Path.Combine(updateTempPath, "trusted.cer");
 
             InitializeComponent();
         }
@@ -92,7 +94,7 @@ namespace WebMConverter.Updater
             await Task.Run(() => ZipFile.ExtractToDirectory(updateZipPath, updateTempPath));
             File.Delete(updateZipPath);
 
-            X509Certificate2 nixxCertificate = new X509Certificate2("trusted.cer");
+            var trustedCertificate = new X509Certificate2("trusted.cer");
             X509Certificate exeCertificate;
 
             try
@@ -105,10 +107,36 @@ namespace WebMConverter.Updater
                 return;
             }
 
-            if (!exeCertificate.Equals(nixxCertificate))
+            X509Certificate2 updateCertificate;
+            try
+            {
+                updateCertificate = new X509Certificate2(updateCertPath);
+            }
+            catch (Exception)
+            {
+                Abort("The downloaded update does not include a valid certificate.");
+                return;
+            }
+
+            if (!exeCertificate.Equals(trustedCertificate))
             {
                 Abort("The downloaded executable is not signed by a trusted developer.");
                 return;
+            }
+
+            if (!trustedCertificate.Equals(updateCertificate))
+            {
+                var answer = MessageBox.Show(this,
+                    "The downloaded update contains different certificate than your current version.\n" +
+                    "This is either a sign of foul play, or it means I fucked up my old certificate and need to ship a new one.\n" +
+                    "If you trust this certificate, it will be used in the future to verify that updates are legitimate.\n" +
+                    "Do you trust this new certificate?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
+
+                if (answer == DialogResult.No)
+                {
+                    Abort();
+                    return;
+                }
             }
 
             Step4_OverwriteAndRestart();
@@ -133,7 +161,7 @@ namespace WebMConverter.Updater
             Application.Exit();
         }
 
-        private void Abort(string message)
+        private void Abort(string message = null)
         {
             if (File.Exists(updateZipPath))
                 File.Delete(updateZipPath);
@@ -141,7 +169,9 @@ namespace WebMConverter.Updater
             if (Directory.Exists(updateTempPath))
                 Directory.Delete(updateTempPath, true);
 
-            MessageBox.Show(message, "Update failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (!String.IsNullOrEmpty(message))
+                MessageBox.Show(message, "Update failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
             Application.Exit();
         }
 

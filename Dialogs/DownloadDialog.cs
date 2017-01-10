@@ -1,8 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Taskbar;
 using Timer = System.Windows.Forms.Timer;
 
 namespace WebMConverter.Dialogs
@@ -20,6 +21,8 @@ namespace WebMConverter.Dialogs
         private bool _panic;
         private bool _gettingFilename;
 
+        private TaskbarManager taskbarManager;
+
         public DownloadDialog(string url)
         {
             InitializeComponent();
@@ -27,7 +30,8 @@ namespace WebMConverter.Dialogs
 
             _infile = '"' + url.Replace(@"""", @"\""") + '"';
             Outfile = Path.GetTempPath();
-            Trace.TraceInformation(_infile);
+
+            taskbarManager = TaskbarManager.Instance;
         }
 
         private void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs args)
@@ -45,7 +49,35 @@ namespace WebMConverter.Dialogs
         private void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs args)
         {
             if (args.Data != null)
+            {
                 boxOutput.Invoke((Action)(() => boxOutput.AppendText('\n' + args.Data)));
+
+                if (DataContainsProgress(args.Data))
+                    ParseAndUpdateProgress(args.Data);
+            }
+        }
+
+        // example youtube-dl line:
+        // [download]  51.5% of ~3.85MiB at 20.49MiB/s ETA 00:00
+
+        private bool DataContainsProgress(string data)
+        {
+            return data.StartsWith("[download]");
+        }
+
+        private void ParseAndUpdateProgress(string input)
+        {
+            var r = new Regex(@"([0-9.]+)%");
+            var m = r.Match(input);
+            if (m.Success)
+            {
+                var progress = float.Parse(m.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+                progressBar.InvokeIfRequired(() =>
+                {
+                    progressBar.Value = (int)(progress * 10); // progressBar maximum is 1000
+                });
+                taskbarManager.SetProgressValue((int)(progress * 10), 1000);
+            }
         }
 
         private void DownloadDialog_Load(object sender, EventArgs e)
@@ -81,6 +113,8 @@ namespace WebMConverter.Dialogs
                 _timer.Start();
             }));
 
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate); // can't get progress for filename getter
+            progressBar.Style = ProgressBarStyle.Marquee;
             _filenameGetterProcess.Start();
         }
 
@@ -101,6 +135,8 @@ namespace WebMConverter.Dialogs
                 else
                 {
                     _gettingFilename = false;
+                    taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
+                    progressBar.Style = ProgressBarStyle.Blocks;
                     _downloaderProcess.Start();
                 }
                 return;
@@ -112,6 +148,7 @@ namespace WebMConverter.Dialogs
                 boxOutput.AppendText("\nIf you have no idea what went wrong, open an issue on GitGud and copy paste the output of this window there.");
                 pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
                 buttonCancel.Enabled = true;
+                taskbarManager.SetProgressState(TaskbarProgressBarState.Error);
             }
             else
             {
@@ -150,6 +187,7 @@ namespace WebMConverter.Dialogs
         {
             _panic = true; //Shut down while avoiding exceptions
             buttonCancel_Click(sender, e);
+            taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
         }
 
         private void ConverterForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -162,6 +200,11 @@ namespace WebMConverter.Dialogs
         {
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        private void boxOutput_TextChanged(object sender, EventArgs e)
+        {
+            NativeMethods.SendMessage(boxOutput.Handle, 0x115, 7, 0);
         }
     }
 }

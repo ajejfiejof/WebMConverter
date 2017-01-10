@@ -103,6 +103,20 @@ namespace WebMConverter
                 }
             }
         }
+
+        private void SubtitleForm_DragDrop(object sender, DragEventArgs e)
+        {
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            checkBoxInternalSubs.Checked = false;
+            textBoxSubtitleFile.Text = files[0];
+        }
+
+        private void SubtitleForm_DragEnter(object sender, DragEventArgs e)
+        {
+            var dataPresent = e.Data.GetDataPresent(DataFormats.FileDrop);
+            e.Effect = dataPresent ? DragDropEffects.Copy : DragDropEffects.None;
+        }
     }
 
     public class SubtitleFilter
@@ -121,13 +135,14 @@ namespace WebMConverter
         public override string ToString()
         {
             var conversion = Program.InputHasWeirdPixelFormat ? "ConvertToYV12() " : "";
+            var shortFileName = Program.GetCompatiblePath(FileName);
 
             switch (Type)
             {
                 case SubtitleType.TextSub:
-                    return string.Format(@"{1}textsub(""{0}"")", FileName, conversion);
+                    return string.Format(@"{1}textsub(""{0}"")", shortFileName, conversion);
                 case SubtitleType.VobSub:
-                    return string.Format(@"{1}vobsub(""{0}"")", FileName, conversion);
+                    return string.Format(@"{1}vobsub(""{0}"")", shortFileName, conversion);
                 default:
                     throw new NotImplementedException();
             }

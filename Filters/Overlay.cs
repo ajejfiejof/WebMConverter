@@ -215,7 +215,8 @@ namespace WebMConverter
 
         public override string ToString()
         {
-            return string.Format("Overlay(ImageSource(\"{0}\"), x={1}, y={2}, mask=ImageSource(\"{0}\",pixel_type=\"RGB32\").ShowAlpha(pixel_type=\"RGB32\"))", FileName, Placement.X, Placement.Y);
+            var shortFileName = Program.GetCompatiblePath(FileName);
+            return string.Format("Overlay(ImageSource(\"{0}\"), x={1}, y={2}, mask=ImageSource(\"{0}\",pixel_type=\"RGB32\").ShowAlpha(pixel_type=\"RGB32\"))", shortFileName, Placement.X, Placement.Y);
         }
     }
 }

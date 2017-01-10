@@ -2,7 +2,9 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Taskbar;
 using Timer = System.Windows.Forms.Timer;
 
 namespace WebMConverter.Dialogs
@@ -28,6 +30,8 @@ namespace WebMConverter.Dialogs
         private double _induration;
         private double _outduration;
 
+        private TaskbarManager taskbarManager;
+
         public ConverterDialog(string input, string[] args, string output)
         {
             InitializeComponent();
@@ -42,12 +46,19 @@ namespace WebMConverter.Dialogs
             {
                 AddInputFileToArguments(ref args[i]);
             }
+
+            taskbarManager = TaskbarManager.Instance;
         }
 
         private void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs args)
         {
             if (args.Data != null)
+            {
                 boxOutput.Invoke((Action)(() => boxOutput.AppendText('\n' + args.Data)));
+
+                if (DataContainsProgress(args.Data))
+                    ParseAndUpdateProgress(args.Data);
+            }
         }
 
         private void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs args)
@@ -56,8 +67,39 @@ namespace WebMConverter.Dialogs
                 boxOutput.Invoke((Action)(() => boxOutput.AppendText('\n' + args.Data)));
         }
 
+        // example ffmpeg line:
+        // frame=  121 fps= 48 q=0.0 size=     552kB time=00:00:05.08 bitrate= 888.7kbits/s
+
+        private bool dontUpdateProgress = false;
+        private bool DataContainsProgress(string data)
+        {
+            if (dontUpdateProgress)
+                return false;
+
+            return data.StartsWith("frame=");
+        }
+
+        private void ParseAndUpdateProgress(string input)
+        {
+            var r = new Regex(@"time=([^ ]+)");
+            var m = r.Match(input);
+            if (m.Success)
+            {
+                var time = TimeSpan.Parse(m.Groups[1].Value); // happens to be the same format as TimeSpan so yay
+                var progress = (float)time.TotalSeconds/(float)_induration;
+                progress = Math.Min(progress, 1); // sometimes progress becomes more than 100%, which breaks the progressBar
+                progressBar.InvokeIfRequired(() =>
+                {
+                    progressBar.Value = (int)(progress * 1000); // progressBar maximum is 1000
+                });
+                taskbarManager.SetProgressValue((int)(progress * 1000), 1000);
+            }
+        }
+
         private void ConverterForm_Load(object sender, EventArgs e)
         {
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate);
+
             string argument = null;
             _twopass = true;
             if (_arguments.Length == 1)
@@ -162,6 +204,7 @@ namespace WebMConverter.Dialogs
                 _timer.Start();
             }));
 
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
             _ffmpegProcess.Start();
             StartPipe(_ffmpegProcess);
         }
@@ -169,6 +212,7 @@ namespace WebMConverter.Dialogs
         private void MultiPass(string[] arguments)
         {
             int passes = arguments.Length;
+            dontUpdateProgress = passes != _currentPass + 1;
 
             _ffmpegProcess = new FFmpeg(arguments[_currentPass]);
 
@@ -184,6 +228,7 @@ namespace WebMConverter.Dialogs
                 {
                     boxOutput.AppendText(string.Format("\n--- ENTERING PASS {0} ---", _currentPass + 1));
 
+                    taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
                     MultiPass(arguments); //Sort of recursion going on here, be careful with stack overflows and shit
                     return;
                 }
@@ -215,6 +260,7 @@ namespace WebMConverter.Dialogs
                     boxOutput.AppendText(string.Format("\n\nffmpeg.exe exited with exit code {0}. That's usually bad.", process.ExitCode));
                     boxOutput.AppendText("\nIf you have no idea what went wrong, open an issue on GitGud and copy paste the output of this window there.");
                 }
+                taskbarManager.SetProgressState(TaskbarProgressBarState.Error);
                 pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
 
                 if (process.ExitCode == -1073741819) //This error keeps happening for me if I set threads to anything above 1, might happen for other people too
@@ -232,6 +278,7 @@ namespace WebMConverter.Dialogs
 
                     boxOutput.AppendText(string.Format("\n\nAmount of video lost: {0}s", Math.Abs(_induration - _outduration)));
 
+                    taskbarManager.SetProgressState(TaskbarProgressBarState.Error);
                     pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
                 }
                 else
@@ -271,6 +318,7 @@ namespace WebMConverter.Dialogs
         {
             _panic = true; //Shut down while avoiding exceptions
             buttonCancel_Click(sender, e);
+            taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
         }
 
         private void ConverterForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -284,6 +332,13 @@ namespace WebMConverter.Dialogs
                 MessageBox.Show("Output file not found! Did you move it?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
                 Process.Start(((MainForm) Owner).textBoxOut.Text); //Play result video
+        }
+
+        private void boxOutput_TextChanged(object sender, EventArgs e)
+        {
+            // manually scroll to bottom cause AppendText doesn't do it if it doesn't have focus
+            NativeMethods.SendMessage(boxOutput.Handle, 0x115, 7, 0);
+            // 0x115: WM_VSCROLL, 7: SB_BOTTOM
         }
     }
 }

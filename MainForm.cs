@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
+using Microsoft.WindowsAPICodePack.Taskbar;
 using StopWatch = System.Timers.Timer;
 
 using WebMConverter.Components;
@@ -98,6 +99,8 @@ namespace WebMConverter
         public int SarWidth;
         public int SarHeight;
 
+        private TaskbarManager taskbarManager;
+
         #region MainForm
 
         public MainForm()
@@ -112,6 +115,8 @@ namespace WebMConverter
                 boxVariable.Checked = true;
             }
             boxAudio.Checked = Properties.Settings.Default.AudioEnabled;
+
+            taskbarManager = TaskbarManager.Instance;
         }
 
         void MainForm_Load(object sender, EventArgs e)
@@ -130,6 +135,72 @@ namespace WebMConverter
         void HandleDragDrop(object sender, DragEventArgs e)
         {
             var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            if (inputFile != null) // we have a file loaded already, so this might be a subtitle or something
+            {
+                switch (Path.GetExtension(files[0]))
+                {
+                    case ".srt":
+                    case ".ass":
+                        var filter = new SubtitleFilter(files[0], SubtitleType.TextSub);
+
+                        if (boxAdvancedScripting.Checked)
+                        {
+                            textBoxProcessingScript.AppendText(Environment.NewLine + filter);
+                        }
+                        else
+                        {
+                            Filters.Subtitle = filter;
+                            listViewProcessingScript.Items.Add("Subtitle", "subtitles");
+                            buttonSubtitle.Enabled = false;
+                        }
+                        return;
+                    case ".png":
+                    case ".jpeg":
+                    case ".jpg":
+                        using (var form = new OverlayForm(new OverlayFilter(new Point(0, 0), files[0])))
+                        {
+                            if (form.ShowDialog(this) != DialogResult.OK) return;
+
+                            if (boxAdvancedScripting.Checked)
+                            {
+                                textBoxProcessingScript.AppendText(Environment.NewLine + form.GeneratedFilter);
+                            }
+                            else
+                            {
+                                Filters.Overlay = form.GeneratedFilter;
+                                listViewProcessingScript.Items.Add("Overlay", "overlay");
+                                buttonOverlay.Enabled = false;
+                            }
+                        }
+                        return;
+                    case ".wav":
+                    case ".mp3":
+                    case ".ogg":
+                        using (var form = new DubForm(new DubFilter(files[0], null, DubMode.TrimAudio)))
+                        {
+                            if (form.ShowDialog(this) != DialogResult.OK) return;
+
+                            if (boxAdvancedScripting.Checked)
+                            {
+                                textBoxProcessingScript.AppendText(Environment.NewLine + form.GeneratedFilter);
+                            }
+                            else
+                            {
+                                Filters.Dub = form.GeneratedFilter;
+                                listViewProcessingScript.Items.Add("Dub", "dub");
+
+                                if (Filters.Dub.Mode != DubMode.TrimAudio) // the video duration may have changed
+                                    UpdateArguments(sender, e);
+
+                                buttonDub.Enabled = false;
+                            }
+                            boxAudio.Checked = boxAudio.Enabled = true;
+                        }
+                        return;
+                }
+            }
+
             SetFile(files[0]);
         }
 
@@ -1160,7 +1231,7 @@ namespace WebMConverter
             audioDisabled = false;
 
             progressBarIndexing.Style = ProgressBarStyle.Marquee;
-            progressBarIndexing.Value = 30;
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate);
             boxIndexingProgress.Text = "";
             panelHideTheOptions.BringToFront();
 
@@ -1244,6 +1315,7 @@ namespace WebMConverter
             indexbw.ProgressChanged += new ProgressChangedEventHandler(delegate(object sender, ProgressChangedEventArgs e)
             {
                 this.progressBarIndexing.Value = e.ProgressPercentage;
+                taskbarManager.SetProgressValue(e.ProgressPercentage, 100);
             });
             indexbw.DoWork += delegate(object sender, DoWorkEventArgs e)
             {
@@ -1548,8 +1620,8 @@ namespace WebMConverter
                 else
                 {
                     labelIndexingProgress.Text = "Extracting subtitle tracks and attachments...";
-                    progressBarIndexing.Value = 30;
                     progressBarIndexing.Style = ProgressBarStyle.Marquee;
+                    taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate);
 
                     extractbw.RunWorkerAsync();
                 }
@@ -1602,6 +1674,7 @@ namespace WebMConverter
                         boxDeinterlace.Checked = true;
 
                 panelHideTheOptions.SendToBack();
+                taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
             };
 
             if (File.Exists(_indexFile))
@@ -1622,8 +1695,8 @@ namespace WebMConverter
                         }
 
                         labelIndexingProgress.Text = "Extracting subtitle tracks and attachments...";
-                        progressBarIndexing.Value = 30;
                         progressBarIndexing.Style = ProgressBarStyle.Marquee;
+                        taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate);
 
                         extractbw.RunWorkerAsync();
                         return;
@@ -1640,6 +1713,7 @@ namespace WebMConverter
             buttonGo.Text = "Cancel";
             progressBarIndexing.Value = 0;
             progressBarIndexing.Style = ProgressBarStyle.Continuous;
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
             labelIndexingProgress.Text = "Indexing...";
             indexbw.RunWorkerAsync();
         }
@@ -1652,6 +1726,7 @@ namespace WebMConverter
             Program.FileMd5 = null;
             buttonBrowseIn.Enabled = true;
             textBoxIn.Enabled = true;
+            taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
             panelHideTheOptions.SendToBack();
         }
 
@@ -1707,21 +1782,13 @@ namespace WebMConverter
         {
             using (StreamWriter avscript = new StreamWriter(avsFileName, false))
             {
-                // AviSynth can't LoadPlugin if the path contains non-english characters, so we convert the possibly weird path into 8.3 notation
-                StringBuilder shortPluginPath = new StringBuilder(255);
-                string pluginPath = Path.Combine(Environment.CurrentDirectory, "Binaries", "Win32");
-                NativeMethods.GetShortPathName(@"\\?\" + pluginPath, shortPluginPath, shortPluginPath.Capacity);
-                // the \\?\ is added because GetShortPathName will fail if pluginPath is longer than 256 characters otherwise.
+                var pluginPath = Path.Combine(Environment.CurrentDirectory, "Binaries", "Win32");
+                var shortPluginPath = Program.GetCompatiblePath(pluginPath);
 
                 avscript.WriteLine(@"PluginPath = ""{0}\""", shortPluginPath);
                 avscript.WriteLine(@"try { LoadPlugin(PluginPath+""ffms2.dll"") } catch (_) { LoadCPlugin(PluginPath+""ffms2.dll"") }");
                 if (Filters.Subtitle != null)
                     avscript.WriteLine(@"LoadPlugin(PluginPath+""VSFilter.dll"")");
-
-                // UTF-8 argument bug workaround
-                // see https://github.com/FFMS/ffms2/pull/167
-                avscript.WriteLine(@"FFIndex(""{0}"", cachefile=""{1}"", utf8=True)", avsInputFile, _indexFile);
-                // this won't actually index file file (we already did), but it will call FFMS_Init with utf8 = true properly, unlike FFVideoSource
 
                 if (Program.InputHasAudio)
                     avscript.WriteLine(@"AudioDub(FFVideoSource(""{0}"",cachefile=""{1}"",track={2}), FFAudioSource(""{0}"",cachefile=""{1}"",track={3}))", avsInputFile, _indexFile, videotrack, audiotrack);

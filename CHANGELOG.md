@@ -1,3 +1,18 @@
+v2.23.0
+=======
+- Added progress bars!
+ - Downloading and Converting dialogs now have a progress bar in the window.
+ - Additionaly, the taskbar icon will show progress during Indexing, Downloading and Converting.
+- You can now drag and drop subtitles and stuff onto the program with a video loaded to instantly add them as a filter!
+ - Dropping a .srt or .ass file will add a Subtitle filter
+ - Dropping a .png, .jpeg or .jpg file will add an Overlay filter
+ - Dropping a .wav, .mp3 or .ogg file will add a Dub filter
+- Added drag and drop support to Subtitle filter dialog.
+- Downloading and Converting dialogs will now scroll the output even if they don't have focus.
+- Updater will now warn if downloaded certificate does not match current one.
+- Fixed Subtitle and Overlay filters breaking with non-english filenames.
+- The program will no longer disappear from alt-tabbing during a conversion.
+
 v2.22.0
 =======
 - Will now automatically download and load videos if your input is a link.
