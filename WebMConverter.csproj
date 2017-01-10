@@ -335,7 +335,7 @@
     </ItemGroup>
     <PropertyGroup>
       <OutputAssembly>$(OutputPath)\WebMConverter.merged.exe</OutputAssembly>
-      <Merger>"$(SolutionDir)\packages\ilmerge.2.14.1208\ILMerge.exe"</Merger>
+      <Merger>"$(SolutionDir)\packages\ilmerge.2.14.1208\tools\ILMerge.exe"</Merger>
     </PropertyGroup>
     <Message Text="MERGING: @(MergeAssemblies->'%(Filename)') into $(OutputAssembly)" Importance="High" />
     <Exec Command="$(Merger) /out:&quot;$(OutputAssembly)&quot; @(MergeAssemblies->'&quot;%(FullPath)&quot;', ' ')" />

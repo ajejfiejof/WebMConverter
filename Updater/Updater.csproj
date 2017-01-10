@@ -105,7 +105,7 @@
     </ItemGroup>
     <PropertyGroup>
       <OutputAssembly>$(OutputPath)\WebMConverter.Updater.update.exe</OutputAssembly>
-      <Merger>&quot;$(SolutionDir)\packages\ilmerge.2.14.1208\ILMerge.exe&quot;</Merger>
+      <Merger>&quot;$(SolutionDir)\packages\ilmerge.2.14.1208\tools\ILMerge.exe&quot;</Merger>
     </PropertyGroup>
     <Message Text="MERGING: @(MergeAssemblies->'%(Filename)') into $(OutputAssembly)" Importance="High" />
     <Exec Command="$(Merger) /out:&quot;$(OutputAssembly)&quot; @(MergeAssemblies->'&quot;%(FullPath)&quot;', ' ')" />
