@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMConverter", "WebMConverter.csproj", "{6DFD4DB4-C541-4CDE-904D-C32F7BA7F8C5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8EA1E414-0956-43DB-BC63-5FA24102F0B2} = {8EA1E414-0956-43DB-BC63-5FA24102F0B2}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.csproj", "{8EA1E414-0956-43DB-BC63-5FA24102F0B2}"
 EndProject
