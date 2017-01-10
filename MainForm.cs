@@ -1724,11 +1724,6 @@ namespace WebMConverter
                 if (Filters.Subtitle != null)
                     avscript.WriteLine(@"LoadPlugin(PluginPath+""VSFilter.dll"")");
 
-                // UTF-8 argument bug workaround
-                // see https://github.com/FFMS/ffms2/pull/167
-                avscript.WriteLine(@"FFIndex(""{0}"", cachefile=""{1}"", utf8=True)", avsInputFile, _indexFile);
-                // this won't actually index file file (we already did), but it will call FFMS_Init with utf8 = true properly, unlike FFVideoSource
-
                 if (Program.InputHasAudio)
                     avscript.WriteLine(@"AudioDub(FFVideoSource(""{0}"",cachefile=""{1}"",track={2}), FFAudioSource(""{0}"",cachefile=""{1}"",track={3}))", avsInputFile, _indexFile, videotrack, audiotrack);
                 else
