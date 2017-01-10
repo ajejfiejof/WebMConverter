@@ -121,13 +121,14 @@ namespace WebMConverter
         public override string ToString()
         {
             var conversion = Program.InputHasWeirdPixelFormat ? "ConvertToYV12() " : "";
+            var shortFileName = Program.GetCompatiblePath(FileName);
 
             switch (Type)
             {
                 case SubtitleType.TextSub:
-                    return string.Format(@"{1}textsub(""{0}"")", FileName, conversion);
+                    return string.Format(@"{1}textsub(""{0}"")", shortFileName, conversion);
                 case SubtitleType.VobSub:
-                    return string.Format(@"{1}vobsub(""{0}"")", FileName, conversion);
+                    return string.Format(@"{1}vobsub(""{0}"")", shortFileName, conversion);
                 default:
                     throw new NotImplementedException();
             }

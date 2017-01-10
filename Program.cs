@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.XPath;
@@ -180,6 +180,15 @@ namespace WebMConverter
                 KillProcessAndChildren(Convert.ToInt32(mo["ProcessID"])); //kill child processes(also kills childrens of childrens etc.)
             }
 
+        }
+
+        internal static string GetCompatiblePath(string input)
+        {
+            // AviSynth and various plugins can't deal with utf-8 paths, so we convert the possibly weird path into 8.3 notation
+            var compatible = new StringBuilder(255);
+            NativeMethods.GetShortPathName(@"\\?\" + input, compatible, compatible.Capacity);
+            // the \\?\ is added because GetShortPathName will fail if input is longer than 256 characters otherwise.
+            return compatible.ToString();
         }
 
         /// <summary>
