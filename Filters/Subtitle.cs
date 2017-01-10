@@ -103,6 +103,20 @@ namespace WebMConverter
                 }
             }
         }
+
+        private void SubtitleForm_DragDrop(object sender, DragEventArgs e)
+        {
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            checkBoxInternalSubs.Checked = false;
+            textBoxSubtitleFile.Text = files[0];
+        }
+
+        private void SubtitleForm_DragEnter(object sender, DragEventArgs e)
+        {
+            var dataPresent = e.Data.GetDataPresent(DataFormats.FileDrop);
+            e.Effect = dataPresent ? DragDropEffects.Copy : DragDropEffects.None;
+        }
     }
 
     public class SubtitleFilter

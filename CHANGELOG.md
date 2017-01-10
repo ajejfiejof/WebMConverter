@@ -8,6 +8,7 @@
  - Dropping a .srt or .ass file will add a Subtitle filter
  - Dropping a .png, .jpeg or .jpg file will add an Overlay filter
  - Dropping a .wav, .mp3 or .ogg file will add a Dub filter
+- Added drag and drop support to Subtitle filter dialog
 
 v2.22.0
 =======
