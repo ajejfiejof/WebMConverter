@@ -135,6 +135,72 @@ namespace WebMConverter
         void HandleDragDrop(object sender, DragEventArgs e)
         {
             var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            if (inputFile != null) // we have a file loaded already, so this might be a subtitle or something
+            {
+                switch (Path.GetExtension(files[0]))
+                {
+                    case ".srt":
+                    case ".ass":
+                        var filter = new SubtitleFilter(files[0], SubtitleType.TextSub);
+
+                        if (boxAdvancedScripting.Checked)
+                        {
+                            textBoxProcessingScript.AppendText(Environment.NewLine + filter);
+                        }
+                        else
+                        {
+                            Filters.Subtitle = filter;
+                            listViewProcessingScript.Items.Add("Subtitle", "subtitles");
+                            buttonSubtitle.Enabled = false;
+                        }
+                        return;
+                    case ".png":
+                    case ".jpeg":
+                    case ".jpg":
+                        using (var form = new OverlayForm(new OverlayFilter(new Point(0, 0), files[0])))
+                        {
+                            if (form.ShowDialog(this) != DialogResult.OK) return;
+
+                            if (boxAdvancedScripting.Checked)
+                            {
+                                textBoxProcessingScript.AppendText(Environment.NewLine + form.GeneratedFilter);
+                            }
+                            else
+                            {
+                                Filters.Overlay = form.GeneratedFilter;
+                                listViewProcessingScript.Items.Add("Overlay", "overlay");
+                                buttonOverlay.Enabled = false;
+                            }
+                        }
+                        return;
+                    case ".wav":
+                    case ".mp3":
+                    case ".ogg":
+                        using (var form = new DubForm(new DubFilter(files[0], null, DubMode.TrimAudio)))
+                        {
+                            if (form.ShowDialog(this) != DialogResult.OK) return;
+
+                            if (boxAdvancedScripting.Checked)
+                            {
+                                textBoxProcessingScript.AppendText(Environment.NewLine + form.GeneratedFilter);
+                            }
+                            else
+                            {
+                                Filters.Dub = form.GeneratedFilter;
+                                listViewProcessingScript.Items.Add("Dub", "dub");
+
+                                if (Filters.Dub.Mode != DubMode.TrimAudio) // the video duration may have changed
+                                    UpdateArguments(sender, e);
+
+                                buttonDub.Enabled = false;
+                            }
+                            boxAudio.Checked = boxAudio.Enabled = true;
+                        }
+                        return;
+                }
+            }
+
             SetFile(files[0]);
         }
 

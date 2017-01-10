@@ -4,6 +4,10 @@
  - Additionaly, the taskbar icon will show progress during Indexing, Downloading and Converting
 - Updater will now warn if downloaded certificate does not match current one.
 - Fixed Subtitle and Overlay filters breaking with non-english filenames.
+- You can now drag and drop subtitles and stuff onto the program with a video loaded to instantly add them as a filter!
+ - Dropping a .srt or .ass file will add a Subtitle filter
+ - Dropping a .png, .jpeg or .jpg file will add an Overlay filter
+ - Dropping a .wav, .mp3 or .ogg file will add a Dub filter
 
 v2.22.0
 =======
