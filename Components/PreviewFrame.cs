@@ -68,7 +68,7 @@ namespace WebMConverter
             width = (int)(frame.EncodedResolution.Width * scale);
             height = (int)(frame.EncodedResolution.Height * scale);
 
-            // http://stackoverflow.com/a/24199315/174466
+            // https://stackoverflow.com/a/24199315/174466
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
 

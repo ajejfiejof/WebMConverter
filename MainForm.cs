@@ -263,7 +263,7 @@ namespace WebMConverter
                     using (var noticeChecker = new WebClient())
                     {
                         const string caption = "Notice";
-                        var result = await noticeChecker.DownloadStringTaskAsync(@"http://nixx.is-fantabulo.us/WebM for Retards/NOTICE");
+                        var result = await noticeChecker.DownloadStringTaskAsync(@"https://nixx.is-fantabulo.us/WebM for Retards/NOTICE");
                         var urlAndMessage = result.Split(new[] { '\n' }, 2);
                         switch (MessageBox.Show(urlAndMessage[1], caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                         {
@@ -432,7 +432,7 @@ namespace WebMConverter
                 if (!VideoDownload.DownloadEnabled)
                 {
                     var result = MessageBox.Show(
-                        "Couldn't find Youtube-DL. Either download it and put it somewhere in your %PATH%, or place it next to WebMConverter.exe.\nYou can download it from http://yt-dl.org/",
+                        "Couldn't find Youtube-DL. Either download it and put it somewhere in your %PATH%, or place it next to WebMConverter.exe.\nYou can download it from yt-dl.org",
                         "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
                     if (result == DialogResult.Retry)
                     {
@@ -1958,11 +1958,11 @@ namespace WebMConverter
 
                     /*
                      * ffmpeg doesn't let you input the cbr arguments manually (I think) so we do a bit of math here.
-                     * ffmpeg lists this in the documentation (http://ffmpeg.org/ffmpeg-all.html#libvpx):
+                     * ffmpeg lists this in the documentation (https://ffmpeg.org/ffmpeg-all.html#libvpx):
                      *  rc_buf_sz         = (bufsize * 1000 / vb)
                      *  rc_buf_optimal_sz = (bufsize * 1000 / vb * 5 / 6)
                      *  rc_buf_initial_sz = (rc_init_occupancy * 1000 / vb)
-                     * libvpx lists this in the documentation (http://www.webmproject.org/docs/encoder-parameters/#vbr-cbr-and-cq-mode):
+                     * libvpx lists this in the documentation (https://www.webmproject.org/docs/encoder-parameters/#vbr-cbr-and-cq-mode):
                      *  --buf-initial-sz=<arg>
                      *  --buf-optimal-sz=<arg>
                      *  --buf-sz=<arg>
