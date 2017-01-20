@@ -16,7 +16,7 @@ This software is released under the MIT license. See LICENSE.md.
 
 If you have any issues with this program, you may report them on [GitGud][NewIssue] or you can email me at `nixx@is-fantabulo.us`.
 
- [LatestDownload]: https://nixx.is-fantabulo.us/WebM for Retards/latest.zip
+ [LatestDownload]: https://nixx.is-fantabulo.us/WebM%20for%20Retards/latest.zip
  [DotNet45]: https://www.microsoft.com/en-us/download/details.aspx?id=30653
  [AviSynth]: http://avisynth.nl/index.php/Main_Page#Official_builds
  [NewIssue]: https://gitgud.io/nixx/WebMConverter/issues/new
