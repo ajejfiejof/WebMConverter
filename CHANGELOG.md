@@ -1,3 +1,5 @@
+- Now uses HTTPS for update checking.
+
 v2.23.0
 =======
 - Added progress bars!
