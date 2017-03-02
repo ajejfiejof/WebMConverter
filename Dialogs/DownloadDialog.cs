@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using Timer = System.Windows.Forms.Timer;
+using static WebMConverter.Utility;
 
 namespace WebMConverter.Dialogs
 {
@@ -171,13 +172,13 @@ namespace WebMConverter.Dialogs
             if (!_ended || _panic) //Prevent stack overflow
             {
                 if (!_filenameGetterProcess.HasExited)
-                    Program.KillProcessAndChildren(_filenameGetterProcess.Id);
+                    KillProcessAndChildren(_filenameGetterProcess.Id);
 
                 if (_gettingFilename)
                     return;
 
                 if (!_downloaderProcess.HasExited)
-                    Program.KillProcessAndChildren(_downloaderProcess.Id);
+                    KillProcessAndChildren(_downloaderProcess.Id);
             }
             else
                 Close();

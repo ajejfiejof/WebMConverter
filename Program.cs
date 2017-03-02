@@ -80,119 +80,6 @@ namespace WebMConverter
         public static Dictionary<int, Tuple<string, SubtitleType, string>> SubtitleTracks; // stream id, <tag:title OR codec_name, textsub/vobsub, extension>
         public static List<string> AttachmentList;
 
-        static int TimeToFrame(double time)
-        {
-            int frame = (int)((float)VideoSource.FPSNumerator / (float)VideoSource.FPSDenominator * time);
-            double closest = double.MaxValue;
-
-            FFMSSharp.Track VideoTrack = VideoSource.Track;
-            FFMSSharp.FrameInfo frameinfo;
-            while (true)
-            {
-                frameinfo = VideoTrack.GetFrameInfo(frame);
-                double difference;
-
-                try
-                {
-                    // To convert this to a timestamp in wallclock milliseconds, use the relation int64_t timestamp = (int64_t)((FFMS_FrameInfo->PTS * FFMS_TrackTimeBase->Num) / (double)FFMS_TrackTimeBase->Den).
-                    difference = ((frameinfo.PTS * VideoTrack.TimeBaseNumerator) / VideoTrack.TimeBaseDenominator / 1000) - time;
-                }
-                catch (NullReferenceException) // We've seeked out of bounds -- the user likely requested a time longer than the video.
-                {
-                    frame = VideoTrack.NumberOfFrames - 1;
-                    break;
-                }
-
-                if (Math.Abs(difference) == closest) break; // We've seeked as close as possible.
-
-                if (Math.Abs(difference) < closest)
-                    closest = Math.Abs(difference);
-
-                if (difference < 0)
-                {
-                    frame += 1;
-                }
-                else
-                {
-                    frame -= 1;
-                }
-
-            }
-            return frame;
-        }
-        internal static int TimeSpanToFrame(TimeSpan time)
-        {
-            return TimeToFrame(time.TotalSeconds);
-        }
-
-        static long FrameToTime(int frame)
-        {
-            var frameinfo = VideoSource.Track.GetFrameInfo(frame);
-            return frameinfo.PTS * VideoSource.Track.TimeBaseNumerator / VideoSource.Track.TimeBaseDenominator;
-        }
-        internal static TimeSpan FrameToTimeSpan(int frame)
-        {
-            return new TimeSpan(Program.FrameToTime(frame) * 10000);
-        }
-        internal static string FrameToTimeStamp(int frame)
-        {
-            return FrameToTimeSpan(frame).ToString(@"hh\:mm\:ss");
-        }
-
-        internal static double ProbeDuration(string filename, bool avs)
-        {
-            using (var prober = new FFprobe(filename, format: avs ? "-f avisynth" : "", argument: "-show_format"))
-            {
-                string streamInfo = prober.Probe();
-
-                using (var s = new System.IO.StringReader(streamInfo))
-                {
-                    var doc = new XPathDocument(s);
-                    var format = doc.CreateNavigator()
-                        .SelectSingleNode("//ffprobe/format");
-                    
-                    if (format == null)
-                        return -1;
-
-                    var duration = Convert.ToDouble(format.GetAttribute("duration", ""), CultureInfo.InvariantCulture);
-                    var startTime = Convert.ToDouble(format.GetAttribute("start_time", ""), CultureInfo.InvariantCulture);
-                    return duration - startTime;
-                }
-            }
-        }
-
-        internal static void KillProcessAndChildren(int pid)
-        {
-            var processSearcher = new ManagementObjectSearcher
-              ("Select * From Win32_Process Where ParentProcessID=" + pid);
-            var processCollection = processSearcher.Get();
-
-            try
-            {
-                var proc = Process.GetProcessById(pid);
-                if (!proc.HasExited) proc.Kill();
-            }
-            catch (ArgumentException)
-            {
-                // Process already exited.
-            }
-
-            foreach (var mo in processCollection)
-            {
-                KillProcessAndChildren(Convert.ToInt32(mo["ProcessID"])); //kill child processes(also kills childrens of childrens etc.)
-            }
-
-        }
-
-        internal static string GetCompatiblePath(string input)
-        {
-            // AviSynth and various plugins can't deal with utf-8 paths, so we convert the possibly weird path into 8.3 notation
-            var compatible = new StringBuilder(255);
-            NativeMethods.GetShortPathName(@"\\?\" + input, compatible, compatible.Capacity);
-            // the \\?\ is added because GetShortPathName will fail if input is longer than 256 characters otherwise.
-            return compatible.ToString();
-        }
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -202,8 +89,12 @@ namespace WebMConverter
             // Check for AviSynth
             if (NativeMethods.LoadLibrary("avisynth") == IntPtr.Zero)
             {
-                MessageBox.Show(string.Format("Failed to load AviSynth: {0}.{1}I'll open the download page, go ahead and install it.", new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error()).Message, Environment.NewLine), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                System.Diagnostics.Process.Start("http://avisynth.nl/index.php/Main_Page#Official_builds");
+                var errorMessage = new Win32Exception(Marshal.GetLastWin32Error()).Message;
+                MessageBox.Show(
+                   $"Failed to load AviSynth: {errorMessage}.{Environment.NewLine}" + 
+                    "I'll open the download page, go ahead and install it.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Process.Start("http://avisynth.nl/index.php/Main_Page#Official_builds");
                 return;
             }
 
@@ -220,35 +111,6 @@ namespace WebMConverter
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
-        }
-    }
-
-    public enum FileType
-    {
-        Video,
-        Avisynth
-    }
-
-    public enum SubtitleType
-    {
-        TextSub,
-        VobSub
-    }
-
-    public static class Extensions
-    {
-        // http://stackoverflow.com/a/12179408/174466
-        public static void InvokeIfRequired(this ISynchronizeInvoke obj, MethodInvoker action)
-        {
-            if (obj.InvokeRequired)
-            {
-                var args = new object[0];
-                obj.Invoke(action, args);
-            }
-            else
-            {
-                action();
-            }
         }
     }
 }

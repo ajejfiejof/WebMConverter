@@ -17,6 +17,7 @@ using StopWatch = System.Timers.Timer;
 
 using WebMConverter.Components;
 using WebMConverter.Dialogs;
+using static WebMConverter.Utility;
 
 namespace WebMConverter
 {
@@ -1783,7 +1784,7 @@ namespace WebMConverter
             using (StreamWriter avscript = new StreamWriter(avsFileName, false))
             {
                 var pluginPath = Path.Combine(Environment.CurrentDirectory, "Binaries", "Win32");
-                var shortPluginPath = Program.GetCompatiblePath(pluginPath);
+                var shortPluginPath = GetCompatiblePath(pluginPath);
 
                 avscript.WriteLine(@"PluginPath = ""{0}\""", shortPluginPath);
                 avscript.WriteLine(@"try { LoadPlugin(PluginPath+""ffms2.dll"") } catch (_) { LoadCPlugin(PluginPath+""ffms2.dll"") }");
@@ -2066,7 +2067,7 @@ namespace WebMConverter
                 else if (Filters.MultipleTrim != null)
                     duration = Filters.MultipleTrim.GetDuration();
                 else 
-                    duration = Program.FrameToTimeSpan(Program.VideoSource.NumberOfFrames - 1).TotalSeconds;
+                    duration = FrameToTimeSpan(Program.VideoSource.NumberOfFrames - 1).TotalSeconds;
 
                 if (Filters.Rate != null)
                 {

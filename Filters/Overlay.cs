@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using WebMConverter.Dialogs;
+using static WebMConverter.Utility;
 
 namespace WebMConverter
 {
@@ -152,11 +153,11 @@ namespace WebMConverter
 
         private void timeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var dialog = new InputDialog<TimeSpan>("Time", Program.FrameToTimeSpan(previewFrame.Frame)))
+            using (var dialog = new InputDialog<TimeSpan>("Time", FrameToTimeSpan(previewFrame.Frame)))
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    int i = Program.TimeSpanToFrame(dialog.Value);
+                    int i = TimeSpanToFrame(dialog.Value);
                     i = Math.Max(0, Math.Min(Program.VideoSource.NumberOfFrames - 1, i)); // Make sure we don't go out of bounds.
                     previewFrame.Frame = i;
                 }
@@ -215,7 +216,7 @@ namespace WebMConverter
 
         public override string ToString()
         {
-            var shortFileName = Program.GetCompatiblePath(FileName);
+            var shortFileName = GetCompatiblePath(FileName);
             return string.Format("Overlay(ImageSource(\"{0}\"), x={1}, y={2}, mask=ImageSource(\"{0}\",pixel_type=\"RGB32\").ShowAlpha(pixel_type=\"RGB32\"))", shortFileName, Placement.X, Placement.Y);
         }
     }

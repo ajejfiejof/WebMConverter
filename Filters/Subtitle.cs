@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using static WebMConverter.Utility;
 
 namespace WebMConverter
 {
@@ -135,7 +136,7 @@ namespace WebMConverter
         public override string ToString()
         {
             var conversion = Program.InputHasWeirdPixelFormat ? "ConvertToYV12() " : "";
-            var shortFileName = Program.GetCompatiblePath(FileName);
+            var shortFileName = GetCompatiblePath(FileName);
 
             switch (Type)
             {

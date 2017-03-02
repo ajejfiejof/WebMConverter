@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using Timer = System.Windows.Forms.Timer;
+using static WebMConverter.Utility;
 
 namespace WebMConverter.Dialogs
 {
@@ -108,7 +109,7 @@ namespace WebMConverter.Dialogs
                 argument = _arguments[0];
             }
 
-            _induration = Program.ProbeDuration(_infile, true);
+            _induration = ProbeDuration(_infile, true);
 
             if (_twopass)
             {
@@ -268,7 +269,7 @@ namespace WebMConverter.Dialogs
             }
             else
             {
-                _outduration = Program.ProbeDuration(_outfile, false);
+                _outduration = ProbeDuration(_outfile, false);
                 if (Math.Abs(_induration - _outduration) > 0.01)
                 {
                     boxOutput.AppendText("\n\nRestraints are too high!");
