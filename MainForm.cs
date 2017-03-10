@@ -152,6 +152,7 @@ namespace WebMConverter
                         else
                         {
                             Filters.Subtitle = filter;
+                            listViewProcessingScript.Items.Cast<ListViewItem>().Where(x => x.Text == "Subtitle").ToList().ForEach(listViewProcessingScript.Items.Remove);
                             listViewProcessingScript.Items.Add("Subtitle", "subtitles");
                             buttonSubtitle.Enabled = false;
                         }
@@ -170,6 +171,7 @@ namespace WebMConverter
                             else
                             {
                                 Filters.Overlay = form.GeneratedFilter;
+                                listViewProcessingScript.Items.Cast<ListViewItem>().Where(x => x.Text == "Overlay").ToList().ForEach(listViewProcessingScript.Items.Remove);
                                 listViewProcessingScript.Items.Add("Overlay", "overlay");
                                 buttonOverlay.Enabled = false;
                             }
@@ -189,6 +191,7 @@ namespace WebMConverter
                             else
                             {
                                 Filters.Dub = form.GeneratedFilter;
+                                listViewProcessingScript.Items.Cast<ListViewItem>().Where(x => x.Text == "Dub").ToList().ForEach(listViewProcessingScript.Items.Remove);
                                 listViewProcessingScript.Items.Add("Dub", "dub");
 
                                 if (Filters.Dub.Mode != DubMode.TrimAudio) // the video duration may have changed
