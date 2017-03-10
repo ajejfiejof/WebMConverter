@@ -25,9 +25,9 @@ namespace WebMConverter
 
             InputFilter = filterToEdit;
 
-            previewFrame.Picture.Paint += new System.Windows.Forms.PaintEventHandler(this.previewPicture_Paint);
-            previewFrame.Picture.MouseDown += new System.Windows.Forms.MouseEventHandler(this.previewPicture_MouseDown);
-            previewFrame.Picture.MouseMove += new System.Windows.Forms.MouseEventHandler(this.previewPicture_MouseMove);
+            previewFrame.Picture.Paint += new PaintEventHandler(previewPicture_Paint);
+            previewFrame.Picture.MouseDown += new MouseEventHandler(previewPicture_MouseDown);
+            previewFrame.Picture.MouseMove += new MouseEventHandler(previewPicture_MouseMove);
         }
 
         void OverlayForm_Load(object sender, EventArgs e)
@@ -85,7 +85,7 @@ namespace WebMConverter
 
         float getPictureScale(PictureBox pictureBox)
         {
-            return (float)pictureBox.ClientSize.Width / (float)videoResolution.Width;
+            return (float)pictureBox.ClientSize.Width / videoResolution.Width;
         }
 
         void previewPicture_Paint(object sender, PaintEventArgs e)
@@ -112,7 +112,7 @@ namespace WebMConverter
 
         void previewPicture_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.None)
+            if (e.Button == MouseButtons.None)
                 return;
 
             var scale = getPictureScale(previewFrame.Picture);
@@ -205,8 +205,8 @@ namespace WebMConverter
 
     public class OverlayFilter
     {
-        public readonly Point Placement;
-        public readonly string FileName;
+        public Point Placement { get; }
+        public string FileName { get; }
 
         public OverlayFilter(Point placement, string fileName)
         {
@@ -217,7 +217,7 @@ namespace WebMConverter
         public override string ToString()
         {
             var shortFileName = GetCompatiblePath(FileName);
-            return string.Format("Overlay(ImageSource(\"{0}\"), x={1}, y={2}, mask=ImageSource(\"{0}\",pixel_type=\"RGB32\").ShowAlpha(pixel_type=\"RGB32\"))", shortFileName, Placement.X, Placement.Y);
+            return $"Overlay(ImageSource(\"{shortFileName}\"), x={Placement.X}, y={Placement.Y}, mask=ImageSource(\"{shortFileName}\",pixel_type=\"RGB32\").ShowAlpha(pixel_type=\"RGB32\"))";
         }
     }
 }

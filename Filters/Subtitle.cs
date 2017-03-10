@@ -17,7 +17,9 @@ namespace WebMConverter
             if (Program.InputHasWeirdPixelFormat)
             {
                 MessageBox.Show(
-                    "Your input video is Hi444p! That's cool, but the subtitle renderer can't deal with that pixel format.\nIf you add subtitles to your webm, we'll have to convert it to something a bit less cool.\nIt's handed automatically, though. Don't worry.",
+                    $"Your input video is Hi444p! That's cool, but the subtitle renderer can't deal with that pixel format.{Environment.NewLine}" + 
+                    $"If you add subtitles to your webm, we'll have to convert it to something a bit less cool.{Environment.NewLine}" + 
+                    "It's handed automatically, though. Don't worry.",
                     "FYI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
@@ -31,7 +33,7 @@ namespace WebMConverter
                 Dictionary<int, string> subtitleTracks = new Dictionary<int, string>();
                 foreach (var track in Program.SubtitleTracks)
                 {
-                    subtitleTracks.Add(track.Key, string.Format("#{0}: {1}", track.Key, track.Value.Item1));
+                    subtitleTracks.Add(track.Key, $"#{track.Key}: {track.Value.Item1}");
                 }
                 comboBoxVideoTracks.DataSource = new BindingSource(subtitleTracks, null);
                 comboBoxVideoTracks.ValueMember = "Key";
@@ -71,7 +73,7 @@ namespace WebMConverter
                     default:
                         throw new NotImplementedException();
                 }
-                string filename = Path.Combine(Program.AttachmentDirectory, string.Format("sub{0}{1}", (int)comboBoxVideoTracks.SelectedValue, extension));
+                string filename = Path.Combine(Program.AttachmentDirectory, $"sub{(int)comboBoxVideoTracks.SelectedValue}{extension}");
                 GeneratedFilter = new SubtitleFilter(filename, type, (int)comboBoxVideoTracks.SelectedValue);
             }
             else
@@ -122,9 +124,9 @@ namespace WebMConverter
 
     public class SubtitleFilter
     {
-        public readonly string FileName;
-        public readonly SubtitleType Type;
-        public readonly int Track;
+        public string FileName { get; }
+        public SubtitleType Type { get; }
+        public int Track { get; }
 
         public SubtitleFilter(string fileName, SubtitleType type, int track = -1)
         {
@@ -141,9 +143,9 @@ namespace WebMConverter
             switch (Type)
             {
                 case SubtitleType.TextSub:
-                    return string.Format(@"{1}textsub(""{0}"")", shortFileName, conversion);
+                    return conversion + $@"textsub(""{shortFileName}"")";
                 case SubtitleType.VobSub:
-                    return string.Format(@"{1}vobsub(""{0}"")", shortFileName, conversion);
+                    return conversion + $@"vobsub(""{shortFileName}"")";
                 default:
                     throw new NotImplementedException();
             }

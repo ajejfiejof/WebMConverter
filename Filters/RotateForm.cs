@@ -73,15 +73,8 @@ namespace WebMConverter
             }
         }
 
-        private void startToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            previewFrame.Frame = Filters.Trim.TrimStart;
-        }
-
-        private void endToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            previewFrame.Frame = Filters.Trim.TrimEnd;
-        }
+        private void startToolStripMenuItem_Click(object sender, EventArgs e) => previewFrame.Frame = Filters.Trim.TrimStart;
+        private void endToolStripMenuItem_Click(object sender, EventArgs e) => previewFrame.Frame = Filters.Trim.TrimEnd;
 
         private void checkUpdate(object sender, EventArgs e)
         {
@@ -189,18 +182,15 @@ namespace WebMConverter
                 mode = RotateFilter.RotateMode.Left;
 
             GeneratedFilter = new RotateFilter(mode, checkFlipHorizontal.Checked, checkFlipVertical.Checked);
-
             DialogResult = DialogResult.OK;
-
-            Close();
         }
     }
 
     public class RotateFilter
     {
-        public readonly RotateMode Mode;
-        public readonly bool FlipHorizontal;
-        public readonly bool FlipVertical;
+        public RotateMode Mode { get; }
+        public bool FlipHorizontal { get; }
+        public bool FlipVertical { get; }
 
         public RotateFilter(RotateMode mode, bool flipHorizontal, bool flipVertical)
         {
