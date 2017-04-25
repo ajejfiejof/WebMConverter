@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using WebMConverter.Dialogs;
+using static WebMConverter.Utility;
 
 namespace WebMConverter
 {
@@ -61,26 +62,19 @@ namespace WebMConverter
 
         private void timeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var dialog = new InputDialog<TimeSpan>("Time", Program.FrameToTimeSpan(previewFrame.Frame)))
+            using (var dialog = new InputDialog<TimeSpan>("Time", FrameToTimeSpan(previewFrame.Frame)))
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    int i = Program.TimeSpanToFrame(dialog.Value);
+                    int i = TimeSpanToFrame(dialog.Value);
                     i = Math.Max(0, Math.Min(Program.VideoSource.NumberOfFrames - 1, i)); // Make sure we don't go out of bounds.
                     previewFrame.Frame = i;
                 }
             }
         }
 
-        private void startToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            previewFrame.Frame = Filters.Trim.TrimStart;
-        }
-
-        private void endToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            previewFrame.Frame = Filters.Trim.TrimEnd;
-        }
+        private void startToolStripMenuItem_Click(object sender, EventArgs e) => previewFrame.Frame = Filters.Trim.TrimStart;
+        private void endToolStripMenuItem_Click(object sender, EventArgs e) => previewFrame.Frame = Filters.Trim.TrimEnd;
 
         private void checkUpdate(object sender, EventArgs e)
         {
@@ -188,18 +182,15 @@ namespace WebMConverter
                 mode = RotateFilter.RotateMode.Left;
 
             GeneratedFilter = new RotateFilter(mode, checkFlipHorizontal.Checked, checkFlipVertical.Checked);
-
             DialogResult = DialogResult.OK;
-
-            Close();
         }
     }
 
     public class RotateFilter
     {
-        public readonly RotateMode Mode;
-        public readonly bool FlipHorizontal;
-        public readonly bool FlipVertical;
+        public RotateMode Mode { get; }
+        public bool FlipHorizontal { get; }
+        public bool FlipVertical { get; }
 
         public RotateFilter(RotateMode mode, bool flipHorizontal, bool flipVertical)
         {

@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using Timer = System.Windows.Forms.Timer;
+using static WebMConverter.Utility;
 
 namespace WebMConverter.Dialogs
 {
@@ -37,7 +38,7 @@ namespace WebMConverter.Dialogs
         private void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs args)
         {
             if (args.Data != null)
-                boxOutput.Invoke((Action)(() => boxOutput.AppendText('\n' + args.Data)));
+                boxOutput.Invoke((Action)(() => boxOutput.AppendText(Environment.NewLine + args.Data)));
         }
 
         private void FilenameGetterOnOutputDataReceived(object sender, DataReceivedEventArgs args)
@@ -50,7 +51,7 @@ namespace WebMConverter.Dialogs
         {
             if (args.Data != null)
             {
-                boxOutput.Invoke((Action)(() => boxOutput.AppendText('\n' + args.Data)));
+                boxOutput.Invoke((Action)(() => boxOutput.AppendText(Environment.NewLine + args.Data)));
 
                 if (DataContainsProgress(args.Data))
                     ParseAndUpdateProgress(args.Data);
@@ -60,10 +61,7 @@ namespace WebMConverter.Dialogs
         // example youtube-dl line:
         // [download]  51.5% of ~3.85MiB at 20.49MiB/s ETA 00:00
 
-        private bool DataContainsProgress(string data)
-        {
-            return data.StartsWith("[download]");
-        }
+        private bool DataContainsProgress(string data) => data.StartsWith("[download]");
 
         private void ParseAndUpdateProgress(string input)
         {
@@ -92,8 +90,8 @@ namespace WebMConverter.Dialogs
             _filenameGetterProcess.Exited += (o, args) => boxOutput.Invoke((Action) (() =>
             {
                 if (_panic) return;
-                boxOutput.AppendText(string.Format("\nDownloading to {0}", Outfile));
-                _downloaderProcess.StartInfo.Arguments = @"-o """ + Outfile + @""" " + _infile;
+                boxOutput.AppendText($"{Environment.NewLine}Downloading to {Outfile}");
+                _downloaderProcess.StartInfo.Arguments = $@"-o ""{Outfile}"" {_infile}";
 
                 _timer = new Timer { Interval = 500 };
                 _timer.Tick += Exited;
@@ -105,7 +103,7 @@ namespace WebMConverter.Dialogs
             _downloaderProcess.Exited += (o, args) => boxOutput.Invoke((Action)(() =>
             {
                 if (_panic) return; //This should stop that one exception when closing the converter
-                boxOutput.AppendText("\n--- YOUTUBE-DL HAS EXITED ---");
+                boxOutput.AppendText($"{Environment.NewLine}--- YOUTUBE-DL HAS EXITED ---");
                 buttonCancel.Enabled = false;
 
                 _timer = new Timer {Interval = 500};
@@ -126,8 +124,8 @@ namespace WebMConverter.Dialogs
             {
                 if (_filenameGetterProcess.ExitCode != 0)
                 {
-                    boxOutput.AppendText(string.Format("\n\nyoutube-dl.exe exited with exit code {0}. That's usually bad.", _filenameGetterProcess.ExitCode));
-                    boxOutput.AppendText("\nIf you have no idea what went wrong, open an issue on GitGud and copy paste the output of this window there.");
+                    boxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}youtube-dl.exe exited with exit code {_filenameGetterProcess.ExitCode}. That's usually bad.");
+                    boxOutput.AppendText($"{Environment.NewLine}If you have no idea what went wrong, open an issue on GitGud and copy paste the output of this window there.");
                     pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
                     buttonCancel.Enabled = true;
                     _ended = true;
@@ -144,15 +142,15 @@ namespace WebMConverter.Dialogs
 
             if (_downloaderProcess.ExitCode != 0)
             {
-                boxOutput.AppendText(string.Format("\n\nyoutube-dl.exe exited with exit code {0}. That's usually bad.", _downloaderProcess.ExitCode));
-                boxOutput.AppendText("\nIf you have no idea what went wrong, open an issue on GitGud and copy paste the output of this window there.");
+                boxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}youtube-dl.exe exited with exit code {_downloaderProcess.ExitCode}. That's usually bad.");
+                boxOutput.AppendText($"{Environment.NewLine}If you have no idea what went wrong, open an issue on GitGud and copy paste the output of this window there.");
                 pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
                 buttonCancel.Enabled = true;
                 taskbarManager.SetProgressState(TaskbarProgressBarState.Error);
             }
             else
             {
-                boxOutput.AppendText("\n\nVideo downloaded succesfully!");
+                boxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}Video downloaded succesfully!");
                 pictureStatus.BackgroundImage = StatusImages.Images["Success"];
                 buttonLoad.Enabled = true;
 
@@ -171,13 +169,13 @@ namespace WebMConverter.Dialogs
             if (!_ended || _panic) //Prevent stack overflow
             {
                 if (!_filenameGetterProcess.HasExited)
-                    Program.KillProcessAndChildren(_filenameGetterProcess.Id);
+                    KillProcessAndChildren(_filenameGetterProcess.Id);
 
                 if (_gettingFilename)
                     return;
 
                 if (!_downloaderProcess.HasExited)
-                    Program.KillProcessAndChildren(_downloaderProcess.Id);
+                    KillProcessAndChildren(_downloaderProcess.Id);
             }
             else
                 Close();
@@ -202,9 +200,6 @@ namespace WebMConverter.Dialogs
             Close();
         }
 
-        private void boxOutput_TextChanged(object sender, EventArgs e)
-        {
-            NativeMethods.SendMessage(boxOutput.Handle, 0x115, 7, 0);
-        }
+        private void boxOutput_TextChanged(object sender, EventArgs e) => NativeMethods.SendMessage(boxOutput.Handle, 0x115, 7, 0);
     }
 }

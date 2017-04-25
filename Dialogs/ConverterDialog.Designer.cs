@@ -29,45 +29,50 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TableLayoutPanel table;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConverterDialog));
+            this.table = new System.Windows.Forms.TableLayoutPanel();
             this.boxOutput = new System.Windows.Forms.RichTextBox();
             this.pictureStatus = new System.Windows.Forms.PictureBox();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.buttonPlay = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.StatusImages = new System.Windows.Forms.ImageList(this.components);
-            table = new System.Windows.Forms.TableLayoutPanel();
-            table.SuspendLayout();
+            this.buttonUpload = new System.Windows.Forms.Button();
+            this.table.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureStatus)).BeginInit();
             this.SuspendLayout();
             // 
             // table
             // 
-            table.ColumnCount = 3;
-            table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            table.Controls.Add(this.boxOutput, 0, 0);
-            table.Controls.Add(this.pictureStatus, 0, 2);
-            table.Controls.Add(this.progressBar, 0, 1);
-            table.Controls.Add(this.buttonPlay, 1, 2);
-            table.Controls.Add(this.buttonCancel, 2, 2);
-            table.Dock = System.Windows.Forms.DockStyle.Fill;
-            table.Location = new System.Drawing.Point(3, 3);
-            table.Name = "table";
-            table.RowCount = 3;
-            table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            table.Size = new System.Drawing.Size(678, 435);
-            table.TabIndex = 0;
+            this.table.ColumnCount = 7;
+            this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 31F));
+            this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.table.Controls.Add(this.boxOutput, 0, 0);
+            this.table.Controls.Add(this.pictureStatus, 0, 2);
+            this.table.Controls.Add(this.progressBar, 0, 1);
+            this.table.Controls.Add(this.buttonPlay, 1, 2);
+            this.table.Controls.Add(this.buttonUpload, 3, 2);
+            this.table.Controls.Add(this.buttonCancel, 5, 2);
+            this.table.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.table.Location = new System.Drawing.Point(3, 3);
+            this.table.Name = "table";
+            this.table.RowCount = 3;
+            this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
+            this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
+            this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.table.Size = new System.Drawing.Size(678, 435);
+            this.table.TabIndex = 0;
             // 
             // boxOutput
             // 
             this.boxOutput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            table.SetColumnSpan(this.boxOutput, 3);
+            table.SetColumnSpan(this.boxOutput, 7);
             this.boxOutput.DetectUrls = false;
             this.boxOutput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.boxOutput.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -92,7 +97,7 @@
             // 
             // progressBar
             // 
-            table.SetColumnSpan(this.progressBar, 3);
+            table.SetColumnSpan(this.progressBar, 7);
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.progressBar.Location = new System.Drawing.Point(3, 376);
             this.progressBar.Maximum = 1000;
@@ -102,11 +107,12 @@
             // 
             // buttonPlay
             // 
+            table.SetColumnSpan(this.buttonPlay, 2);
             this.buttonPlay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonPlay.Enabled = false;
             this.buttonPlay.Location = new System.Drawing.Point(34, 407);
             this.buttonPlay.Name = "buttonPlay";
-            this.buttonPlay.Size = new System.Drawing.Size(317, 25);
+            this.buttonPlay.Size = new System.Drawing.Size(208, 25);
             this.buttonPlay.TabIndex = 1;
             this.buttonPlay.Text = "Play result";
             this.buttonPlay.UseVisualStyleBackColor = true;
@@ -114,11 +120,12 @@
             // 
             // buttonCancel
             // 
+            this.table.SetColumnSpan(this.buttonCancel, 2);
             this.buttonCancel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonCancel.Location = new System.Drawing.Point(357, 407);
+            this.buttonCancel.Location = new System.Drawing.Point(462, 407);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(318, 25);
-            this.buttonCancel.TabIndex = 2;
+            this.buttonCancel.Size = new System.Drawing.Size(213, 25);
+            this.buttonCancel.TabIndex = 3;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
@@ -131,13 +138,26 @@
             this.StatusImages.Images.SetKeyName(1, "Failure");
             this.StatusImages.Images.SetKeyName(2, "Success");
             // 
+            // buttonUpload
+            // 
+            this.table.SetColumnSpan(this.buttonUpload, 2);
+            this.buttonUpload.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonUpload.Enabled = false;
+            this.buttonUpload.Location = new System.Drawing.Point(248, 407);
+            this.buttonUpload.Name = "buttonUpload";
+            this.buttonUpload.Size = new System.Drawing.Size(208, 25);
+            this.buttonUpload.TabIndex = 2;
+            this.buttonUpload.Text = "Upload with ShareX";
+            this.buttonUpload.UseVisualStyleBackColor = true;
+            this.buttonUpload.Click += new System.EventHandler(this.buttonUpload_Click);
+            // 
             // ConverterDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 441);
             this.ControlBox = false;
-            this.Controls.Add(table);
+            this.Controls.Add(this.table);
             this.Name = "ConverterDialog";
             this.Padding = new System.Windows.Forms.Padding(3);
             this.ShowInTaskbar = false;
@@ -145,7 +165,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConverterForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ConverterForm_FormClosed);
             this.Load += new System.EventHandler(this.ConverterForm_Load);
-            table.ResumeLayout(false);
+            this.table.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureStatus)).EndInit();
             this.ResumeLayout(false);
 
@@ -159,7 +179,7 @@
         private System.Windows.Forms.ImageList StatusImages;
         private System.Windows.Forms.RichTextBox boxOutput;
         private System.Windows.Forms.ProgressBar progressBar;
-
-
+        private System.Windows.Forms.Button buttonUpload;
+        private System.Windows.Forms.TableLayoutPanel table;
     }
 }

@@ -13,7 +13,7 @@ namespace WebMConverter
         uint framenumber;
         FFMSSharp.Frame frame;
         int cachedframenumber;
-        private RotateFlipType rotateFlipType;
+        RotateFlipType rotateFlipType;
 
         [DefaultValue(0)]
         public int Frame
@@ -64,11 +64,11 @@ namespace WebMConverter
             // Calculate width and height
             int width, height;
             float scale;
-            scale = Math.Min((float)this.Size.Width / (float)frame.EncodedResolution.Width, (float)this.Size.Height / (float)frame.EncodedResolution.Height);
+            scale = Math.Min((float)Size.Width / frame.EncodedResolution.Width, (float)Size.Height / frame.EncodedResolution.Height);
             width = (int)(frame.EncodedResolution.Width * scale);
             height = (int)(frame.EncodedResolution.Height * scale);
 
-            // http://stackoverflow.com/a/24199315/174466
+            // https://stackoverflow.com/a/24199315/174466
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
 
@@ -105,7 +105,7 @@ namespace WebMConverter
             }
         }
 
-        private void pictureBoxFrame_SizeChanged(object sender, EventArgs e)
+        void pictureBoxFrame_SizeChanged(object sender, EventArgs e)
         {
             GeneratePreview();
         }

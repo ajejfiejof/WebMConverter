@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using WebMConverter.Dialogs;
+using static WebMConverter.Utility;
 
 namespace WebMConverter
 {
@@ -24,9 +25,9 @@ namespace WebMConverter
 
             InputFilter = filterToEdit;
 
-            previewFrame.Picture.Paint += new System.Windows.Forms.PaintEventHandler(this.previewPicture_Paint);
-            previewFrame.Picture.MouseDown += new System.Windows.Forms.MouseEventHandler(this.previewPicture_MouseDown);
-            previewFrame.Picture.MouseMove += new System.Windows.Forms.MouseEventHandler(this.previewPicture_MouseMove);
+            previewFrame.Picture.Paint += new PaintEventHandler(previewPicture_Paint);
+            previewFrame.Picture.MouseDown += new MouseEventHandler(previewPicture_MouseDown);
+            previewFrame.Picture.MouseMove += new MouseEventHandler(previewPicture_MouseMove);
         }
 
         void OverlayForm_Load(object sender, EventArgs e)
@@ -84,7 +85,7 @@ namespace WebMConverter
 
         float getPictureScale(PictureBox pictureBox)
         {
-            return (float)pictureBox.ClientSize.Width / (float)videoResolution.Width;
+            return (float)pictureBox.ClientSize.Width / videoResolution.Width;
         }
 
         void previewPicture_Paint(object sender, PaintEventArgs e)
@@ -111,7 +112,7 @@ namespace WebMConverter
 
         void previewPicture_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.None)
+            if (e.Button == MouseButtons.None)
                 return;
 
             var scale = getPictureScale(previewFrame.Picture);
@@ -152,11 +153,11 @@ namespace WebMConverter
 
         private void timeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var dialog = new InputDialog<TimeSpan>("Time", Program.FrameToTimeSpan(previewFrame.Frame)))
+            using (var dialog = new InputDialog<TimeSpan>("Time", FrameToTimeSpan(previewFrame.Frame)))
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    int i = Program.TimeSpanToFrame(dialog.Value);
+                    int i = TimeSpanToFrame(dialog.Value);
                     i = Math.Max(0, Math.Min(Program.VideoSource.NumberOfFrames - 1, i)); // Make sure we don't go out of bounds.
                     previewFrame.Frame = i;
                 }
@@ -204,8 +205,8 @@ namespace WebMConverter
 
     public class OverlayFilter
     {
-        public readonly Point Placement;
-        public readonly string FileName;
+        public Point Placement { get; }
+        public string FileName { get; }
 
         public OverlayFilter(Point placement, string fileName)
         {
@@ -215,8 +216,8 @@ namespace WebMConverter
 
         public override string ToString()
         {
-            var shortFileName = Program.GetCompatiblePath(FileName);
-            return string.Format("Overlay(ImageSource(\"{0}\"), x={1}, y={2}, mask=ImageSource(\"{0}\",pixel_type=\"RGB32\").ShowAlpha(pixel_type=\"RGB32\"))", shortFileName, Placement.X, Placement.Y);
+            var shortFileName = GetCompatiblePath(FileName);
+            return $"Overlay(ImageSource(\"{shortFileName}\"), x={Placement.X}, y={Placement.Y}, mask=ImageSource(\"{shortFileName}\",pixel_type=\"RGB32\").ShowAlpha(pixel_type=\"RGB32\"))";
         }
     }
 }

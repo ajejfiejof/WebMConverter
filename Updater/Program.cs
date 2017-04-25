@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Net;
 using System.Windows.Forms;
 
 namespace WebMConverter.Updater
 {
     static partial class Program
     {
-        public const string VersionUrl = @"http://nixx.is-fantabulo.us/WebM for Retards/latest";
-        public const string ChangelogUrl = @"http://nixx.is-fantabulo.us/WebM for Retards/{0}.changes";
-        public const string ProgramUrl = @"http://nixx.is-fantabulo.us/WebM for Retards/{0}.zip";
+        public const string VersionUrl = @"https://nixx.is-fantabulo.us/WebM for Retards/latest";
+        public const string ChangelogUrl = @"https://nixx.is-fantabulo.us/WebM for Retards/{0}.changes";
+        public const string ProgramUrl = @"https://nixx.is-fantabulo.us/WebM for Retards/{0}.zip";
 
         /// <summary>
         /// The main entry point for the application.

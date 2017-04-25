@@ -1,16 +1,13 @@
-﻿
-using System;
+﻿using System;
 using System.Diagnostics;
-using System.Windows.Forms;
-using WebMConverter.Dialogs;
 
 namespace WebMConverter
 {
     static class VideoDownload
     {
-        public static bool DownloadEnabled { get; private set; }
+        public static bool Enabled { get; private set; }
 
-        public static void CheckIfDownloadIsEnabled()
+        public static void CheckEnabled()
         {
             try
             {
@@ -19,10 +16,10 @@ namespace WebMConverter
             }
             catch (Exception)
             {
-                DownloadEnabled = false;
+                Enabled = false;
                 return;
             }
-            DownloadEnabled = true;
+            Enabled = true;
         }
     }
 

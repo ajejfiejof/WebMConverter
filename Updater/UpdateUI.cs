@@ -28,10 +28,7 @@ namespace WebMConverter.Updater
             InitializeComponent();
         }
 
-        private void UpdateUI_Load(object sender, EventArgs e)
-        {
-            Step1_GetLatestVersion();
-        }
+        private void UpdateUI_Load(object sender, EventArgs e) => Step1_GetLatestVersion();
 
         private void Step1_GetLatestVersion()
         {
@@ -55,7 +52,7 @@ namespace WebMConverter.Updater
 
         private void Step2_DownloadLatestVersion()
         {
-            labelStatus.Text = string.Format("Downloading version {0} (....)", latestVersion);
+            labelStatus.Text = $"Downloading version {latestVersion} (....)";
             progressBar.Style = ProgressBarStyle.Continuous;
             progressBar.Value = 0;
 
@@ -64,7 +61,7 @@ namespace WebMConverter.Updater
             {
                 progressBar.Value = args.ProgressPercentage;
 
-                labelStatus.Text = string.Format("Downloading version {0} ({1} MiB / {2} MiB)", latestVersion, args.BytesReceived / 1024 / 1024, args.TotalBytesToReceive / 1024 / 1024);
+                labelStatus.Text = $"Downloading version {latestVersion} ({args.BytesReceived / 1024 / 1024} MiB / {args.TotalBytesToReceive / 1024 / 1024} MiB)";
             };
 
             client.DownloadFileCompleted += delegate(object sender, AsyncCompletedEventArgs args)
@@ -127,9 +124,9 @@ namespace WebMConverter.Updater
             if (!trustedCertificate.Equals(updateCertificate))
             {
                 var answer = MessageBox.Show(this,
-                    "The downloaded update contains different certificate than your current version.\n" +
-                    "This is either a sign of foul play, or it means I fucked up my old certificate and need to ship a new one.\n" +
-                    "If you trust this certificate, it will be used in the future to verify that updates are legitimate.\n" +
+                    $"The downloaded update contains a different certificate than your current version.{Environment.NewLine}" +
+                    $"This is either a sign of foul play, or it means I lost my old certificate and need to ship a new one.{Environment.NewLine}" +
+                    $"If you trust this certificate, it will be used in the future to verify that updates are legitimate.{Environment.NewLine}" +
                     "Do you trust this new certificate?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
 
                 if (answer == DialogResult.No)
@@ -169,7 +166,7 @@ namespace WebMConverter.Updater
             if (Directory.Exists(updateTempPath))
                 Directory.Delete(updateTempPath, true);
 
-            if (!String.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(message))
                 MessageBox.Show(message, "Update failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             Application.Exit();
