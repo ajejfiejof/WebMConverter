@@ -1,10 +1,25 @@
 ﻿using System;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml.XPath;
 
 namespace WebMConverter
 {
+    static class NativeMethods
+    {
+        [DllImport("kernel32", SetLastError = true)]
+        public static extern IntPtr LoadLibrary(string lpFileName);
+        [DllImport("kernel32", CharSet = CharSet.Auto)]
+        public static extern int GetShortPathName([MarshalAs(UnmanagedType.LPTStr)] string path, [MarshalAs(UnmanagedType.LPTStr)] StringBuilder shortPath, int shortPathLength);
+        [DllImport("gdi32", CharSet = CharSet.Auto)]
+        public static extern int AddFontResourceEx(string lpszFilename, uint fl, IntPtr pdv);
+        [DllImport("gdi32", CharSet = CharSet.Auto)]
+        public static extern bool RemoveFontResourceEx(string lpFileName, uint fl, IntPtr pdv);
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessage(IntPtr window, int message, int wparam, int lparam);
+    }
+
     static class Utility
     {
         public static int TimeToFrame(double time)
