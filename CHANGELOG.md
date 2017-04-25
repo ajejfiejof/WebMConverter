@@ -1,4 +1,6 @@
 - Now uses HTTPS for update checking.
+- Added an "Upload through ShareX" button to the converter dialog if that's installed.
+  - *Caveat*: The only way I could find if you have ShareX installed is to look if you've got the "Upload with ShareX" context menu thing. If you don't have that feature enabled, you won't see the converter button even if you've got ShareX installed.
 
 v2.23.0
 =======

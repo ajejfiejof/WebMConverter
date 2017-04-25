@@ -88,7 +88,8 @@ namespace WebMConverter
                 Properties.Settings.Default.Save();
             }
 
-            Task.Factory.StartNew(VideoDownload.CheckIfDownloadIsEnabled);
+            Task.Factory.StartNew(VideoDownload.CheckEnabled);
+            Task.Factory.StartNew(ShareXUpload.CheckEnabled);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

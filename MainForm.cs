@@ -431,7 +431,7 @@ namespace WebMConverter
             if (textBoxIn.Text.StartsWith("http"))
             {
                 // we're a download button right now
-                if (!VideoDownload.DownloadEnabled)
+                if (!VideoDownload.Enabled)
                 {
                     var result = MessageBox.Show(
                        $"Couldn't find Youtube-DL. Either download it and put it somewhere in your %PATH%, or place it next to WebMConverter.exe.{Environment.NewLine}" + 
@@ -439,7 +439,7 @@ namespace WebMConverter
                         "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
                     if (result == DialogResult.Retry)
                     {
-                        VideoDownload.CheckIfDownloadIsEnabled();
+                        VideoDownload.CheckEnabled();
                         buttonBrowseIn_Click(sender, e);
                         return;
                     }

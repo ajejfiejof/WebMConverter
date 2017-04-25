@@ -36,6 +36,15 @@ namespace WebMConverter.Dialogs
         public ConverterDialog(string input, string[] args, string output)
         {
             InitializeComponent();
+
+            if (!ShareXUpload.Enabled)
+            {
+                table.SetColumnSpan(buttonPlay, 3);
+                buttonUpload.Hide();
+                table.SetColumnSpan(buttonCancel, 3);
+                table.SetColumn(buttonCancel, 4);
+            }
+
             pictureStatus.BackgroundImage = StatusImages.Images["Happening"];
 
             _infile = input;
@@ -289,6 +298,7 @@ namespace WebMConverter.Dialogs
                 }
 
                 buttonPlay.Enabled = true;
+                buttonUpload.Enabled = true;
             }
 
             buttonCancel.Text = "Close";
@@ -333,6 +343,24 @@ namespace WebMConverter.Dialogs
                 MessageBox.Show("Output file not found! Did you move it?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
                 Process.Start(((MainForm) Owner).textBoxOut.Text); //Play result video
+        }
+
+        private void buttonUpload_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists(((MainForm)Owner).textBoxOut.Text))
+                MessageBox.Show("Output file not found! Did you move it?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                try
+                {
+                    using (var proc = new ShareX(((MainForm)Owner).textBoxOut.Text)) proc.Start();
+                }
+                catch (Exception exc)
+                {
+                    MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+                
         }
 
         // manually scroll to bottom cause AppendText doesn't do it if it doesn't have focus
