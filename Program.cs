@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -87,6 +88,8 @@ namespace WebMConverter
                 Properties.Settings.Default.TryUpgrade = false;
                 Properties.Settings.Default.Save();
             }
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 
             Task.Factory.StartNew(VideoDownload.CheckEnabled);
             Task.Factory.StartNew(ShareXUpload.CheckEnabled);
