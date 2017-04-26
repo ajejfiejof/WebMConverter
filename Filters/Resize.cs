@@ -145,6 +145,6 @@ namespace WebMConverter
             TargetHeight = (targetHeight / 2) * 2;
         }
 
-        public override string ToString() => $"LanczosResize({TargetWidth}, {TargetWidth})";
+        public override string ToString() => $"LanczosResize({TargetWidth}, {TargetHeight})";
     }
 }
