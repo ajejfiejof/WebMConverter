@@ -110,6 +110,7 @@ namespace WebMConverter
             this.buttonDub = new System.Windows.Forms.ToolStripButton();
             this.buttonRate = new System.Windows.Forms.ToolStripButton();
             this.buttonRotate = new System.Windows.Forms.ToolStripButton();
+            this.buttonFade = new System.Windows.Forms.ToolStripButton();
             this.listViewProcessingScript = new System.Windows.Forms.ListView();
             this.imageListFilters = new System.Windows.Forms.ImageList(this.components);
             this.textBoxProcessingScript = new System.Windows.Forms.TextBox();
@@ -152,7 +153,6 @@ namespace WebMConverter
             this.listViewContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.listViewContextMenuEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.listViewContextMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonFade = new System.Windows.Forms.ToolStripButton();
             tableMainForm = new System.Windows.Forms.TableLayoutPanel();
             groupMain = new System.Windows.Forms.GroupBox();
             tableMain = new System.Windows.Forms.TableLayoutPanel();
@@ -611,6 +611,18 @@ namespace WebMConverter
             this.buttonRotate.MouseEnter += new System.EventHandler(this.ToolStripItemTooltip);
             this.buttonRotate.MouseLeave += new System.EventHandler(this.clearToolTip);
             // 
+            // buttonFade
+            // 
+            this.buttonFade.AccessibleDescription = "Add fading effects to the start and/or end to your video.";
+            this.buttonFade.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.buttonFade.Enabled = false;
+            this.buttonFade.Name = "buttonFade";
+            this.buttonFade.Size = new System.Drawing.Size(36, 22);
+            this.buttonFade.Text = "Fade";
+            this.buttonFade.Click += new System.EventHandler(this.buttonFade_Click);
+            this.buttonFade.MouseEnter += new System.EventHandler(this.ToolStripItemTooltip);
+            this.buttonFade.MouseLeave += new System.EventHandler(this.clearToolTip);
+            // 
             // panelProcessingInput
             // 
             panelProcessingInput.Controls.Add(this.listViewProcessingScript);
@@ -653,6 +665,7 @@ namespace WebMConverter
             this.imageListFilters.Images.SetKeyName(7, "Dub");
             this.imageListFilters.Images.SetKeyName(8, "Rate");
             this.imageListFilters.Images.SetKeyName(9, "Fade");
+            this.imageListFilters.Images.SetKeyName(10, "Rotate");
             // 
             // textBoxProcessingScript
             // 
@@ -1875,18 +1888,6 @@ namespace WebMConverter
             this.listViewContextMenuDelete.Size = new System.Drawing.Size(107, 22);
             this.listViewContextMenuDelete.Text = "Delete";
             this.listViewContextMenuDelete.Click += new System.EventHandler(this.listViewContextMenuDelete_Click);
-            // 
-            // buttonFade
-            // 
-            this.buttonFade.AccessibleDescription = "Add fading effects to the start and/or end to your video.";
-            this.buttonFade.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.buttonFade.Enabled = false;
-            this.buttonFade.Name = "buttonFade";
-            this.buttonFade.Size = new System.Drawing.Size(36, 22);
-            this.buttonFade.Text = "Fade";
-            this.buttonFade.Click += new System.EventHandler(this.buttonFade_Click);
-            this.buttonFade.MouseEnter += new System.EventHandler(this.ToolStripItemTooltip);
-            this.buttonFade.MouseLeave += new System.EventHandler(this.clearToolTip);
             // 
             // MainForm
             // 
