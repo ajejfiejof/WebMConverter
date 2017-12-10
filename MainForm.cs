@@ -602,6 +602,26 @@ namespace WebMConverter
             }
         }
 
+        void buttonFade_Click(object sender, EventArgs e)
+        {
+            using (var form = new FadeForm())
+            {
+                if (form.ShowDialog(this) != DialogResult.OK) return;
+
+                if (boxAdvancedScripting.Checked)
+                {
+                    textBoxProcessingScript.AppendText(Environment.NewLine + form.GeneratedFilter);
+                }
+                else
+                {
+                    Filters.Fade = form.GeneratedFilter;
+                    listViewProcessingScript.Items.Add("Fade", "fade");
+
+                    ((ToolStripItem)sender).Enabled = false;
+                }
+            }
+        }
+
         void buttonMultipleTrim_Click(object sender, EventArgs e)
         {
             using (var form = new MultipleTrimForm())
@@ -796,17 +816,19 @@ namespace WebMConverter
 
         void toolStripFilterButtonsEnabled(bool enabled)
         {
-            buttonCaption.Enabled = enabled;
-            buttonCrop.Enabled = enabled;
-            buttonDub.Enabled = enabled;
-            buttonOverlay.Enabled = enabled;
-            buttonRate.Enabled = enabled;
-            buttonResize.Enabled = enabled;
-            buttonReverse.Enabled = enabled;
-            buttonRotate.Enabled = enabled;
-            buttonSubtitle.Enabled = enabled;
-            buttonTrim.Enabled = enabled;
-            buttonExportProcessing.Enabled = enabled;
+            buttonCaption.Enabled = 
+            buttonCrop.Enabled =
+            buttonDub.Enabled =
+            buttonFade.Enabled =
+            buttonOverlay.Enabled =
+            buttonRate.Enabled =
+            buttonResize.Enabled =
+            buttonReverse.Enabled =
+            buttonRotate.Enabled =
+            buttonSubtitle.Enabled =
+            buttonTrim.Enabled =
+            buttonExportProcessing.Enabled =
+                enabled;
         }
 
         void listViewProcessingScript_KeyUp(object sender, KeyEventArgs e)
@@ -852,6 +874,15 @@ namespace WebMConverter
                             Filters.Dub = form.GeneratedFilter;
                             if (oldfilter.Mode != DubMode.TrimAudio || Filters.Dub.Mode != DubMode.TrimAudio) // the video duration may have changed
                                 UpdateArguments(sender, e);
+                        }
+                    }
+                    break;
+                case "Fade":
+                    using (var form = new FadeForm(Filters.Fade))
+                    {
+                        if (form.ShowDialog(this) == DialogResult.OK)
+                        {
+                            Filters.Fade = form.GeneratedFilter;
                         }
                     }
                     break;
@@ -971,6 +1002,10 @@ namespace WebMConverter
                         UpdateArguments();
                     if (!Program.InputHasAudio)
                         boxAudio.Checked = boxAudio.Enabled = false;
+                    break;
+                case "Fade":
+                    Filters.Fade = null;
+                    buttonFade.Enabled = true;
                     break;
                 case "Multiple Trim":
                     Filters.MultipleTrim = null;
@@ -2154,6 +2189,8 @@ namespace WebMConverter
                 script.AppendLine(Filters.Reverse.ToString());
             if (Filters.Dub != null)
                 script.AppendLine(Filters.Dub.ToString());
+            if (Filters.Fade != null)
+                script.AppendLine(Filters.Fade.ToString());
             if (Filters.Rotate != null)
                 script.AppendLine(Filters.Rotate.ToString());
 

@@ -18,6 +18,7 @@ namespace WebMConverter
         internal static DeinterlaceFilter Deinterlace = null;
         internal static DenoiseFilter Denoise = null;
         internal static DubFilter Dub;
+        internal static FadeFilter Fade;
         internal static LevelsFilter Levels = null;
         internal static MultipleTrimFilter MultipleTrim = null;
         internal static OverlayFilter Overlay = null;

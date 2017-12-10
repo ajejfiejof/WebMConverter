@@ -1,3 +1,5 @@
+- Add Fade filter.
+
 v2.24.2
 =======
 - Now uses HTTPS for update checking.
