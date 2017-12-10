@@ -152,6 +152,7 @@ namespace WebMConverter
             this.listViewContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.listViewContextMenuEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.listViewContextMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonFade = new System.Windows.Forms.ToolStripButton();
             tableMainForm = new System.Windows.Forms.TableLayoutPanel();
             groupMain = new System.Windows.Forms.GroupBox();
             tableMain = new System.Windows.Forms.TableLayoutPanel();
@@ -430,7 +431,8 @@ namespace WebMConverter
             this.buttonPreview,
             this.buttonDub,
             this.buttonRate,
-            this.buttonRotate});
+            this.buttonRotate,
+            this.buttonFade});
             toolStripProcessing.Location = new System.Drawing.Point(0, 0);
             toolStripProcessing.Name = "toolStripProcessing";
             toolStripProcessing.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -650,6 +652,7 @@ namespace WebMConverter
             this.imageListFilters.Images.SetKeyName(6, "Caption");
             this.imageListFilters.Images.SetKeyName(7, "Dub");
             this.imageListFilters.Images.SetKeyName(8, "Rate");
+            this.imageListFilters.Images.SetKeyName(9, "Fade");
             // 
             // textBoxProcessingScript
             // 
@@ -1873,6 +1876,18 @@ namespace WebMConverter
             this.listViewContextMenuDelete.Text = "Delete";
             this.listViewContextMenuDelete.Click += new System.EventHandler(this.listViewContextMenuDelete_Click);
             // 
+            // buttonFade
+            // 
+            this.buttonFade.AccessibleDescription = "Add fading effects to the start and/or end to your video.";
+            this.buttonFade.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.buttonFade.Enabled = false;
+            this.buttonFade.Name = "buttonFade";
+            this.buttonFade.Size = new System.Drawing.Size(36, 22);
+            this.buttonFade.Text = "Fade";
+            this.buttonFade.Click += new System.EventHandler(this.buttonFade_Click);
+            this.buttonFade.MouseEnter += new System.EventHandler(this.ToolStripItemTooltip);
+            this.buttonFade.MouseLeave += new System.EventHandler(this.clearToolTip);
+            // 
             // MainForm
             // 
             this.AcceptButton = this.buttonGo;
@@ -2016,5 +2031,6 @@ namespace WebMConverter
         private System.Windows.Forms.ContextMenuStrip listViewContextMenu;
         private System.Windows.Forms.ToolStripMenuItem listViewContextMenuEdit;
         private System.Windows.Forms.ToolStripMenuItem listViewContextMenuDelete;
+        private System.Windows.Forms.ToolStripButton buttonFade;
     }
 }
