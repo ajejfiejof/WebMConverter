@@ -110,6 +110,7 @@ namespace WebMConverter
             this.buttonDub = new System.Windows.Forms.ToolStripButton();
             this.buttonRate = new System.Windows.Forms.ToolStripButton();
             this.buttonRotate = new System.Windows.Forms.ToolStripButton();
+            this.buttonFade = new System.Windows.Forms.ToolStripButton();
             this.listViewProcessingScript = new System.Windows.Forms.ListView();
             this.imageListFilters = new System.Windows.Forms.ImageList(this.components);
             this.textBoxProcessingScript = new System.Windows.Forms.TextBox();
@@ -430,7 +431,8 @@ namespace WebMConverter
             this.buttonPreview,
             this.buttonDub,
             this.buttonRate,
-            this.buttonRotate});
+            this.buttonRotate,
+            this.buttonFade});
             toolStripProcessing.Location = new System.Drawing.Point(0, 0);
             toolStripProcessing.Name = "toolStripProcessing";
             toolStripProcessing.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -609,6 +611,18 @@ namespace WebMConverter
             this.buttonRotate.MouseEnter += new System.EventHandler(this.ToolStripItemTooltip);
             this.buttonRotate.MouseLeave += new System.EventHandler(this.clearToolTip);
             // 
+            // buttonFade
+            // 
+            this.buttonFade.AccessibleDescription = "Add fading effects to the start and/or end to your video.";
+            this.buttonFade.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.buttonFade.Enabled = false;
+            this.buttonFade.Name = "buttonFade";
+            this.buttonFade.Size = new System.Drawing.Size(36, 22);
+            this.buttonFade.Text = "Fade";
+            this.buttonFade.Click += new System.EventHandler(this.buttonFade_Click);
+            this.buttonFade.MouseEnter += new System.EventHandler(this.ToolStripItemTooltip);
+            this.buttonFade.MouseLeave += new System.EventHandler(this.clearToolTip);
+            // 
             // panelProcessingInput
             // 
             panelProcessingInput.Controls.Add(this.listViewProcessingScript);
@@ -650,6 +664,8 @@ namespace WebMConverter
             this.imageListFilters.Images.SetKeyName(6, "Caption");
             this.imageListFilters.Images.SetKeyName(7, "Dub");
             this.imageListFilters.Images.SetKeyName(8, "Rate");
+            this.imageListFilters.Images.SetKeyName(9, "Fade");
+            this.imageListFilters.Images.SetKeyName(10, "Rotate");
             // 
             // textBoxProcessingScript
             // 
@@ -2016,5 +2032,6 @@ namespace WebMConverter
         private System.Windows.Forms.ContextMenuStrip listViewContextMenu;
         private System.Windows.Forms.ToolStripMenuItem listViewContextMenuEdit;
         private System.Windows.Forms.ToolStripMenuItem listViewContextMenuDelete;
+        private System.Windows.Forms.ToolStripButton buttonFade;
     }
 }
