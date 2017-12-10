@@ -1,3 +1,5 @@
+v2.25.0
+=======
 - Add Fade filter.
 - Add icon for Rotate filter.
 
