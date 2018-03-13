@@ -1,3 +1,5 @@
+v2.26.0
+=======
 - Added support for Blu-ray PGS subtitles (.sup)
 - Add some failsafes for getting file duration.
 
