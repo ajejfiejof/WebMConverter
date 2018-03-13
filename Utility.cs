@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 using System.Xml.XPath;
 
 namespace WebMConverter
@@ -74,18 +75,26 @@ namespace WebMConverter
             {
                 string streamInfo = prober.Probe();
 
-                using (var s = new System.IO.StringReader(streamInfo))
+                try
                 {
-                    var doc = new XPathDocument(s);
-                    var format = doc.CreateNavigator()
-                        .SelectSingleNode("//ffprobe/format");
+                    using (var s = new System.IO.StringReader(streamInfo))
+                    {
+                        var doc = new XPathDocument(s);
+                        var format = doc.CreateNavigator()
+                            .SelectSingleNode("//ffprobe/format");
 
-                    if (format == null)
-                        return -1;
+                        if (format == null)
+                            return -1;
 
-                    var duration = Convert.ToDouble(format.GetAttribute("duration", ""), CultureInfo.InvariantCulture);
-                    var startTime = Convert.ToDouble(format.GetAttribute("start_time", ""), CultureInfo.InvariantCulture);
-                    return duration - startTime;
+                        var duration = Convert.ToDouble(format.GetAttribute("duration", ""), CultureInfo.InvariantCulture);
+                        var startTime = Convert.ToDouble(format.GetAttribute("start_time", ""), CultureInfo.InvariantCulture);
+                        return duration - startTime;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to get duration from file. Error: ${ex.Message}\nstreamInfo: ${streamInfo}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return -1;
                 }
             }
         }
@@ -132,7 +141,8 @@ namespace WebMConverter
     public enum SubtitleType
     {
         TextSub,
-        VobSub
+        VobSub,
+        PgsSub
     }
 
     public static class Extensions

@@ -61,25 +61,26 @@ namespace WebMConverter
             if (checkBoxInternalSubs.Checked)
             {
                 SubtitleType type = Program.SubtitleTracks[(int)comboBoxVideoTracks.SelectedValue].Item2;
-                string extension;
-                switch (type)
-                {
-                    case SubtitleType.TextSub:
-                        extension = Program.SubtitleTracks[(int)comboBoxVideoTracks.SelectedValue].Item3;
-                        break;
-                    case SubtitleType.VobSub:
-                        extension = ".idx";
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
+                string extension = Program.SubtitleTracks[(int)comboBoxVideoTracks.SelectedValue].Item3;
                 string filename = Path.Combine(Program.AttachmentDirectory, $"sub{(int)comboBoxVideoTracks.SelectedValue}{extension}");
                 GeneratedFilter = new SubtitleFilter(filename, type, (int)comboBoxVideoTracks.SelectedValue);
             }
             else
             {
                 string filename = textBoxSubtitleFile.Text;
-                SubtitleType type = Path.GetExtension(filename) == ".sub" ? SubtitleType.VobSub : SubtitleType.TextSub;
+                SubtitleType type;
+                switch (Path.GetExtension(filename))
+                {
+                    case ".sub":
+                        type = SubtitleType.VobSub;
+                        break;
+                    case ".sup":
+                        type = SubtitleType.PgsSub;
+                        break;
+                    default:
+                        type = SubtitleType.TextSub;
+                        break;
+                }
                 GeneratedFilter = new SubtitleFilter(filename, type);
             }
         }
@@ -97,7 +98,7 @@ namespace WebMConverter
             using (var dialog = new OpenFileDialog())
             {
                 dialog.InitialDirectory = Path.GetDirectoryName(Program.InputFile);
-                dialog.Filter = "Text subtitles (*.ass, *.srt, *.ssa)|*.ass;*.srt;*.ssa|DVD subtitles (*.sub)|*.sub";
+                dialog.Filter = "Text subtitles (*.ass, *.srt, *.ssa)|*.ass;*.srt;*.ssa|DVD subtitles (*.sub)|*.sub|Blu-Ray subtitles (*.sup)|*.sup";
                 dialog.RestoreDirectory = true;
 
                 if (dialog.ShowDialog() == DialogResult.OK)
@@ -146,6 +147,8 @@ namespace WebMConverter
                     return conversion + $@"textsub(""{shortFileName}"")";
                 case SubtitleType.VobSub:
                     return conversion + $@"vobsub(""{shortFileName}"")";
+                case SubtitleType.PgsSub:
+                    return conversion + $@"suptitle(""{FileName}"")";
                 default:
                     throw new NotImplementedException();
             }

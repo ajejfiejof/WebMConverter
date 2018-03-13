@@ -1545,15 +1545,20 @@ namespace WebMConverter
                                     SubtitleType type;
                                     string extension;
 
-                                    if (streamtitle == "dvdsub") // Hold on a moment, this is a vobsub!
+                                    switch (streamtitle)
                                     {
-                                        type = SubtitleType.VobSub;
-                                        extension = ".idx";
-                                    }
-                                    else
-                                    {
-                                        type = SubtitleType.TextSub;
-                                        extension = "." + streamtitle; // YOLO
+                                        case "dvdsub":
+                                            type = SubtitleType.VobSub;
+                                            extension = ".idx";
+                                            break;
+                                        case "pgssub":
+                                            type = SubtitleType.PgsSub;
+                                            extension = ".sup";
+                                            break;
+                                        default:
+                                            type = SubtitleType.TextSub;
+                                            extension = "." + streamtitle; // YOLO
+                                            break;
                                     }
                                     
                                     file = Path.Combine(Program.AttachmentDirectory, $"sub{streamindex}{extension}");
@@ -1824,7 +1829,24 @@ namespace WebMConverter
                 avscript.WriteLine($@"PluginPath = ""{shortPluginPath}\""");
                 avscript.WriteLine(@"try { LoadPlugin(PluginPath+""ffms2.dll"") } catch (_) { LoadCPlugin(PluginPath+""ffms2.dll"") }");
                 if (Filters.Subtitle != null)
-                    avscript.WriteLine(@"LoadPlugin(PluginPath+""VSFilter.dll"")");
+                {
+                    string plugin;
+
+                    switch (Filters.Subtitle.Type)
+                    {
+                        case SubtitleType.TextSub:
+                        case SubtitleType.VobSub:
+                            plugin = "VSFilter.dll";
+                            break;
+                        case SubtitleType.PgsSub:
+                            plugin = "SupTitle.dll";
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+                    
+                    avscript.WriteLine($@"LoadPlugin(PluginPath+""{plugin}"")");
+                }
 
                 if (Program.InputHasAudio)
                     avscript.WriteLine($@"AudioDub(FFVideoSource(""{avsInputFile}"",cachefile=""{_indexFile}"",track={videotrack}), FFAudioSource(""{avsInputFile}"",cachefile=""{_indexFile}"",track={audiotrack}))");
@@ -2077,18 +2099,25 @@ namespace WebMConverter
             if (boxAdvancedScripting.Checked || Program.InputType == FileType.Avisynth)
             {
                 // The dirty way.
-
-                using (XmlReader reader = XmlReader.Create(new StringReader(avsScriptInfo)))
+                
+                try
                 {
-                    reader.ReadToFollowing("stream");
-
-                    while (reader.MoveToNextAttribute())
+                    using (XmlReader reader = XmlReader.Create(new StringReader(avsScriptInfo)))
                     {
-                        if (reader.Name == "duration")
+                        reader.ReadToFollowing("stream");
+
+                        while (reader.MoveToNextAttribute())
                         {
-                            return double.Parse(reader.Value, CultureInfo.InvariantCulture);
+                            if (reader.Name == "duration")
+                            {
+                                return double.Parse(reader.Value, CultureInfo.InvariantCulture);
+                            }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to get duration from Avisynth script. Error: ${ex.Message}\navsScriptInfo: ${avsScriptInfo}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
 
                 return -1;
@@ -2122,21 +2151,28 @@ namespace WebMConverter
 
                 int width = -1, height = -1;
 
-                using (XmlReader reader = XmlReader.Create(new StringReader(avsScriptInfo)))
+                try
                 {
-                    reader.ReadToFollowing("stream");
-
-                    while (reader.MoveToNextAttribute())
+                    using (XmlReader reader = XmlReader.Create(new StringReader(avsScriptInfo)))
                     {
-                        if (reader.Name == "width")
+                        reader.ReadToFollowing("stream");
+
+                        while (reader.MoveToNextAttribute())
                         {
-                            width = int.Parse(reader.Value);
-                        }
-                        if (reader.Name == "height")
-                        {
-                            height = int.Parse(reader.Value);
+                            if (reader.Name == "width")
+                            {
+                                width = int.Parse(reader.Value);
+                            }
+                            if (reader.Name == "height")
+                            {
+                                height = int.Parse(reader.Value);
+                            }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to get resolution from Avisynth script. Error: ${ex.Message}\navsScriptInfo: ${avsScriptInfo}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
 
                 return new Size(width, height);
