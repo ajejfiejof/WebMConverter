@@ -1545,15 +1545,20 @@ namespace WebMConverter
                                     SubtitleType type;
                                     string extension;
 
-                                    if (streamtitle == "dvdsub") // Hold on a moment, this is a vobsub!
+                                    switch (streamtitle)
                                     {
-                                        type = SubtitleType.VobSub;
-                                        extension = ".idx";
-                                    }
-                                    else
-                                    {
-                                        type = SubtitleType.TextSub;
-                                        extension = "." + streamtitle; // YOLO
+                                        case "dvdsub":
+                                            type = SubtitleType.VobSub;
+                                            extension = ".idx";
+                                            break;
+                                        case "pgssub":
+                                            type = SubtitleType.PgsSub;
+                                            extension = ".sup";
+                                            break;
+                                        default:
+                                            type = SubtitleType.TextSub;
+                                            extension = "." + streamtitle; // YOLO
+                                            break;
                                     }
                                     
                                     file = Path.Combine(Program.AttachmentDirectory, $"sub{streamindex}{extension}");
@@ -1824,7 +1829,24 @@ namespace WebMConverter
                 avscript.WriteLine($@"PluginPath = ""{shortPluginPath}\""");
                 avscript.WriteLine(@"try { LoadPlugin(PluginPath+""ffms2.dll"") } catch (_) { LoadCPlugin(PluginPath+""ffms2.dll"") }");
                 if (Filters.Subtitle != null)
-                    avscript.WriteLine(@"LoadPlugin(PluginPath+""VSFilter.dll"")");
+                {
+                    string plugin;
+
+                    switch (Filters.Subtitle.Type)
+                    {
+                        case SubtitleType.TextSub:
+                        case SubtitleType.VobSub:
+                            plugin = "VSFilter.dll";
+                            break;
+                        case SubtitleType.PgsSub:
+                            plugin = "SupTitle.dll";
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+                    
+                    avscript.WriteLine($@"LoadPlugin(PluginPath+""{plugin}"")");
+                }
 
                 if (Program.InputHasAudio)
                     avscript.WriteLine($@"AudioDub(FFVideoSource(""{avsInputFile}"",cachefile=""{_indexFile}"",track={videotrack}), FFAudioSource(""{avsInputFile}"",cachefile=""{_indexFile}"",track={audiotrack}))");

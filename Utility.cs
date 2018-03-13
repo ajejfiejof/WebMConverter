@@ -141,7 +141,8 @@ namespace WebMConverter
     public enum SubtitleType
     {
         TextSub,
-        VobSub
+        VobSub,
+        PgsSub
     }
 
     public static class Extensions
