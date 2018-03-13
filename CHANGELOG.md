@@ -1,3 +1,5 @@
+- Add some failsafes for getting file duration.
+
 v2.25.0
 =======
 - Add Fade filter.

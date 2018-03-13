@@ -2077,18 +2077,25 @@ namespace WebMConverter
             if (boxAdvancedScripting.Checked || Program.InputType == FileType.Avisynth)
             {
                 // The dirty way.
-
-                using (XmlReader reader = XmlReader.Create(new StringReader(avsScriptInfo)))
+                
+                try
                 {
-                    reader.ReadToFollowing("stream");
-
-                    while (reader.MoveToNextAttribute())
+                    using (XmlReader reader = XmlReader.Create(new StringReader(avsScriptInfo)))
                     {
-                        if (reader.Name == "duration")
+                        reader.ReadToFollowing("stream");
+
+                        while (reader.MoveToNextAttribute())
                         {
-                            return double.Parse(reader.Value, CultureInfo.InvariantCulture);
+                            if (reader.Name == "duration")
+                            {
+                                return double.Parse(reader.Value, CultureInfo.InvariantCulture);
+                            }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to get duration from Avisynth script. Error: ${ex.Message}\navsScriptInfo: ${avsScriptInfo}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
 
                 return -1;
@@ -2122,21 +2129,28 @@ namespace WebMConverter
 
                 int width = -1, height = -1;
 
-                using (XmlReader reader = XmlReader.Create(new StringReader(avsScriptInfo)))
+                try
                 {
-                    reader.ReadToFollowing("stream");
-
-                    while (reader.MoveToNextAttribute())
+                    using (XmlReader reader = XmlReader.Create(new StringReader(avsScriptInfo)))
                     {
-                        if (reader.Name == "width")
+                        reader.ReadToFollowing("stream");
+
+                        while (reader.MoveToNextAttribute())
                         {
-                            width = int.Parse(reader.Value);
-                        }
-                        if (reader.Name == "height")
-                        {
-                            height = int.Parse(reader.Value);
+                            if (reader.Name == "width")
+                            {
+                                width = int.Parse(reader.Value);
+                            }
+                            if (reader.Name == "height")
+                            {
+                                height = int.Parse(reader.Value);
+                            }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to get resolution from Avisynth script. Error: ${ex.Message}\navsScriptInfo: ${avsScriptInfo}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
 
                 return new Size(width, height);
