@@ -36,6 +36,7 @@ namespace WebMConverter
             Deinterlace = null;
             Denoise = null;
             Dub = null;
+            Fade = null;
             Levels = null;
             MultipleTrim = null;
             Overlay = null;
