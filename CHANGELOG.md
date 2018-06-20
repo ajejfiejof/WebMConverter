@@ -1,3 +1,7 @@
+v2.26.1
+=======
+- Fade filter will now be properly reset upon loading a new file.
+
 v2.26.0
 =======
 - Added support for Blu-ray PGS subtitles (.sup)
