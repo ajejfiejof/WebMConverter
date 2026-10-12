@@ -1,0 +1,24 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:WebMConverter.Avalonia.ViewModels"
+        x:Class="WebMConverter.Avalonia.Views.ConvertProgressView"
+        x:DataType="vm:ConvertProgressViewModel"
+        Title="Converting…" Width="700" Height="480"
+        MinWidth="500" MinHeight="350"
+        WindowStartupLocation="CenterOwner">
+  <DockPanel Margin="8">
+    <StackPanel DockPanel.Dock="Bottom" Spacing="8" Margin="0,8,0,0">
+      <ProgressBar Value="{Binding ProgressPercent}" Minimum="0" Maximum="100" Height="20" />
+      <TextBlock Text="{Binding Status}" />
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <Button Content="Cancel" Command="{Binding CancelRunCommand}" IsEnabled="{Binding IsRunning}" MinWidth="90" />
+        <Button Content="Play" Command="{Binding OpenFileCommand}" IsEnabled="{Binding Succeeded}" MinWidth="90" />
+        <Button Content="Open folder" Command="{Binding OpenFolderCommand}" IsEnabled="{Binding Succeeded}" MinWidth="90" />
+        <Button Content="Upload" Command="{Binding UploadCommand}" IsEnabled="{Binding Succeeded}" IsVisible="{Binding ShowUpload}" MinWidth="90" />
+        <Button Content="Close" Command="{Binding CloseWindowCommand}" IsEnabled="{Binding !IsRunning}" MinWidth="90" />
+      </StackPanel>
+    </StackPanel>
+    <TextBox Text="{Binding Log}" IsReadOnly="True" AcceptsReturn="True"
+             FontFamily="monospace" TextWrapping="NoWrap" />
+  </DockPanel>
+</Window>

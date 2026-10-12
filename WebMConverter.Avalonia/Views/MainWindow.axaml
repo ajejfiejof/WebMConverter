@@ -23,13 +23,13 @@
       <TextBlock Text="{Binding StatusMessage}" TextTrimming="CharacterEllipsis" />
     </Border>
 
-    <TabControl Margin="8">
+    <TabControl Margin="8" Name="MainTabs">
       <TabItem Header="Input / Output">
         <StackPanel Spacing="8" Margin="8">
-          <TextBlock Text="Input file (or drop a file onto the box):" />
+          <TextBlock Text="Input file (URL downloads, or drop a file onto the box):" />
           <Grid ColumnDefinitions="*,Auto">
             <TextBox Grid.Column="0" Text="{Binding InputFile}" DragDrop.AllowDrop="True"
-                     PlaceholderText="Video file, URL download lands with the engine port…" />
+                     PlaceholderText="Video file or http(s) URL…" />
             <Button Grid.Column="1" Content="Browse…" Margin="8,0,0,0" Click="OnBrowseInputClick" />
           </Grid>
 
@@ -41,51 +41,199 @@
 
           <TextBlock Text="Title (metadata):" />
           <TextBox Text="{Binding Title}" />
+          <TextBlock Text="{Binding MediaSummary}" Opacity="0.7" />
 
           <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,8,0,0">
             <Button Content="Convert" Command="{Binding ConvertCommand}" MinWidth="100" />
-            <Button Content="Cancel" Command="{Binding CancelConvertCommand}" IsEnabled="{Binding IsBusy}" MinWidth="100" />
             <Button Content="Preview" Command="{Binding PreviewCommand}" MinWidth="100" />
           </StackPanel>
-
-          <ProgressBar Value="{Binding ProgressValue}" Minimum="0" Maximum="100" Height="20" Margin="0,8,0,0" />
         </StackPanel>
       </TabItem>
 
       <TabItem Header="Processing">
         <DockPanel Margin="8">
-          <TextBlock DockPanel.Dock="Top" Margin="0,0,0,8" TextWrapping="Wrap"
-                     Text="Filter dialogs (crop, trim, subtitles, …) port here in Phase 2.2. Active filters list below." />
-          <Button DockPanel.Dock="Bottom" Content="Clear" Command="{Binding ClearFiltersCommand}"
-                  HorizontalAlignment="Right" Margin="0,8,0,0" />
-          <ListBox ItemsSource="{Binding ActiveFilters}" />
+          <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="8" Margin="0,8,0,0">
+            <Button Content="Clear all" Command="{Binding ClearFiltersCommand}" />
+            <TextBlock Text="Caption is Windows-only for now." VerticalAlignment="Center" Opacity="0.7" />
+          </StackPanel>
+          <ScrollViewer>
+            <StackPanel Spacing="10">
+              <StackPanel>
+                <CheckBox Content="Trim (seconds)" IsChecked="{Binding UseTrim}" />
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseTrim}">
+                  <TextBlock Text="Start:" VerticalAlignment="Center" />
+                  <NumericUpDown Value="{Binding TrimStartSeconds}" Minimum="0" Maximum="100000" Increment="1" MinWidth="120" />
+                  <TextBlock Text="End:" VerticalAlignment="Center" />
+                  <NumericUpDown Value="{Binding TrimEndSeconds}" Minimum="0" Maximum="100000" Increment="1" MinWidth="120" />
+                </StackPanel>
+              </StackPanel>
+
+              <StackPanel>
+                <TextBlock Text="Multiple trim ranges (seconds):" />
+                <ItemsControl ItemsSource="{Binding MultiTrimRanges}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vm:TrimRangeEntry">
+                      <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+                        <TextBlock Text="Start:" VerticalAlignment="Center" />
+                        <NumericUpDown Value="{Binding StartSeconds}" Minimum="0" Maximum="100000" MinWidth="120" />
+                        <TextBlock Text="End:" VerticalAlignment="Center" />
+                        <NumericUpDown Value="{Binding EndSeconds}" Minimum="0" Maximum="100000" MinWidth="120" />
+                        <Button Content="Remove" Command="{Binding $parent[Window].DataContext.RemoveTrimRangeCommand}" CommandParameter="{Binding}" />
+                      </StackPanel>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Button Content="Add range" Command="{Binding AddTrimRangeCommand}" Margin="0,4,0,0" HorizontalAlignment="Left" />
+              </StackPanel>
+
+              <StackPanel>
+                <CheckBox Content="Crop (pixels, right/bottom negative to shrink)" IsChecked="{Binding UseCrop}" />
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseCrop}">
+                  <TextBlock Text="L:" VerticalAlignment="Center" />
+                  <NumericUpDown Value="{Binding CropLeft}" MinWidth="90" />
+                  <TextBlock Text="T:" VerticalAlignment="Center" />
+                  <NumericUpDown Value="{Binding CropTop}" MinWidth="90" />
+                  <TextBlock Text="R:" VerticalAlignment="Center" />
+                  <NumericUpDown Value="{Binding CropRight}" MinWidth="90" />
+                  <TextBlock Text="B:" VerticalAlignment="Center" />
+                  <NumericUpDown Value="{Binding CropBottom}" MinWidth="90" />
+                </StackPanel>
+              </StackPanel>
+
+              <StackPanel>
+                <CheckBox Content="Resize" IsChecked="{Binding UseResize}" />
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseResize}">
+                  <TextBlock Text="Width:" VerticalAlignment="Center" />
+                  <NumericUpDown Value="{Binding ResizeWidth}" Minimum="0" Maximum="8192" MinWidth="110" />
+                  <TextBlock Text="Height:" VerticalAlignment="Center" />
+                  <NumericUpDown Value="{Binding ResizeHeight}" Minimum="0" Maximum="8192" MinWidth="110" />
+                </StackPanel>
+              </StackPanel>
+
+              <StackPanel>
+                <CheckBox Content="Burn subtitles" IsChecked="{Binding UseSubtitle}" />
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseSubtitle}">
+                  <TextBox Text="{Binding SubtitleFile}" MinWidth="300" />
+                  <Button Content="Browse…" Command="{Binding BrowseSubtitleCommand}" />
+                  <ComboBox SelectedIndex="{Binding SubtitleTypeIndex}" MinWidth="140">
+                    <ComboBoxItem Content="TextSub (.srt/.ass)" />
+                    <ComboBoxItem Content="VobSub" />
+                    <ComboBoxItem Content="PGS" />
+                  </ComboBox>
+                </StackPanel>
+              </StackPanel>
+
+              <StackPanel>
+                <CheckBox Content="Rate" IsChecked="{Binding UseRate}" />
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseRate}">
+                  <TextBlock Text="Multiplier % (100 = 1×):" VerticalAlignment="Center" />
+                  <NumericUpDown Value="{Binding RateMultiplier}" Minimum="1" Maximum="1000" MinWidth="110" />
+                </StackPanel>
+              </StackPanel>
+
+              <StackPanel>
+                <CheckBox Content="Fade" IsChecked="{Binding UseFade}" />
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseFade}">
+                  <CheckBox Content="In" IsChecked="{Binding FadeStart}" />
+                  <CheckBox Content="Out" IsChecked="{Binding FadeEnd}" />
+                  <TextBlock Text="Frames:" VerticalAlignment="Center" />
+                  <NumericUpDown Value="{Binding FadeFrames}" Minimum="1" Maximum="10000" MinWidth="100" />
+                  <CheckBox Content="Keep audio" IsChecked="{Binding FadeKeepAudio}" />
+                </StackPanel>
+              </StackPanel>
+
+              <StackPanel>
+                <CheckBox Content="Rotate / flip" IsChecked="{Binding UseRotate}" />
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseRotate}">
+                  <ComboBox SelectedIndex="{Binding RotateModeIndex}" MinWidth="140">
+                    <ComboBoxItem Content="None" />
+                    <ComboBoxItem Content="Right" />
+                    <ComboBoxItem Content="Twice" />
+                    <ComboBoxItem Content="Left" />
+                  </ComboBox>
+                  <CheckBox Content="Flip H" IsChecked="{Binding RotateFlipH}" />
+                  <CheckBox Content="Flip V" IsChecked="{Binding RotateFlipV}" />
+                </StackPanel>
+              </StackPanel>
+
+              <StackPanel Orientation="Horizontal" Spacing="16">
+                <CheckBox Content="Reverse" IsChecked="{Binding UseReverse}" />
+                <CheckBox Content="Deinterlace" IsChecked="{Binding UseDeinterlace}" />
+                <CheckBox Content="Denoise" IsChecked="{Binding UseDenoise}" />
+              </StackPanel>
+
+              <StackPanel>
+                <CheckBox Content="Levels" IsChecked="{Binding UseLevels}" />
+                <ComboBox SelectedIndex="{Binding LevelsIndex}" Margin="20,4,0,0" MinWidth="140"
+                          IsVisible="{Binding UseLevels}">
+                  <ComboBoxItem Content="TV → PC" />
+                  <ComboBoxItem Content="PC → TV" />
+                </ComboBox>
+              </StackPanel>
+
+              <StackPanel>
+                <CheckBox Content="Overlay image" IsChecked="{Binding UseOverlay}" />
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseOverlay}">
+                  <TextBox Text="{Binding OverlayFile}" MinWidth="260" />
+                  <Button Content="Browse…" Command="{Binding BrowseOverlayCommand}" />
+                  <TextBlock Text="X:" VerticalAlignment="Center" />
+                  <NumericUpDown Value="{Binding OverlayX}" MinWidth="90" />
+                  <TextBlock Text="Y:" VerticalAlignment="Center" />
+                  <NumericUpDown Value="{Binding OverlayY}" MinWidth="90" />
+                </StackPanel>
+              </StackPanel>
+
+              <StackPanel>
+                <CheckBox Content="Dub audio" IsChecked="{Binding UseDub}" />
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseDub}">
+                  <TextBox Text="{Binding DubFile}" MinWidth="260" />
+                  <Button Content="Browse…" Command="{Binding BrowseDubCommand}" />
+                  <ComboBox SelectedIndex="{Binding DubModeIndex}" MinWidth="140">
+                    <ComboBoxItem Content="Trim audio" />
+                    <ComboBoxItem Content="Loop video" />
+                    <ComboBoxItem Content="Just dub" />
+                  </ComboBox>
+                </StackPanel>
+              </StackPanel>
+
+              <StackPanel>
+                <TextBlock Text="Active filters:" />
+                <ListBox ItemsSource="{Binding ActiveFilters}" MaxHeight="120" />
+              </StackPanel>
+            </StackPanel>
+          </ScrollViewer>
         </DockPanel>
       </TabItem>
 
       <TabItem Header="Encoding">
-        <StackPanel Spacing="8" Margin="8">
-          <TextBlock Text="Mode:" />
-          <ComboBox SelectedIndex="{Binding EncodingModeIndex}" MinWidth="260">
-            <ComboBoxItem Content="Constant quality (bitrate)" />
-            <ComboBoxItem Content="Variable quality (CRF)" />
-          </ComboBox>
-          <TextBlock Text="Codec:" />
-          <ComboBox SelectedIndex="{Binding CodecIndex}" MinWidth="260">
-            <ComboBoxItem Content="VP9 (recommended)" />
-            <ComboBoxItem Content="VP8 (legacy)" />
-            <ComboBoxItem Content="AV1 (experimental)" />
-          </ComboBox>
-          <TextBlock Text="Video bitrate (kbit/s, constant mode):" />
-          <NumericUpDown Value="{Binding VideoBitrate}" Minimum="100" Maximum="20000" Increment="100" MinWidth="200" />
-          <TextBlock Text="CRF (variable mode, lower is better):" />
-          <NumericUpDown Value="{Binding Crf}" Minimum="0" Maximum="63" Increment="1" MinWidth="200" />
-          <TextBlock Text="CRF tolerance:" />
-          <NumericUpDown Value="{Binding CrfTolerance}" Minimum="0" Maximum="10" Increment="1" MinWidth="200" />
-          <CheckBox Content="Enable audio" IsChecked="{Binding AudioEnabled}" />
-          <TextBlock Text="Audio bitrate (kbit/s):" />
-          <NumericUpDown Value="{Binding AudioBitrate}" Minimum="32" Maximum="512" Increment="16"
-                         IsEnabled="{Binding AudioEnabled}" MinWidth="200" />
-        </StackPanel>
+        <ScrollViewer>
+          <StackPanel Spacing="8" Margin="8">
+            <TextBlock Text="Mode:" />
+            <ComboBox SelectedIndex="{Binding EncodingModeIndex}" MinWidth="260">
+              <ComboBoxItem Content="Constant quality (bitrate)" />
+              <ComboBoxItem Content="Variable quality (CRF)" />
+            </ComboBox>
+            <TextBlock Text="Codec:" />
+            <ComboBox SelectedIndex="{Binding CodecIndex}" MinWidth="260">
+              <ComboBoxItem Content="VP9 (recommended)" />
+              <ComboBoxItem Content="VP8 (legacy)" />
+              <ComboBoxItem Content="AV1 (experimental)" />
+            </ComboBox>
+            <TextBlock Text="Size limit (MB, constant mode):" />
+            <TextBox Text="{Binding SizeLimitMb}" MinWidth="200" />
+            <TextBlock Text="Video bitrate (kbit/s, constant mode):" />
+            <TextBox Text="{Binding VideoBitrateK}" PlaceholderText="900" MinWidth="200" />
+            <TextBlock Text="CRF (variable mode, lower is better):" />
+            <NumericUpDown Value="{Binding Crf}" Minimum="0" Maximum="63" Increment="1" MinWidth="200" />
+            <TextBlock Text="CRF tolerance:" />
+            <NumericUpDown Value="{Binding CrfTolerance}" Minimum="0" Maximum="10" Increment="1" MinWidth="200" />
+            <CheckBox Content="Enable audio" IsChecked="{Binding AudioEnabled}" />
+            <TextBlock Text="Audio bitrate (kbit/s, constant mode):" />
+            <TextBox Text="{Binding AudioBitrateK}" PlaceholderText="64" MinWidth="200" IsEnabled="{Binding AudioEnabled}" />
+            <TextBlock Text="Audio quality (variable Vorbis only):" />
+            <NumericUpDown Value="{Binding AudioQuality}" Minimum="0" Maximum="10" Increment="1" MinWidth="200" />
+          </StackPanel>
+        </ScrollViewer>
       </TabItem>
 
       <TabItem Header="Advanced">
@@ -95,6 +243,8 @@
           <NumericUpDown Value="{Binding Threads}" Minimum="1" Maximum="64" Increment="1" MinWidth="200" />
           <TextBlock Text="Slices:" />
           <NumericUpDown Value="{Binding Slices}" Minimum="1" Maximum="16" Increment="1" MinWidth="200" />
+          <TextBlock Text="Frame rate override (blank = source):" />
+          <TextBox Text="{Binding FrameRate}" MinWidth="200" />
           <TextBlock Text="Extra ffmpeg arguments:" />
           <TextBox Text="{Binding ExtraArguments}" PlaceholderText="-lag-in-frames 16 …" />
         </StackPanel>
