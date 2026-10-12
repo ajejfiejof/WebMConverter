@@ -60,11 +60,11 @@ namespace WebMConverter.Updater
 
             try
             {
-                var currentVersion = SemVersion.Parse(currentVerString.TrimStart('v', 'V'));
+                var currentVersion = SemVersion.Parse(currentVerString.TrimStart('v', 'V'), SemVersionStyles.Any);
                 var release = FetchLatestRelease();
-                var latestVersion = SemVersion.Parse(release.Version);
+                var latestVersion = SemVersion.Parse(release.Version, SemVersionStyles.Any);
 
-                if (latestVersion > currentVersion)
+                if (latestVersion.ComparePrecedenceTo(currentVersion) > 0)
                 {
                     output = latestVersion.ToString() + Environment.NewLine + release.Changelog;
                 }
