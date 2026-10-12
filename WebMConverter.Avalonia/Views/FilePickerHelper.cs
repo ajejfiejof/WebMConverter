@@ -27,16 +27,18 @@ internal static class FilePickerHelper
         return files.Count == 0 ? null : files[0].Path.LocalPath;
     }
 
-    public static async Task<string?> PickSaveAsync(Window? owner, string title, string suggestedName, string? initialDir = null)
+    public static async Task<string?> PickSaveAsync(
+        Window? owner, string title, string suggestedName, string? initialDir = null, FilePickerFileType? fileType = null)
     {
         if (owner is null)
             return null;
 
+        fileType ??= new FilePickerFileType("WebM video") { Patterns = ["*.webm"] };
         var options = new FilePickerSaveOptions
         {
             Title = title,
             SuggestedFileName = suggestedName,
-            FileTypeChoices = [new FilePickerFileType("WebM video") { Patterns = ["*.webm"] }],
+            FileTypeChoices = [fileType],
         };
         var start = await TryGetFolderAsync(owner, initialDir).ConfigureAwait(true);
         if (start is not null)

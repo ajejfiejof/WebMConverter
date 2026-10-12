@@ -164,3 +164,26 @@ public sealed class YoutubeDlProcess : Process
             BeginOutputReadLine();
     }
 }
+
+/// <summary>vspipe frame-server (VapourSynth piping into ffmpeg).</summary>
+public sealed class VspipeProcess : Process
+{
+    public VspipeProcess(string arguments, string? executable = null)
+    {
+        StartInfo.FileName = executable ?? BinaryResolver.GetBinaryPath("vspipe");
+        StartInfo.Arguments = arguments;
+        StartInfo.RedirectStandardInput = true;
+        StartInfo.RedirectStandardOutput = true;
+        StartInfo.RedirectStandardError = true;
+        StartInfo.UseShellExecute = false;
+        StartInfo.CreateNoWindow = true;
+        EnableRaisingEvents = true;
+    }
+
+    public new void Start()
+    {
+        base.Start();
+        BeginErrorReadLine();
+        BeginOutputReadLine();
+    }
+}

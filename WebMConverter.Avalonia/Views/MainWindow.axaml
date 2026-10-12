@@ -55,6 +55,7 @@
         <DockPanel Margin="8">
           <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="8" Margin="0,8,0,0">
             <Button Content="Clear all" Command="{Binding ClearFiltersCommand}" />
+            <Button Content="Export .vpy" Command="{Binding ExportVapourSynthCommand}" />
           </StackPanel>
           <ScrollViewer>
             <StackPanel Spacing="10">

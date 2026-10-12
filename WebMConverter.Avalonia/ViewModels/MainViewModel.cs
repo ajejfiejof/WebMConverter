@@ -13,6 +13,7 @@ using WebMConverter.Avalonia.Views;
 using WebMConverter.Core;
 using WebMConverter.Core.Filters;
 using WebMConverter.Core.Media;
+using WebMConverter.Core.VapourSynth;
 
 namespace WebMConverter.Avalonia.ViewModels;
 
@@ -675,6 +676,42 @@ public partial class MainViewModel : ViewModelBase
             Title = url;
         _settings.RememberedFolderOut = Path.GetDirectoryName(OutputFile) ?? "";
         SettingsStore.Save(_settings);
+    }
+
+    [RelayCommand]
+    private async Task ExportVapourSynth()
+    {
+        Window? owner = GetOwner();
+        if (owner is null)
+            return;
+
+        try
+        {
+            MediaInfo media = EnsureMedia();
+            FilterSet filters = BuildFilterSet(media);
+            var notes = VapourSynthScript.UnsupportedNotes(filters);
+            string cache = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N") + ".ffindex");
+            var options = VapourSynthScript.FromFilters(InputFile, cache, filters, media.FrameToTime, media.Fps);
+            string script = VapourSynthScript.Generate(options);
+
+            string? file = await FilePickerHelper.PickSaveAsync(
+                owner, "Export VapourSynth script",
+                Path.GetFileName(Path.ChangeExtension(InputFile, ".vpy")),
+                RememberedFolderOut,
+                new global::Avalonia.Platform.Storage.FilePickerFileType("VapourSynth script") { Patterns = ["*.vpy"] });
+            if (file is null)
+                return;
+
+            await File.WriteAllTextAsync(file, script);
+            StatusMessage = notes.Count == 0
+                ? $"Exported {file}"
+                : $"Exported {file} ({notes.Count} filter(s) unmapped: {string.Join("; ", notes)})";
+        }
+        catch (Exception ex) when (ex is ArgumentException || ex is ProbeException || ex is NotSupportedException)
+        {
+            StatusMessage = "ERROR: " + ex.Message;
+            await MessageDialog.ShowAsync(owner, "Error", ex.Message);
+        }
     }
 
     [RelayCommand]
