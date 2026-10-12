@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Tab_InputOutput" xml:space="preserve">
+    <value>Input / Output</value>
+  </data>
+  <data name="Tab_Processing" xml:space="preserve">
+    <value>Processing</value>
+  </data>
+  <data name="Tab_Encoding" xml:space="preserve">
+    <value>Encoding</value>
+  </data>
+  <data name="Tab_Advanced" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="Menu_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="Menu_Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="Menu_Open" xml:space="preserve">
+    <value>Open…</value>
+  </data>
+  <data name="Menu_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Menu_About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Menu_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="InputLabel" xml:space="preserve">
+    <value>Input file (URL downloads, or drop a file onto the box):</value>
+  </data>
+  <data name="InputPlaceholder" xml:space="preserve">
+    <value>Video file or http(s) URL…</value>
+  </data>
+  <data name="OutputLabel" xml:space="preserve">
+    <value>Output file:</value>
+  </data>
+  <data name="OutputPlaceholder" xml:space="preserve">
+    <value>…\name.webm</value>
+  </data>
+  <data name="TitleLabel" xml:space="preserve">
+    <value>Title (metadata):</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Browse…</value>
+  </data>
+  <data name="Convert" xml:space="preserve">
+    <value>Convert</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="StatusReady" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="Trim" xml:space="preserve">
+    <value>Trim (seconds)</value>
+  </data>
+  <data name="TrimStart" xml:space="preserve">
+    <value>Start:</value>
+  </data>
+  <data name="TrimEnd" xml:space="preserve">
+    <value>End:</value>
+  </data>
+  <data name="MultiTrim" xml:space="preserve">
+    <value>Multiple trim ranges (seconds):</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="AddRange" xml:space="preserve">
+    <value>Add range</value>
+  </data>
+  <data name="Crop" xml:space="preserve">
+    <value>Crop (pixels, right/bottom negative to shrink)</value>
+  </data>
+  <data name="CropLeft" xml:space="preserve">
+    <value>L:</value>
+  </data>
+  <data name="CropTop" xml:space="preserve">
+    <value>T:</value>
+  </data>
+  <data name="CropRight" xml:space="preserve">
+    <value>R:</value>
+  </data>
+  <data name="CropBottom" xml:space="preserve">
+    <value>B:</value>
+  </data>
+  <data name="Resize" xml:space="preserve">
+    <value>Resize</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Width:</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Height:</value>
+  </data>
+  <data name="Subtitles" xml:space="preserve">
+    <value>Burn subtitles</value>
+  </data>
+  <data name="SubtitleType" xml:space="preserve">
+    <value>Subtitle type</value>
+  </data>
+  <data name="SubtitleTextSub" xml:space="preserve">
+    <value>TextSub (.srt/.ass)</value>
+  </data>
+  <data name="SubtitleVobSub" xml:space="preserve">
+    <value>VobSub</value>
+  </data>
+  <data name="SubtitlePgs" xml:space="preserve">
+    <value>PGS</value>
+  </data>
+  <data name="EmbeddedTracks" xml:space="preserve">
+    <value>Embedded tracks (if any)…</value>
+  </data>
+  <data name="Rate" xml:space="preserve">
+    <value>Rate</value>
+  </data>
+  <data name="RateMultiplier" xml:space="preserve">
+    <value>Multiplier % (100 = 1×):</value>
+  </data>
+  <data name="Fade" xml:space="preserve">
+    <value>Fade</value>
+  </data>
+  <data name="FadeIn" xml:space="preserve">
+    <value>In</value>
+  </data>
+  <data name="FadeOut" xml:space="preserve">
+    <value>Out</value>
+  </data>
+  <data name="Frames" xml:space="preserve">
+    <value>Frames:</value>
+  </data>
+  <data name="KeepAudio" xml:space="preserve">
+    <value>Keep audio</value>
+  </data>
+  <data name="RotateFlip" xml:space="preserve">
+    <value>Rotate / flip</value>
+  </data>
+  <data name="RotateNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="RotateRight" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="RotateTwice" xml:space="preserve">
+    <value>Twice</value>
+  </data>
+  <data name="RotateLeft" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="FlipH" xml:space="preserve">
+    <value>Flip H</value>
+  </data>
+  <data name="FlipV" xml:space="preserve">
+    <value>Flip V</value>
+  </data>
+  <data name="Reverse" xml:space="preserve">
+    <value>Reverse</value>
+  </data>
+  <data name="Deinterlace" xml:space="preserve">
+    <value>Deinterlace</value>
+  </data>
+  <data name="Denoise" xml:space="preserve">
+    <value>Denoise</value>
+  </data>
+  <data name="Levels" xml:space="preserve">
+    <value>Levels</value>
+  </data>
+  <data name="LevelsTvPc" xml:space="preserve">
+    <value>TV → PC</value>
+  </data>
+  <data name="LevelsPcTv" xml:space="preserve">
+    <value>PC → TV</value>
+  </data>
+  <data name="Overlay" xml:space="preserve">
+    <value>Overlay image</value>
+  </data>
+  <data name="X" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="Y" xml:space="preserve">
+    <value>Y:</value>
+  </data>
+  <data name="Dub" xml:space="preserve">
+    <value>Dub audio</value>
+  </data>
+  <data name="DubTrimAudio" xml:space="preserve">
+    <value>Trim audio</value>
+  </data>
+  <data name="DubLoopVideo" xml:space="preserve">
+    <value>Loop video</value>
+  </data>
+  <data name="DubJustDub" xml:space="preserve">
+    <value>Just dub</value>
+  </data>
+  <data name="ActiveFilters" xml:space="preserve">
+    <value>Active filters:</value>
+  </data>
+  <data name="Caption" xml:space="preserve">
+    <value>Caption (burned text)</value>
+  </data>
+  <data name="CaptionPlaceholder" xml:space="preserve">
+    <value>Caption text…</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Size:</value>
+  </data>
+  <data name="Font" xml:space="preserve">
+    <value>Font:</value>
+  </data>
+  <data name="TextColor" xml:space="preserve">
+    <value>Text #:</value>
+  </data>
+  <data name="BorderColor" xml:space="preserve">
+    <value>Border #:</value>
+  </data>
+  <data name="Border" xml:space="preserve">
+    <value>Border:</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>Clear all</value>
+  </data>
+  <data name="ExportVpy" xml:space="preserve">
+    <value>Export .vpy</value>
+  </data>
+  <data name="Mode" xml:space="preserve">
+    <value>Mode:</value>
+  </data>
+  <data name="ModeConstant" xml:space="preserve">
+    <value>Constant quality (bitrate)</value>
+  </data>
+  <data name="ModeVariable" xml:space="preserve">
+    <value>Variable quality (CRF)</value>
+  </data>
+  <data name="Codec" xml:space="preserve">
+    <value>Codec:</value>
+  </data>
+  <data name="CodecVp9" xml:space="preserve">
+    <value>VP9 (recommended)</value>
+  </data>
+  <data name="CodecVp8" xml:space="preserve">
+    <value>VP8 (legacy)</value>
+  </data>
+  <data name="CodecAv1" xml:space="preserve">
+    <value>AV1 (experimental)</value>
+  </data>
+  <data name="SizeLimit" xml:space="preserve">
+    <value>Size limit (MB, constant mode):</value>
+  </data>
+  <data name="VideoBitrate" xml:space="preserve">
+    <value>Video bitrate (kbit/s, constant mode):</value>
+  </data>
+  <data name="Crf" xml:space="preserve">
+    <value>CRF (variable mode, lower is better):</value>
+  </data>
+  <data name="CrfTolerance" xml:space="preserve">
+    <value>CRF tolerance:</value>
+  </data>
+  <data name="EnableAudio" xml:space="preserve">
+    <value>Enable audio</value>
+  </data>
+  <data name="AudioBitrate" xml:space="preserve">
+    <value>Audio bitrate (kbit/s, constant mode):</value>
+  </data>
+  <data name="AudioQuality" xml:space="preserve">
+    <value>Audio quality (variable Vorbis only):</value>
+  </data>
+  <data name="HqMode" xml:space="preserve">
+    <value>High-quality mode (2-pass, slower)</value>
+  </data>
+  <data name="Threads" xml:space="preserve">
+    <value>Threads:</value>
+  </data>
+  <data name="Slices" xml:space="preserve">
+    <value>Slices:</value>
+  </data>
+  <data name="FrameRateOverride" xml:space="preserve">
+    <value>Frame rate override (blank = source):</value>
+  </data>
+  <data name="ExtraArguments" xml:space="preserve">
+    <value>Extra ffmpeg arguments:</value>
+  </data>
+  <data name="ExtraArgsPlaceholder" xml:space="preserve">
+    <value>-lag-in-frames 16 …</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>Open folder</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Downloading…</value>
+  </data>
+  <data name="Converting" xml:space="preserve">
+    <value>Converting…</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="PreviewTitle" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>WebMConverter (Avalonia) — cross-platform build.</value>
+  </data>
+  <data name="StatusProbing" xml:space="preserve">
+    <value>Probing…</value>
+  </data>
+  <data name="StatusPreview" xml:space="preserve">
+    <value>Preview…</value>
+  </data>
+  <data name="StatusProbeFailed" xml:space="preserve">
+    <value>Probe failed: {0}</value>
+  </data>
+  <data name="StatusError" xml:space="preserve">
+    <value>ERROR: {0}</value>
+  </data>
+</root>

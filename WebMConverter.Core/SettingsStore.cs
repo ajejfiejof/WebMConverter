@@ -10,6 +10,7 @@ namespace WebMConverter.Core;
 /// </summary>
 public sealed class AppSettings
 {
+    public string Language { get; set; } = "en";
     public string EncodingMode { get; set; } = nameof(Core.EncodingMode.Variable);
     public bool AudioEnabled { get; set; } = true;
     public string RememberedFolderIn { get; set; } = string.Empty;

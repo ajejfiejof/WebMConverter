@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Tab_InputOutput" xml:space="preserve">
+    <value>输入 / 输出</value>
+  </data>
+  <data name="Tab_Processing" xml:space="preserve">
+    <value>处理</value>
+  </data>
+  <data name="Tab_Encoding" xml:space="preserve">
+    <value>编码</value>
+  </data>
+  <data name="Tab_Advanced" xml:space="preserve">
+    <value>高级</value>
+  </data>
+  <data name="Menu_File" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="Menu_Help" xml:space="preserve">
+    <value>帮助</value>
+  </data>
+  <data name="Menu_Open" xml:space="preserve">
+    <value>打开…</value>
+  </data>
+  <data name="Menu_Exit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="Menu_About" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="Menu_Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="InputLabel" xml:space="preserve">
+    <value>输入文件（网址下载，或将文件拖到此处）：</value>
+  </data>
+  <data name="InputPlaceholder" xml:space="preserve">
+    <value>视频文件或 http(s) 网址…</value>
+  </data>
+  <data name="OutputLabel" xml:space="preserve">
+    <value>输出文件：</value>
+  </data>
+  <data name="OutputPlaceholder" xml:space="preserve">
+    <value>…\名称.webm</value>
+  </data>
+  <data name="TitleLabel" xml:space="preserve">
+    <value>标题（元数据）：</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>浏览…</value>
+  </data>
+  <data name="Convert" xml:space="preserve">
+    <value>转换</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>预览</value>
+  </data>
+  <data name="StatusReady" xml:space="preserve">
+    <value>就绪</value>
+  </data>
+  <data name="Trim" xml:space="preserve">
+    <value>裁剪（秒）</value>
+  </data>
+  <data name="TrimStart" xml:space="preserve">
+    <value>开始：</value>
+  </data>
+  <data name="TrimEnd" xml:space="preserve">
+    <value>结束：</value>
+  </data>
+  <data name="MultiTrim" xml:space="preserve">
+    <value>多个裁剪范围（秒）：</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="AddRange" xml:space="preserve">
+    <value>添加范围</value>
+  </data>
+  <data name="Crop" xml:space="preserve">
+    <value>裁剪（像素，右/下为负表示收缩）</value>
+  </data>
+  <data name="CropLeft" xml:space="preserve">
+    <value>左：</value>
+  </data>
+  <data name="CropTop" xml:space="preserve">
+    <value>上：</value>
+  </data>
+  <data name="CropRight" xml:space="preserve">
+    <value>右：</value>
+  </data>
+  <data name="CropBottom" xml:space="preserve">
+    <value>下：</value>
+  </data>
+  <data name="Resize" xml:space="preserve">
+    <value>缩放</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>宽度：</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>高度：</value>
+  </data>
+  <data name="Subtitles" xml:space="preserve">
+    <value>烧录字幕</value>
+  </data>
+  <data name="SubtitleType" xml:space="preserve">
+    <value>字幕类型</value>
+  </data>
+  <data name="SubtitleTextSub" xml:space="preserve">
+    <value>TextSub（.srt/.ass）</value>
+  </data>
+  <data name="SubtitleVobSub" xml:space="preserve">
+    <value>VobSub</value>
+  </data>
+  <data name="SubtitlePgs" xml:space="preserve">
+    <value>PGS</value>
+  </data>
+  <data name="EmbeddedTracks" xml:space="preserve">
+    <value>内嵌轨道（若有）：</value>
+  </data>
+  <data name="Rate" xml:space="preserve">
+    <value>帧率</value>
+  </data>
+  <data name="RateMultiplier" xml:space="preserve">
+    <value>倍率 %（100 = 1×）：</value>
+  </data>
+  <data name="Fade" xml:space="preserve">
+    <value>淡入淡出</value>
+  </data>
+  <data name="FadeIn" xml:space="preserve">
+    <value>淡入</value>
+  </data>
+  <data name="FadeOut" xml:space="preserve">
+    <value>淡出</value>
+  </data>
+  <data name="Frames" xml:space="preserve">
+    <value>帧数：</value>
+  </data>
+  <data name="KeepAudio" xml:space="preserve">
+    <value>保留音频</value>
+  </data>
+  <data name="RotateFlip" xml:space="preserve">
+    <value>旋转 / 翻转</value>
+  </data>
+  <data name="RotateNone" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="RotateRight" xml:space="preserve">
+    <value>顺时针</value>
+  </data>
+  <data name="RotateTwice" xml:space="preserve">
+    <value>180°</value>
+  </data>
+  <data name="RotateLeft" xml:space="preserve">
+    <value>逆时针</value>
+  </data>
+  <data name="FlipH" xml:space="preserve">
+    <value>水平翻转</value>
+  </data>
+  <data name="FlipV" xml:space="preserve">
+    <value>垂直翻转</value>
+  </data>
+  <data name="Reverse" xml:space="preserve">
+    <value>倒放</value>
+  </data>
+  <data name="Deinterlace" xml:space="preserve">
+    <value>去隔行</value>
+  </data>
+  <data name="Denoise" xml:space="preserve">
+    <value>降噪</value>
+  </data>
+  <data name="Levels" xml:space="preserve">
+    <value>色阶</value>
+  </data>
+  <data name="LevelsTvPc" xml:space="preserve">
+    <value>电视 → 电脑</value>
+  </data>
+  <data name="LevelsPcTv" xml:space="preserve">
+    <value>电脑 → 电视</value>
+  </data>
+  <data name="Overlay" xml:space="preserve">
+    <value>叠加图片</value>
+  </data>
+  <data name="X" xml:space="preserve">
+    <value>X：</value>
+  </data>
+  <data name="Y" xml:space="preserve">
+    <value>Y：</value>
+  </data>
+  <data name="Dub" xml:space="preserve">
+    <value>配音</value>
+  </data>
+  <data name="DubTrimAudio" xml:space="preserve">
+    <value>裁剪音频</value>
+  </data>
+  <data name="DubLoopVideo" xml:space="preserve">
+    <value>循环视频</value>
+  </data>
+  <data name="DubJustDub" xml:space="preserve">
+    <value>仅配音</value>
+  </data>
+  <data name="ActiveFilters" xml:space="preserve">
+    <value>已启用滤镜：</value>
+  </data>
+  <data name="Caption" xml:space="preserve">
+    <value>字幕（烧录文字）</value>
+  </data>
+  <data name="CaptionPlaceholder" xml:space="preserve">
+    <value>字幕文字…</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>字号：</value>
+  </data>
+  <data name="Font" xml:space="preserve">
+    <value>字体：</value>
+  </data>
+  <data name="TextColor" xml:space="preserve">
+    <value>文字 #：</value>
+  </data>
+  <data name="BorderColor" xml:space="preserve">
+    <value>描边 #：</value>
+  </data>
+  <data name="Border" xml:space="preserve">
+    <value>描边：</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>全部清除</value>
+  </data>
+  <data name="ExportVpy" xml:space="preserve">
+    <value>导出 .vpy</value>
+  </data>
+  <data name="Mode" xml:space="preserve">
+    <value>模式：</value>
+  </data>
+  <data name="ModeConstant" xml:space="preserve">
+    <value>恒定质量（码率）</value>
+  </data>
+  <data name="ModeVariable" xml:space="preserve">
+    <value>可变质量（CRF）</value>
+  </data>
+  <data name="Codec" xml:space="preserve">
+    <value>编码格式：</value>
+  </data>
+  <data name="CodecVp9" xml:space="preserve">
+    <value>VP9（推荐）</value>
+  </data>
+  <data name="CodecVp8" xml:space="preserve">
+    <value>VP8（旧版）</value>
+  </data>
+  <data name="CodecAv1" xml:space="preserve">
+    <value>AV1（实验性）</value>
+  </data>
+  <data name="SizeLimit" xml:space="preserve">
+    <value>体积上限（MB，恒定质量模式）：</value>
+  </data>
+  <data name="VideoBitrate" xml:space="preserve">
+    <value>视频码率（kbit/s，恒定质量模式）：</value>
+  </data>
+  <data name="Crf" xml:space="preserve">
+    <value>CRF（可变质量模式，越低越好）：</value>
+  </data>
+  <data name="CrfTolerance" xml:space="preserve">
+    <value>CRF 容差：</value>
+  </data>
+  <data name="EnableAudio" xml:space="preserve">
+    <value>启用音频</value>
+  </data>
+  <data name="AudioBitrate" xml:space="preserve">
+    <value>音频码率（kbit/s，恒定质量模式）：</value>
+  </data>
+  <data name="AudioQuality" xml:space="preserve">
+    <value>音频质量（仅可变质量 Vorbis）：</value>
+  </data>
+  <data name="HqMode" xml:space="preserve">
+    <value>高质量模式（两遍编码，较慢）</value>
+  </data>
+  <data name="Threads" xml:space="preserve">
+    <value>线程数：</value>
+  </data>
+  <data name="Slices" xml:space="preserve">
+    <value>切片数：</value>
+  </data>
+  <data name="FrameRateOverride" xml:space="preserve">
+    <value>帧率覆盖（留空则使用源帧率）：</value>
+  </data>
+  <data name="ExtraArguments" xml:space="preserve">
+    <value>额外的 ffmpeg 参数：</value>
+  </data>
+  <data name="ExtraArgsPlaceholder" xml:space="preserve">
+    <value>-lag-in-frames 16 …</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>播放</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>打开文件夹</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>上传</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>载入</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>下载中…</value>
+  </data>
+  <data name="Converting" xml:space="preserve">
+    <value>转换中…</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="PreviewTitle" xml:space="preserve">
+    <value>预览</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>WebMConverter（Avalonia）— 跨平台版本。</value>
+  </data>
+  <data name="StatusProbing" xml:space="preserve">
+    <value>正在探测…</value>
+  </data>
+  <data name="StatusPreview" xml:space="preserve">
+    <value>预览中…</value>
+  </data>
+  <data name="StatusProbeFailed" xml:space="preserve">
+    <value>探测失败：{0}</value>
+  </data>
+  <data name="StatusError" xml:space="preserve">
+    <value>错误：{0}</value>
+  </data>
+</root>
