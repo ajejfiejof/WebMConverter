@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Windows.Forms;
 
@@ -6,9 +6,8 @@ namespace WebMConverter.Updater
 {
     static partial class Program
     {
-        public const string VersionUrl = @"https://nixx.is-fantabulo.us/WebM Converter/latest";
-        public const string ChangelogUrl = @"https://nixx.is-fantabulo.us/WebM Converter/{0}.changes";
-        public const string ProgramUrl = @"https://nixx.is-fantabulo.us/WebM Converter/{0}.zip";
+        public const string GitHubApiUrl = @"https://api.github.com/repos/ajejfiejof/WebMConverter/releases/latest";
+        public const string UserAgent = @"WebMConverter-Updater";
 
         /// <summary>
         /// The main entry point for the application.
@@ -18,7 +17,11 @@ namespace WebMConverter.Updater
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+            }
+            catch { }
 
             if (args.Length == 0)
             {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -13,6 +13,7 @@ namespace WebMConverter.Updater
     public partial class UpdateUI : Form
     {
         private string latestVersion;
+        private string updateDownloadUrl;
         private string updateZipPath;
         private string updateTempPath;
         private string updateExePath;
@@ -34,33 +35,40 @@ namespace WebMConverter.Updater
         {
             labelStatus.Text = "Checking latest version...";
 
-            var client = new WebClient();
-            client.DownloadStringCompleted += delegate(object sender, DownloadStringCompletedEventArgs args)
+            Task.Factory.StartNew(() =>
             {
-                if (args.Error != null)
+                try
                 {
-                    Abort(args.Error.Message);
-                    Application.Exit();
+                    var release = Program.FetchLatestRelease();
+                    latestVersion = release.Version;
+                    updateDownloadUrl = release.DownloadUrl;
+
+                    if (string.IsNullOrEmpty(updateDownloadUrl))
+                    {
+                        Invoke((Action)(() => Abort("No download URL found in release.")));
+                        return;
+                    }
+
+                    Invoke((Action)(() => Step2_DownloadLatestVersion()));
                 }
-
-                latestVersion = args.Result.Trim();
-                Step2_DownloadLatestVersion();
-            };
-
-            client.DownloadStringAsync(new Uri(Program.VersionUrl));
+                catch (Exception ex)
+                {
+                    Invoke((Action)(() => Abort(ex.Message)));
+                }
+            });
         }
 
         private void Step2_DownloadLatestVersion()
         {
-            labelStatus.Text = $"Downloading version {latestVersion} (....)";
+            labelStatus.Text = $"Downloading version {latestVersion}...";
             progressBar.Style = ProgressBarStyle.Continuous;
             progressBar.Value = 0;
 
             var client = new WebClient();
+            client.Headers.Add("User-Agent", Program.UserAgent);
             client.DownloadProgressChanged += delegate(object sender, DownloadProgressChangedEventArgs args)
             {
                 progressBar.Value = args.ProgressPercentage;
-
                 labelStatus.Text = $"Downloading version {latestVersion} ({args.BytesReceived / 1024 / 1024} MiB / {args.TotalBytesToReceive / 1024 / 1024} MiB)";
             };
 
@@ -69,18 +77,18 @@ namespace WebMConverter.Updater
                 if (args.Error != null)
                 {
                     Abort(args.Error.Message);
-                    Application.Exit();
+                    return;
                 }
 
                 Step3_UnzipAndVerify();
             };
 
-            client.DownloadFileAsync(new Uri(string.Format(Program.ProgramUrl, latestVersion)), updateZipPath);
+            client.DownloadFileAsync(new Uri(updateDownloadUrl), updateZipPath);
         }
 
         private async void Step3_UnzipAndVerify()
         {
-            labelStatus.Text = string.Format("Verifying integrity...");
+            labelStatus.Text = "Extracting files...";
             progressBar.Style = ProgressBarStyle.Marquee;
             progressBar.Value = 30;
 
@@ -91,47 +99,21 @@ namespace WebMConverter.Updater
             await Task.Run(() => ZipFile.ExtractToDirectory(updateZipPath, updateTempPath));
             File.Delete(updateZipPath);
 
-            var trustedCertificate = new X509Certificate2("trusted.cer");
-            X509Certificate exeCertificate;
-
-            try
+            if (File.Exists("trusted.cer"))
             {
-                exeCertificate = X509Certificate.CreateFromSignedFile(updateExePath);
-            }
-            catch (Exception)
-            {
-                Abort("The downloaded executable is unsigned and therefore untrusted.");
-                return;
-            }
-
-            X509Certificate2 updateCertificate;
-            try
-            {
-                updateCertificate = new X509Certificate2(updateCertPath);
-            }
-            catch (Exception)
-            {
-                Abort("The downloaded update does not include a valid certificate.");
-                return;
-            }
-
-            if (!exeCertificate.Equals(trustedCertificate))
-            {
-                Abort("The downloaded executable is not signed by a trusted developer.");
-                return;
-            }
-
-            if (!trustedCertificate.Equals(updateCertificate))
-            {
-                var answer = MessageBox.Show(this,
-                    $"The downloaded update contains a different certificate than your current version.{Environment.NewLine}" +
-                    $"This is either a sign of foul play, or it means I lost my old certificate and need to ship a new one.{Environment.NewLine}" +
-                    $"If you trust this certificate, it will be used in the future to verify that updates are legitimate.{Environment.NewLine}" +
-                    "Do you trust this new certificate?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
-
-                if (answer == DialogResult.No)
+                try
                 {
-                    Abort();
+                    var trustedCertificate = new X509Certificate2("trusted.cer");
+                    var exeCertificate = X509Certificate.CreateFromSignedFile(updateExePath);
+                    if (!exeCertificate.Equals(trustedCertificate))
+                    {
+                        Abort("The downloaded executable is not signed by a trusted developer.");
+                        return;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Abort("Certificate verification error: " + e.Message);
                     return;
                 }
             }
@@ -151,9 +133,15 @@ namespace WebMConverter.Updater
             catch (Exception e)
             {
                 Abort(e.Message);
+                return;
             }
 
-            Directory.Delete(updateTempPath, true);
+            try
+            {
+                Directory.Delete(updateTempPath, true);
+            }
+            catch { }
+
             Process.Start("WebMConverter.exe");
             Application.Exit();
         }
