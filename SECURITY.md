@@ -12,9 +12,9 @@ CHANGELOG unless anonymity is requested.
 
 ## Supply chain: SBOM
 
-Every CI run generates a [CycloneDX](https://cyclonedx.org/) SBOM
-(`bom.json`, spec 1.7) covering all NuGet dependencies of the solution, and
-publishes it as a build artifact. To reproduce locally:
+Generate a [CycloneDX](https://cyclonedx.org/) SBOM (`bom.json`, spec 1.7)
+covering all NuGet dependencies of the solution at release time, and attach
+it to the release:
 
 ```bash
 dotnet tool install --global CycloneDX

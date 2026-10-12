@@ -53,7 +53,7 @@
 ## Phase 4: Testing & Polish (Partial)
 - [x] Linux smoke + E2E conversion tests (this machine)
 - [x] README with Linux instructions
-- [ ] Multi-distro testing, CI Linux build, automated packaging
+- [ ] Multi-distro testing, automated packaging
 
 ## Known quirks carried over (bug-compatible, fix later)
 - Crop dimensions feed the `-vf` chain twice (probe resolution is already

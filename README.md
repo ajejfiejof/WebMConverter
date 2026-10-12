@@ -6,7 +6,6 @@ for the WebM format — no command-line tools required.
 ![Linux](https://img.shields.io/badge/Linux-supported-brightgreen)
 ![Windows](https://img.shields.io/badge/Windows-supported-brightgreen)
 ![.NET 8](https://img.shields.io/badge/.NET-8-blue)
-[![CI](https://github.com/ajejfiejof/WebMConverter/actions/workflows/ci.yml/badge.svg)](https://github.com/ajejfiejof/WebMConverter/actions/workflows/ci.yml)
 
 Built with [Avalonia UI](https://avaloniaui.net/) (XAML + MVVM). All conversion
 logic lives in the UI-free `WebMConverter.Core` library, covered by xUnit
@@ -109,7 +108,6 @@ WebMConverter.Core/          UI-free engine: probing, argument builder,
 WebMConverter.Core.Tests/    xUnit suite (unit + ffmpeg-gated end-to-end)
 WebMConverter.Avalonia/      Avalonia UI: views, view models, dialogs
 packaging/                   .desktop, AppStream, Flatpak, AppImage, icon
-.github/workflows/ci.yml     Linux+Windows build/test, CycloneDX SBOM
 ```
 
 ## Known limitations

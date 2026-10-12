@@ -17,7 +17,7 @@ unreleased (Avalonia port)
 - VapourSynth: generate .vpy scripts, convert via vspipe piping,
   Export .vpy button.
 - Packaging: Flatpak manifest, AppImage script, .desktop + AppStream metadata.
-- CI builds/tests on Linux+Windows and publishes a CycloneDX SBOM.
+- Release process: CycloneDX SBOM (`bom.json`) generated locally per release.
 - Governance: Contributor Covenant Code of Conduct, Conventional Commits
   (CONTRIBUTING.md), security policy (SECURITY.md).
 - Platform limits: .avs scripts require Windows; .vpy requires VapourSynth.

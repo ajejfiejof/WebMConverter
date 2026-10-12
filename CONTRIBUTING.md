@@ -53,8 +53,7 @@ dotnet run --project WebMConverter.Avalonia -c Release
   Avalonia head must build and run on Linux with no Windows targeting.
 * New Core behavior needs xUnit coverage in `WebMConverter.Core.Tests`.
   E2E tests must degrade to a logged no-op when ffmpeg is absent.
-* Verify GUI changes by launching under Xvfb and screenshotting, as CI has
-  no display.
+* Verify GUI changes by launching under Xvfb and screenshotting.
 
 ## Pull requests
 
@@ -65,5 +64,5 @@ dotnet run --project WebMConverter.Avalonia -c Release
 
 ## Security
 
-See [SECURITY.md](SECURITY.md). Every CI run publishes a CycloneDX SBOM
-artifact (`bom.json`); do not commit generated SBOMs to the repo.
+See [SECURITY.md](SECURITY.md). A CycloneDX SBOM (`bom.json`) can be
+generated locally per release; do not commit it to the repo.
