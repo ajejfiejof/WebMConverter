@@ -1,3 +1,13 @@
+unreleased (Avalonia port)
+======================
+- Cross-platform UI: migrated from Windows Forms to Avalonia (Linux/Windows/macOS).
+- All conversion logic extracted into UI-free WebMConverter.Core; argument
+  builder is an exact port, verified against legacy vectors and end-to-end
+  with real ffmpeg on Linux (single-pass, HQ two-pass, trim/crop).
+- Settings now stored as JSON instead of WinForms user settings.
+- Removed the built-in auto-updater (use releases / package manager).
+- Platform limits: .avs scripts and Caption filter require Windows.
+
 v2.26.1
 =======
 - Fade filter will now be properly reset upon loading a new file.
