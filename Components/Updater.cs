@@ -34,7 +34,7 @@ namespace WebMConverter.Components
             StartInfo.RedirectStandardError = true;
             StartInfo.UseShellExecute = false; //Required to redirect IO streams
             StartInfo.CreateNoWindow = true; //Hide console
-            EnableRaisingEvents = true; 
+            EnableRaisingEvents = true;
         }
 
         new public void Start()

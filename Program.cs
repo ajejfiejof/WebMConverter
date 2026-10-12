@@ -120,7 +120,7 @@ namespace WebMConverter
             return filters.Count > 0 ? string.Join(",", filters) : null;
         }
     }
-    
+
     #endregion
 
     static class Program

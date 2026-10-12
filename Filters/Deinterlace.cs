@@ -1,4 +1,4 @@
-﻿namespace WebMConverter
+namespace WebMConverter
 {
     public class DeinterlaceFilter
     {

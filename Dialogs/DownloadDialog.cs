@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -87,7 +87,7 @@ namespace WebMConverter.Dialogs
 
             _filenameGetterProcess.ErrorDataReceived += ProcessOnErrorDataReceived;
             _filenameGetterProcess.OutputDataReceived += FilenameGetterOnOutputDataReceived;
-            _filenameGetterProcess.Exited += (o, args) => boxOutput.Invoke((Action) (() =>
+            _filenameGetterProcess.Exited += (o, args) => boxOutput.Invoke((Action)(() =>
             {
                 if (_panic) return;
                 boxOutput.AppendText($"{Environment.NewLine}Downloading to {Outfile}");
@@ -106,7 +106,7 @@ namespace WebMConverter.Dialogs
                 boxOutput.AppendText($"{Environment.NewLine}--- YOUTUBE-DL HAS EXITED ---");
                 buttonCancel.Enabled = false;
 
-                _timer = new Timer {Interval = 500};
+                _timer = new Timer { Interval = 500 };
                 _timer.Tick += Exited;
                 _timer.Start();
             }));

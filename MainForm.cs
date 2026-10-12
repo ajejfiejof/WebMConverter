@@ -434,7 +434,7 @@ namespace WebMConverter
                 if (!VideoDownload.Enabled)
                 {
                     var result = MessageBox.Show(
-                       $"Couldn't find Youtube-DL. Either download it and put it somewhere in your %PATH%, or place it next to WebMConverter.exe.{Environment.NewLine}" + 
+                       $"Couldn't find Youtube-DL. Either download it and put it somewhere in your %PATH%, or place it next to WebMConverter.exe.{Environment.NewLine}" +
                         "You can download it from yt-dl.org",
                         "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
                     if (result == DialogResult.Retry)
@@ -681,7 +681,7 @@ namespace WebMConverter
                         Filters.Rate = form.GeneratedFilter;
                         listViewProcessingScript.Items.Add("Rate", "rate");
                         UpdateArguments(sender, e);
-                        ((ToolStripItem) sender).Enabled = false;
+                        ((ToolStripItem)sender).Enabled = false;
                     }
                 }
             }
@@ -816,7 +816,7 @@ namespace WebMConverter
 
         void toolStripFilterButtonsEnabled(bool enabled)
         {
-            buttonCaption.Enabled = 
+            buttonCaption.Enabled =
             buttonCrop.Enabled =
             buttonDub.Enabled =
             buttonFade.Enabled =
@@ -1134,7 +1134,7 @@ namespace WebMConverter
         void boxAudio_CheckedChanged(object sender, EventArgs e)
         {
             numericAudioQuality.Enabled = boxAudioBitrate.Enabled = ((CheckBox)sender).Checked;
-            
+
             if (boxNGOV.Checked)
                 numericAudioQuality.Enabled = false;
 
@@ -1227,7 +1227,7 @@ namespace WebMConverter
             boxTitle.Text =
             boxLimit.Text =
             boxBitrate.Text =
-            boxAudioBitrate.Text = 
+            boxAudioBitrate.Text =
             boxFrameRate.Text =
             boxArguments.Text =
                 string.Empty;
@@ -1319,11 +1319,11 @@ namespace WebMConverter
                 Program.InputType = FileType.Avisynth;
 
                 BackgroundWorker probebw = new BackgroundWorker();
-                probebw.DoWork += delegate(object sender, DoWorkEventArgs e)
+                probebw.DoWork += delegate (object sender, DoWorkEventArgs e)
                 {
                     ProbeScript();
                 };
-                probebw.RunWorkerCompleted += delegate(object sender, RunWorkerCompletedEventArgs e)
+                probebw.RunWorkerCompleted += delegate (object sender, RunWorkerCompletedEventArgs e)
                 {
                     boxAdvancedScripting.Enabled = false;
                     listViewProcessingScript.Enabled = false;
@@ -1373,17 +1373,17 @@ namespace WebMConverter
 
             indexbw.WorkerSupportsCancellation = true;
             indexbw.WorkerReportsProgress = true;
-            indexbw.ProgressChanged += new ProgressChangedEventHandler(delegate(object sender, ProgressChangedEventArgs e)
+            indexbw.ProgressChanged += new ProgressChangedEventHandler(delegate (object sender, ProgressChangedEventArgs e)
             {
                 this.progressBarIndexing.Value = e.ProgressPercentage;
                 taskbarManager.SetProgressValue(e.ProgressPercentage, 100);
             });
-            indexbw.DoWork += delegate(object sender, DoWorkEventArgs e)
+            indexbw.DoWork += delegate (object sender, DoWorkEventArgs e)
             {
                 logIndexingProgress("Indexing starting...");
                 FFMSSharp.Indexer indexer = new FFMSSharp.Indexer(path, FFMSSharp.Source.Lavf);
 
-                indexer.UpdateIndexProgress += delegate(object sendertwo, FFMSSharp.IndexingProgressChangeEventArgs etwo)
+                indexer.UpdateIndexProgress += delegate (object sendertwo, FFMSSharp.IndexingProgressChangeEventArgs etwo)
                 {
                     indexbw.ReportProgress((int)(etwo.Current / (double)etwo.Total * 100));
                     indexer.CancelIndexing = indexbw.CancellationPending;
@@ -1415,7 +1415,7 @@ namespace WebMConverter
                         {
                             result = MessageBox.Show(
                                 $"Indexing error: {error.Message}{Environment.NewLine}" +
-                                $"If you were planning on making a WebM with audio, I'm afraid that's not going to happen.{Environment.NewLine}" + 
+                                $"If you were planning on making a WebM with audio, I'm afraid that's not going to happen.{Environment.NewLine}" +
                                 "Would you like to index the file without audio?",
                                 "Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                         });
@@ -1584,7 +1584,7 @@ namespace WebMConverter
                                             extension = "." + streamtitle; // YOLO
                                             break;
                                     }
-                                    
+
                                     file = Path.Combine(Program.AttachmentDirectory, $"sub{streamindex}{extension}");
                                     logIndexingProgress($"Found subtitle track #{streamindex}");
 
@@ -1668,7 +1668,7 @@ namespace WebMConverter
                 SetSlices(frame.EncodedResolution);
                 LoadFonts(msg => logIndexingProgress((string)msg));
             });
-            indexbw.RunWorkerCompleted += delegate(object sender, RunWorkerCompletedEventArgs e)
+            indexbw.RunWorkerCompleted += delegate (object sender, RunWorkerCompletedEventArgs e)
             {
                 if (audioDisabled == true && e.Cancelled)
                 {
@@ -1694,7 +1694,7 @@ namespace WebMConverter
                     extractbw.RunWorkerAsync();
                 }
             };
-            extractbw.RunWorkerCompleted += delegate(object sender, RunWorkerCompletedEventArgs e)
+            extractbw.RunWorkerCompleted += delegate (object sender, RunWorkerCompletedEventArgs e)
             {
                 if (e.Error != null)
                 {
@@ -1718,8 +1718,8 @@ namespace WebMConverter
                             break;
                         default:
                             MessageBox.Show(
-                                $"We couldn't find any audio tracks.{Environment.NewLine}" + 
-                                $"If you want sound, please use another input file.{Environment.NewLine}" + 
+                                $"We couldn't find any audio tracks.{Environment.NewLine}" +
+                                $"If you want sound, please use another input file.{Environment.NewLine}" +
                                 "If you don't want audio in your output webm, there's nothing to worry about.",
                                 "FYI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             break;
@@ -1868,7 +1868,7 @@ namespace WebMConverter
                         default:
                             throw new NotImplementedException();
                     }
-                    
+
                     avscript.WriteLine($@"LoadPlugin(PluginPath+""{plugin}"")");
                 }
 
@@ -2165,7 +2165,7 @@ namespace WebMConverter
             if (boxAdvancedScripting.Checked || Program.InputType == FileType.Avisynth)
             {
                 // The dirty way.
-                
+
                 try
                 {
                     using (XmlReader reader = XmlReader.Create(new StringReader(avsScriptInfo)))
@@ -2197,7 +2197,7 @@ namespace WebMConverter
                     duration = Filters.Trim.GetDuration();
                 else if (Filters.MultipleTrim != null)
                     duration = Filters.MultipleTrim.GetDuration();
-                else 
+                else
                     duration = FrameToTimeSpan(Program.VideoSource.NumberOfFrames - 1).TotalSeconds;
 
                 if (Filters.Rate != null)

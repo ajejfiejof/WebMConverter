@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 using WebMConverter.Dialogs;
 using static WebMConverter.Utility;
@@ -130,7 +130,7 @@ namespace WebMConverter
                     modifier = 1;
                     break;
             }
-            
+
             if (modifier != 0)
             {
                 SetFrame(modifier, true);

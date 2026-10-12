@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -17,8 +17,8 @@ namespace WebMConverter
             if (Program.InputHasWeirdPixelFormat)
             {
                 MessageBox.Show(
-                    $"Your input video is Hi444p! That's cool, but the subtitle renderer can't deal with that pixel format.{Environment.NewLine}" + 
-                    $"If you add subtitles to your webm, we'll have to convert it to something a bit less cool.{Environment.NewLine}" + 
+                    $"Your input video is Hi444p! That's cool, but the subtitle renderer can't deal with that pixel format.{Environment.NewLine}" +
+                    $"If you add subtitles to your webm, we'll have to convert it to something a bit less cool.{Environment.NewLine}" +
                     "It's handed automatically, though. Don't worry.",
                     "FYI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

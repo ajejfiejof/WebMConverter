@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -112,7 +112,7 @@ namespace WebMConverter
                 heldCorner = Corner.None;
                 held = true;
             }
-            
+
             previewFrame.Invalidate();
         }
 

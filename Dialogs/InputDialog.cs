@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 
 namespace WebMConverter.Dialogs
@@ -45,7 +45,7 @@ namespace WebMConverter.Dialogs
                 case "System.Int32":
                     _inputField = new TextBox();
                     _inputField.Text = value.ToString();
-                    (_inputField as TextBox).KeyPress += delegate(object sender, KeyPressEventArgs e)
+                    (_inputField as TextBox).KeyPress += delegate (object sender, KeyPressEventArgs e)
                     {
                         if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
                         {

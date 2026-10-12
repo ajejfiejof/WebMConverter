@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Windows.Forms;
 
@@ -26,7 +26,7 @@ namespace WebMConverter
         {
             int targetwidth;
             int targetheight;
-            
+
             try
             {
                 targetwidth = int.Parse(textWidthOut.Text);
@@ -136,7 +136,7 @@ namespace WebMConverter
 
     public class ResizeFilter
     {
-        public int TargetWidth { get; } 
+        public int TargetWidth { get; }
         public int TargetHeight { get; }
 
         public ResizeFilter(int targetWidth, int targetHeight)

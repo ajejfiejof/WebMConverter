@@ -15,9 +15,9 @@ namespace WebMConverter
                 folder = "Win32";
             else
                 if (Environment.Is64BitOperatingSystem)
-                    folder = "Win64";
-                else
-                    folder = "Win32";
+                folder = "Win64";
+            else
+                folder = "Win32";
 
             FFmpegPath = Program.GetBinaryPath("ffmpeg.exe", folder);
 
@@ -28,7 +28,7 @@ namespace WebMConverter
             StartInfo.RedirectStandardError = true;
             StartInfo.UseShellExecute = false; //Required to redirect IO streams
             StartInfo.CreateNoWindow = true; //Hide console
-            EnableRaisingEvents = true; 
+            EnableRaisingEvents = true;
         }
 
         new public void Start() => Start(true);

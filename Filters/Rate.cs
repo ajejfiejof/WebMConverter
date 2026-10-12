@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
@@ -31,7 +31,7 @@ namespace WebMConverter
                 trackRate.Value = _filterToEdit.Multiplier;
             }
             else
-                _originalDuration = new TimeSpan((long)(((MainForm) Owner).GetDuration() * 10000000));
+                _originalDuration = new TimeSpan((long)(((MainForm)Owner).GetDuration() * 10000000));
 
             boxPreviewOriginal.Text = _originalDuration.ToString(PreviewBoxFormat);
             boxPreviewScaled.Text = new TimeSpan((long)(_originalDuration.Ticks / GetValue())).ToString(PreviewBoxFormat);

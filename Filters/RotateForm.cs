@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using WebMConverter.Dialogs;
@@ -144,9 +144,9 @@ namespace WebMConverter
                 case RotateFlipType.Rotate90FlipNone:
                     if (checkFlipHorizontal.Checked && checkFlipVertical.Checked)
                         rotateFlip = RotateFlipType.Rotate90FlipXY;
-                    else if(checkFlipHorizontal.Checked)
+                    else if (checkFlipHorizontal.Checked)
                         rotateFlip = RotateFlipType.Rotate90FlipX;
-                    else if(checkFlipVertical.Checked)
+                    else if (checkFlipVertical.Checked)
                         rotateFlip = RotateFlipType.Rotate90FlipY;
                     break;
                 case RotateFlipType.Rotate180FlipNone:

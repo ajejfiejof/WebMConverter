@@ -39,12 +39,12 @@ namespace WebMConverter
 
         private void DubForm_DragDrop(object sender, DragEventArgs e)
         {
-            var files = (string[]) e.Data.GetData(DataFormats.FileDrop);
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
             SetFile(files[0]);
         }
 
         private void buttonBrowse_Click(object sender, EventArgs e) => openAudioFile.ShowDialog(this);
-        private void openAudioFile_FileOk(object sender, CancelEventArgs e) => SetFile(((OpenFileDialog) sender).FileName);
+        private void openAudioFile_FileOk(object sender, CancelEventArgs e) => SetFile(((OpenFileDialog)sender).FileName);
 
         private void SetFile(string audioFileName)
         {
@@ -119,7 +119,7 @@ namespace WebMConverter
 
                     indexer.UpdateIndexProgress += (ind, updateArgs) =>
                     {
-                        _worker.ReportProgress((int) (((double) updateArgs.Current/updateArgs.Total)*100));
+                        _worker.ReportProgress((int)(((double)updateArgs.Current / updateArgs.Total) * 100));
                         indexer.CancelIndexing = _worker.CancellationPending;
                     };
 
@@ -232,7 +232,7 @@ namespace WebMConverter
                 case DubMode.TrimAudio:
                     return $@"Trim(AudioDub(FFAudioSource(""{AudioFileName}"",cachefile=""{IndexFileName}"")), 0, last.FrameCount)";
                 case DubMode.LoopVideo:
-                    return $@"dub = FFAudioSource(""{AudioFileName}"",cachefile=""{IndexFileName}""){Environment.NewLine}" + 
+                    return $@"dub = FFAudioSource(""{AudioFileName}"",cachefile=""{IndexFileName}""){Environment.NewLine}" +
                              "Loop(-1).AudioDub(dub).Trim(0,int(dub.AudioLength / dub.AudioRate * last.FrameRate))";
                 case DubMode.JustDub:
                     return $@"AudioDub(FFAudioSource(""{AudioFileName}"",cachefile=""{IndexFileName}""))";

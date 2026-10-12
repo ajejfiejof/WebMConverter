@@ -66,13 +66,13 @@ namespace WebMConverter.Updater
 
             var client = new WebClient();
             client.Headers.Add("User-Agent", Program.UserAgent);
-            client.DownloadProgressChanged += delegate(object sender, DownloadProgressChangedEventArgs args)
+            client.DownloadProgressChanged += delegate (object sender, DownloadProgressChangedEventArgs args)
             {
                 progressBar.Value = args.ProgressPercentage;
                 labelStatus.Text = $"Downloading version {latestVersion} ({args.BytesReceived / 1024 / 1024} MiB / {args.TotalBytesToReceive / 1024 / 1024} MiB)";
             };
 
-            client.DownloadFileCompleted += delegate(object sender, AsyncCompletedEventArgs args)
+            client.DownloadFileCompleted += delegate (object sender, AsyncCompletedEventArgs args)
             {
                 if (args.Error != null)
                 {

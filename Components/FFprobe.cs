@@ -26,7 +26,7 @@ namespace WebMConverter
                 }
 
                 string dataToProbeAsString = "";
-                foreach(string Type in dataToProbe)
+                foreach (string Type in dataToProbe)
                 {
                     dataToProbeAsString += " -show_";
                     dataToProbeAsString += Type;

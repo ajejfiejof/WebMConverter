@@ -96,7 +96,7 @@ namespace WebMConverter.Dialogs
             if (m.Success)
             {
                 var time = TimeSpan.Parse(m.Groups[1].Value); // happens to be the same format as TimeSpan so yay
-                var progress = (float)time.TotalSeconds/_induration;
+                var progress = (float)time.TotalSeconds / _induration;
                 progress = Math.Min(progress, 1); // sometimes progress becomes more than 100%, which breaks the progressBar
                 progressBar.InvokeIfRequired(() =>
                 {
@@ -163,7 +163,7 @@ namespace WebMConverter.Dialogs
             {
                 try
                 {
-                    boxOutput.Invoke((Action) (() =>
+                    boxOutput.Invoke((Action)(() =>
                     {
                         boxOutput.AppendText(Environment.NewLine + args.Data);
                     }));
@@ -346,7 +346,7 @@ namespace WebMConverter.Dialogs
             if (!File.Exists(((MainForm)Owner).textBoxOut.Text))
                 MessageBox.Show("Output file not found! Did you move it?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
-                Process.Start(((MainForm) Owner).textBoxOut.Text); //Play result video
+                Process.Start(((MainForm)Owner).textBoxOut.Text); //Play result video
         }
 
         private void buttonUpload_Click(object sender, EventArgs e)
@@ -364,7 +364,7 @@ namespace WebMConverter.Dialogs
                     MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-                
+
         }
 
         // manually scroll to bottom cause AppendText doesn't do it if it doesn't have focus

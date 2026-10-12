@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace WebMConverter
 {
@@ -22,7 +22,7 @@ namespace WebMConverter
                 default:
                     throw new NotImplementedException();
             }
-            
+
         }
     }
 

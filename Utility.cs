@@ -140,7 +140,7 @@ namespace WebMConverter
             return input;
         }
     }
-    
+
     public enum FileType
     {
         Video,
