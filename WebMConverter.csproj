@@ -19,8 +19,11 @@
 
   <ItemGroup>
     <Compile Remove="Updater\**" />
+    <Compile Remove="WebMConverter.Avalonia\**" />
     <EmbeddedResource Remove="Updater\**" />
+    <EmbeddedResource Remove="WebMConverter.Avalonia\**" />
     <None Remove="Updater\**" />
+    <None Remove="WebMConverter.Avalonia\**" />
   </ItemGroup>
 
   <ItemGroup>
