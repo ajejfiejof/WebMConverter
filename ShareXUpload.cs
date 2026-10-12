@@ -1,5 +1,6 @@
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace WebMConverter
 {
@@ -10,6 +11,9 @@ namespace WebMConverter
 
         public static void CheckEnabled()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return;
+
             var installPath = (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Classes\*\shell\ShareX\command", null, null);
             if (installPath == null) return;
             Enabled = true;

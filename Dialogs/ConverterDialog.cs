@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
@@ -57,7 +58,10 @@ namespace WebMConverter.Dialogs
                 AddInputFileToArguments(ref args[i]);
             }
 
-            taskbarManager = TaskbarManager.Instance;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && TaskbarManager.IsPlatformSupported)
+            {
+                taskbarManager = TaskbarManager.Instance;
+            }
         }
 
         private void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs args)
@@ -102,13 +106,13 @@ namespace WebMConverter.Dialogs
                 {
                     progressBar.Value = (int)(progress * 1000); // progressBar maximum is 1000
                 });
-                taskbarManager.SetProgressValue((int)(progress * 1000), 1000);
+                taskbarManager?.SetProgressValue((int)(progress * 1000), 1000);
             }
         }
 
         private void ConverterForm_Load(object sender, EventArgs e)
         {
-            taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate);
+            taskbarManager?.SetProgressState(TaskbarProgressBarState.Indeterminate);
 
             string argument = null;
             _twopass = true;
@@ -218,7 +222,7 @@ namespace WebMConverter.Dialogs
                 _timer.Start();
             }));
 
-            taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
+            taskbarManager?.SetProgressState(TaskbarProgressBarState.Normal);
             _ffmpegProcess.Start();
             StartPipe(_ffmpegProcess);
         }
@@ -242,7 +246,7 @@ namespace WebMConverter.Dialogs
                 {
                     boxOutput.AppendText($"{Environment.NewLine}--- ENTERING PASS {_currentPass + 1} ---");
 
-                    taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
+                    taskbarManager?.SetProgressState(TaskbarProgressBarState.Normal);
                     MultiPass(arguments); //Sort of recursion going on here, be careful with stack overflows and shit
                     return;
                 }
@@ -274,7 +278,7 @@ namespace WebMConverter.Dialogs
                     boxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}ffmpeg.exe exited with exit code {process.ExitCode}. That's usually bad.");
                     boxOutput.AppendText($"{Environment.NewLine}If you have no idea what went wrong, open an issue on GitGud and copy paste the output of this window there.");
                 }
-                taskbarManager.SetProgressState(TaskbarProgressBarState.Error);
+                taskbarManager?.SetProgressState(TaskbarProgressBarState.Error);
                 pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
 
                 if (process.ExitCode == -1073741819) //This error keeps happening for me if I set threads to anything above 1, might happen for other people too
@@ -292,7 +296,7 @@ namespace WebMConverter.Dialogs
 
                     boxOutput.AppendText($"{Environment.NewLine}Amount of video lost: {Math.Abs(_induration - _outduration)}s");
 
-                    taskbarManager.SetProgressState(TaskbarProgressBarState.Error);
+                    taskbarManager?.SetProgressState(TaskbarProgressBarState.Error);
                     pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
                 }
                 else
@@ -333,7 +337,7 @@ namespace WebMConverter.Dialogs
         {
             _panic = true; //Shut down while avoiding exceptions
             buttonCancel_Click(sender, e);
-            taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
+            taskbarManager?.SetProgressState(TaskbarProgressBarState.NoProgress);
         }
 
         private void ConverterForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -368,7 +372,11 @@ namespace WebMConverter.Dialogs
         }
 
         // manually scroll to bottom cause AppendText doesn't do it if it doesn't have focus
-        private void boxOutput_TextChanged(object sender, EventArgs e) => NativeMethods.SendMessage(boxOutput.Handle, 0x115, 7, 0);
+        private void boxOutput_TextChanged(object sender, EventArgs e)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                NativeMethods.SendMessage(boxOutput.Handle, 0x115, 7, 0);
+        }
         // 0x115: WM_VSCROLL, 7: SB_BOTTOM
     }
 }

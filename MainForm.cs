@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -117,7 +118,10 @@ namespace WebMConverter
             }
             boxAudio.Checked = Properties.Settings.Default.AudioEnabled;
 
-            taskbarManager = TaskbarManager.Instance;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && TaskbarManager.IsPlatformSupported)
+            {
+                taskbarManager = TaskbarManager.Instance;
+            }
         }
 
         void MainForm_Load(object sender, EventArgs e)
@@ -1284,7 +1288,7 @@ namespace WebMConverter
             audioDisabled = false;
 
             progressBarIndexing.Style = ProgressBarStyle.Marquee;
-            taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate);
+            taskbarManager?.SetProgressState(TaskbarProgressBarState.Indeterminate);
             boxIndexingProgress.Text = "";
             panelHideTheOptions.BringToFront();
 
@@ -1376,7 +1380,7 @@ namespace WebMConverter
             indexbw.ProgressChanged += new ProgressChangedEventHandler(delegate (object sender, ProgressChangedEventArgs e)
             {
                 this.progressBarIndexing.Value = e.ProgressPercentage;
-                taskbarManager.SetProgressValue(e.ProgressPercentage, 100);
+                taskbarManager?.SetProgressValue(e.ProgressPercentage, 100);
             });
             indexbw.DoWork += delegate (object sender, DoWorkEventArgs e)
             {
@@ -1689,7 +1693,7 @@ namespace WebMConverter
                 {
                     labelIndexingProgress.Text = "Extracting subtitle tracks and attachments...";
                     progressBarIndexing.Style = ProgressBarStyle.Marquee;
-                    taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate);
+                    taskbarManager?.SetProgressState(TaskbarProgressBarState.Indeterminate);
 
                     extractbw.RunWorkerAsync();
                 }
@@ -1742,7 +1746,7 @@ namespace WebMConverter
                         boxDeinterlace.Checked = true;
 
                 panelHideTheOptions.SendToBack();
-                taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
+                taskbarManager?.SetProgressState(TaskbarProgressBarState.NoProgress);
             };
 
             if (File.Exists(_indexFile))
@@ -1764,7 +1768,7 @@ namespace WebMConverter
 
                         labelIndexingProgress.Text = "Extracting subtitle tracks and attachments...";
                         progressBarIndexing.Style = ProgressBarStyle.Marquee;
-                        taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate);
+                        taskbarManager?.SetProgressState(TaskbarProgressBarState.Indeterminate);
 
                         extractbw.RunWorkerAsync();
                         return;
@@ -1781,7 +1785,7 @@ namespace WebMConverter
             buttonGo.Text = "Cancel";
             progressBarIndexing.Value = 0;
             progressBarIndexing.Style = ProgressBarStyle.Continuous;
-            taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
+            taskbarManager?.SetProgressState(TaskbarProgressBarState.Normal);
             labelIndexingProgress.Text = "Indexing...";
             indexbw.RunWorkerAsync();
         }
@@ -1794,7 +1798,7 @@ namespace WebMConverter
             Program.FileMd5 = null;
             buttonBrowseIn.Enabled = true;
             textBoxIn.Enabled = true;
-            taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
+            taskbarManager?.SetProgressState(TaskbarProgressBarState.NoProgress);
             panelHideTheOptions.SendToBack();
         }
 
@@ -2352,6 +2356,9 @@ namespace WebMConverter
 
         private void LoadFonts(Action<object> action = null)
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return;
+
             Program.AttachmentList.ForEach(filename =>
             {
                 action?.Invoke($"Loading font {filename}");
@@ -2365,6 +2372,9 @@ namespace WebMConverter
 
         private void UnloadFonts()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return;
+
             Program.AttachmentList?.ForEach(filename =>
             {
                 NativeMethods.RemoveFontResourceEx(Path.Combine(Program.AttachmentDirectory, filename), 0, IntPtr.Zero);

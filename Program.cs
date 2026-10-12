@@ -151,16 +151,34 @@ namespace WebMConverter
 
         public static string GetBinaryPath(string filename, string folder = "Win32")
         {
-            string path = Path.Combine(AppDirectory, "Binaries", folder, filename);
-            if (File.Exists(path))
-                return path;
-            path = Path.Combine(AppDirectory, filename);
-            if (File.Exists(path))
-                return path;
-            path = Path.Combine(Environment.CurrentDirectory, "Binaries", folder, filename);
-            if (File.Exists(path))
-                return path;
-            return filename;
+            var names = new List<string> { filename };
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                if (!filename.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+                    names.Insert(0, filename + ".exe");
+            }
+            else
+            {
+                if (filename.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+                    names.Insert(0, filename.Substring(0, filename.Length - 4));
+            }
+
+            foreach (var name in names)
+            {
+                string path = Path.Combine(AppDirectory, "Binaries", folder, name);
+                if (File.Exists(path))
+                    return path;
+
+                path = Path.Combine(AppDirectory, name);
+                if (File.Exists(path))
+                    return path;
+
+                path = Path.Combine(Environment.CurrentDirectory, "Binaries", folder, name);
+                if (File.Exists(path))
+                    return path;
+            }
+
+            return names[0];
         }
 
         /// <summary>
@@ -169,12 +187,19 @@ namespace WebMConverter
         [STAThread]
         static void Main()
         {
-            // Check for AviSynth availability without preventing application startup
-            try
+            // Check for AviSynth availability on Windows without preventing application startup
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                AviSynthAvailable = NativeMethods.LoadLibrary("avisynth") != IntPtr.Zero;
+                try
+                {
+                    AviSynthAvailable = NativeMethods.LoadLibrary("avisynth") != IntPtr.Zero;
+                }
+                catch
+                {
+                    AviSynthAvailable = false;
+                }
             }
-            catch
+            else
             {
                 AviSynthAvailable = false;
             }

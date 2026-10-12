@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
@@ -32,7 +33,10 @@ namespace WebMConverter.Dialogs
             _infile = '"' + url.Replace(@"""", @"\""") + '"';
             Outfile = Path.GetTempPath();
 
-            taskbarManager = TaskbarManager.Instance;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && TaskbarManager.IsPlatformSupported)
+            {
+                taskbarManager = TaskbarManager.Instance;
+            }
         }
 
         private void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs args)
@@ -74,7 +78,7 @@ namespace WebMConverter.Dialogs
                 {
                     progressBar.Value = (int)(progress * 10); // progressBar maximum is 1000
                 });
-                taskbarManager.SetProgressValue((int)(progress * 10), 1000);
+                taskbarManager?.SetProgressValue((int)(progress * 10), 1000);
             }
         }
 
@@ -111,7 +115,7 @@ namespace WebMConverter.Dialogs
                 _timer.Start();
             }));
 
-            taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate); // can't get progress for filename getter
+            taskbarManager?.SetProgressState(TaskbarProgressBarState.Indeterminate); // can't get progress for filename getter
             progressBar.Style = ProgressBarStyle.Marquee;
             _filenameGetterProcess.Start();
         }
@@ -133,7 +137,7 @@ namespace WebMConverter.Dialogs
                 else
                 {
                     _gettingFilename = false;
-                    taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
+                    taskbarManager?.SetProgressState(TaskbarProgressBarState.Normal);
                     progressBar.Style = ProgressBarStyle.Blocks;
                     _downloaderProcess.Start();
                 }
@@ -146,7 +150,7 @@ namespace WebMConverter.Dialogs
                 boxOutput.AppendText($"{Environment.NewLine}If you have no idea what went wrong, open an issue on GitGud and copy paste the output of this window there.");
                 pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
                 buttonCancel.Enabled = true;
-                taskbarManager.SetProgressState(TaskbarProgressBarState.Error);
+                taskbarManager?.SetProgressState(TaskbarProgressBarState.Error);
             }
             else
             {
@@ -185,7 +189,7 @@ namespace WebMConverter.Dialogs
         {
             _panic = true; //Shut down while avoiding exceptions
             buttonCancel_Click(sender, e);
-            taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
+            taskbarManager?.SetProgressState(TaskbarProgressBarState.NoProgress);
         }
 
         private void ConverterForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -200,6 +204,10 @@ namespace WebMConverter.Dialogs
             Close();
         }
 
-        private void boxOutput_TextChanged(object sender, EventArgs e) => NativeMethods.SendMessage(boxOutput.Handle, 0x115, 7, 0);
+        private void boxOutput_TextChanged(object sender, EventArgs e)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                NativeMethods.SendMessage(boxOutput.Handle, 0x115, 7, 0);
+        }
     }
 }
