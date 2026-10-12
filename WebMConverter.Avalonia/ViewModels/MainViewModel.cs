@@ -9,6 +9,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WebMConverter.Avalonia.Services;
 using WebMConverter.Avalonia.Views;
 using WebMConverter.Core;
 using WebMConverter.Core.Filters;
@@ -97,7 +98,11 @@ public partial class MainViewModel : ViewModelBase
     private string _mediaSummary = string.Empty;
 
     [ObservableProperty]
-    private string _statusMessage = "Ready";
+    private string _statusMessage = Lang.Resources.Get("StatusReady");
+
+    /// <summary>True while the status bar shows the default "Ready" text, so a
+    /// language switch can re-render it.</summary>
+    private bool _statusIsDefault = true;
 
     [ObservableProperty]
     private bool _isBusy;
@@ -274,6 +279,30 @@ public partial class MainViewModel : ViewModelBase
         if (_settings.EncodingMode == nameof(Core.EncodingMode.Constant))
             _encodingModeIndex = 0;
         _audioEnabled = _settings.AudioEnabled;
+
+        // Apply the persisted language (also refreshes bindings via the service).
+        SelectedLanguage = _settings.Language;
+    }
+
+    public ObservableCollection<LanguageOption> Languages => LocalizationService.Instance.AvailableLanguages;
+
+    [ObservableProperty]
+    private string _selectedLanguage = "en";
+
+    partial void OnSelectedLanguageChanged(string value)
+    {
+        LocalizationService.Instance.CurrentCulture = value;
+        if (_statusIsDefault)
+            StatusMessage = Lang.Resources.Get("StatusReady");
+        _settings.Language = value;
+        SettingsStore.Save(_settings);
+    }
+
+    [RelayCommand]
+    private void SetLanguage(string? code)
+    {
+        if (!string.IsNullOrEmpty(code))
+            SelectedLanguage = code;
     }
 
     private bool CanStart => !IsBusy
@@ -310,7 +339,7 @@ public partial class MainViewModel : ViewModelBase
         if (string.IsNullOrWhiteSpace(path) || path.StartsWith("http", StringComparison.OrdinalIgnoreCase) || !File.Exists(path))
             return;
 
-        StatusMessage = "Probing…";
+        StatusMessage = Lang.Resources.Get("StatusProbing");
         try
         {
             MediaInfo info = await Task.Run(() => ProbeService.ProbeVideoInfo(path), cts.Token).ConfigureAwait(false);
@@ -364,7 +393,7 @@ public partial class MainViewModel : ViewModelBase
                 if (attachments.Subtitles.Count > 0)
                     notes.Add($"{attachments.Subtitles.Count} embedded subtitle(s) found");
 
-                StatusMessage = notes.Count == 0 ? "Ready" : "Ready (" + string.Join("; ", notes) + ")";
+                SetStatus(notes.Count == 0 ? null : " (" + string.Join("; ", notes) + ")");
             });
         }
         catch (OperationCanceledException)
@@ -373,7 +402,7 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            await Dispatcher.UIThread.InvokeAsync(() => StatusMessage = "Probe failed: " + ex.Message);
+            await Dispatcher.UIThread.InvokeAsync(() => StatusMessage = string.Format(Lang.Resources.Get("StatusProbeFailed"), ex.Message));
         }
     }
 
@@ -511,6 +540,15 @@ public partial class MainViewModel : ViewModelBase
         return filters;
     }
 
+    /// <summary>Sets a status message, or the localized default when null.</summary>
+    private void SetStatus(string? suffix)
+    {
+        _statusIsDefault = suffix is null;
+        StatusMessage = _statusIsDefault
+            ? Lang.Resources.Get("StatusReady")
+            : Lang.Resources.Get("StatusReady") + suffix;
+    }
+
     public void RefreshActiveFilters()
     {
         ActiveFilters.Clear();
@@ -555,7 +593,7 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex) when (ex is ArgumentException || ex is ProbeException || ex is NotSupportedException)
         {
-            StatusMessage = "ERROR: " + ex.Message;
+            StatusMessage = string.Format(Lang.Resources.Get("StatusError"), ex.Message);
             if (owner is not null)
                 await MessageDialog.ShowAsync(owner, "Error", ex.Message);
             return;
@@ -619,7 +657,7 @@ public partial class MainViewModel : ViewModelBase
             MediaInfo media = EnsureMedia();
             FilterSet filters = BuildFilterSet(media);
             IsBusy = true;
-            StatusMessage = "Preview…";
+            StatusMessage = Lang.Resources.Get("StatusPreview");
             try
             {
                 using var ffplay = await Task.Run(
@@ -628,7 +666,7 @@ public partial class MainViewModel : ViewModelBase
                 string error = ffplay.ErrorLog;
                 await Dispatcher.UIThread.InvokeAsync(async () =>
                 {
-                    StatusMessage = "Ready";
+                    SetStatus(null);
                     if (error.Length > 0 && owner is not null)
                         await MessageDialog.ShowAsync(owner, "Preview", error);
                 });
@@ -640,7 +678,7 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex) when (ex is ArgumentException || ex is ProbeException || ex is NotSupportedException || ex is InvalidOperationException)
         {
-            StatusMessage = "ERROR: " + ex.Message;
+            StatusMessage = string.Format(Lang.Resources.Get("StatusError"), ex.Message);
             if (owner is not null)
                 await MessageDialog.ShowAsync(owner, "Error", ex.Message);
         }
@@ -709,7 +747,7 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex) when (ex is ArgumentException || ex is ProbeException || ex is NotSupportedException)
         {
-            StatusMessage = "ERROR: " + ex.Message;
+            StatusMessage = string.Format(Lang.Resources.Get("StatusError"), ex.Message);
             await MessageDialog.ShowAsync(owner, "Error", ex.Message);
         }
     }
@@ -765,6 +803,15 @@ public partial class MainViewModel : ViewModelBase
             DubFile = file;
             UseDub = true;
         }
+    }
+
+    /// <summary>Loads a file chosen outside the browse dialog (Enter key / drag-drop).</summary>
+    public void LoadInputFile(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return;
+        InputFile = path;
+        RememberFolders(System.IO.Path.GetDirectoryName(path), null);
     }
 
     private Window? GetOwner() => App.Current?.ApplicationLifetime is global::Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop

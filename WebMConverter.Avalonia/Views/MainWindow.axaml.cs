@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Avalonia.Controls;
+using Avalonia.Automation;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -15,6 +16,10 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         AddHandler(DragDrop.DropEvent, OnDrop);
+
+        // The DataContext is assigned after construction, so build the
+        // language menu once it arrives.
+        DataContextChanged += (_, _) => PopulateLanguageMenu();
 
         var tabs = this.FindControl<TabControl>("MainTabs");
         if (tabs is not null)
@@ -71,8 +76,59 @@ public partial class MainWindow : Window
 
     private void OnExitClick(object? sender, RoutedEventArgs e) => Close();
 
+    private void OnLanguageClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is MenuItem { Tag: string code })
+            ViewModel.SetLanguageCommand.Execute(code);
+    }
+
+    /// <summary>
+    /// Populates the language menu with explicit MenuItems. Built in code
+    /// rather than ItemsSource: Avalonia's MenuItem does not generate item
+    /// containers for a templated ItemsControl, which renders an empty popup.
+    /// </summary>
+    private void PopulateLanguageMenu()
+    {
+        var menu = this.FindControl<MenuItem>("LanguageMenu");
+        if (menu is null)
+            return;
+
+        menu.Items.Clear();
+        foreach (Services.LanguageOption option in ViewModel.Languages)
+        {
+            var item = new MenuItem
+            {
+                Header = option.Name,
+                Tag = option.Code,
+            };
+            AutomationProperties.SetName(item, option.Name);
+            item.Click += OnLanguageClick;
+            menu.Items.Add(item);
+        }
+    }
+
     private void OnAboutClick(object? sender, RoutedEventArgs e) =>
-        ViewModel.StatusMessage = "WebMConverter (Avalonia) — cross-platform build.";
+        ViewModel.StatusMessage = Lang.Resources.Get("About");
+
+    /// <summary>Enter in the input box loads the file, or starts a URL download.</summary>
+    private async void OnInputKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Enter || !string.IsNullOrWhiteSpace(ViewModel.InputFile))
+            return;
+
+        e.Handled = true;
+        if (ViewModel.InputFile.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+        {
+            if (ViewModel.DownloadFromUrlCommand.CanExecute(ViewModel.InputFile))
+                await ViewModel.DownloadFromUrlCommand.ExecuteAsync(ViewModel.InputFile);
+            else
+                ViewModel.StatusMessage = "yt-dlp not found — install it or put it next to the app.";
+        }
+        else
+        {
+            ViewModel.LoadInputFile(ViewModel.InputFile);
+        }
+    }
 
     private void OnDrop(object? sender, DragEventArgs e)
     {

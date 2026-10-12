@@ -3,22 +3,30 @@
         xmlns:vm="using:WebMConverter.Avalonia.ViewModels"
         x:Class="WebMConverter.Avalonia.Views.ConvertProgressView"
         x:DataType="vm:ConvertProgressViewModel"
-        Title="Converting…" Width="700" Height="480"
+        Title="{Binding L[Converting]}" Width="700" Height="480"
         MinWidth="500" MinHeight="350"
         WindowStartupLocation="CenterOwner">
   <DockPanel Margin="8">
     <StackPanel DockPanel.Dock="Bottom" Spacing="8" Margin="0,8,0,0">
-      <ProgressBar Value="{Binding ProgressPercent}" Minimum="0" Maximum="100" Height="20" />
-      <TextBlock Text="{Binding Status}" />
+      <ProgressBar Value="{Binding ProgressPercent}" Minimum="0" Maximum="100" Height="20"
+                   AutomationProperties.Name="{Binding Status}" />
+      <TextBlock Text="{Binding Status}" AutomationProperties.Name="{Binding Status}" />
       <StackPanel Orientation="Horizontal" Spacing="8">
-        <Button Content="Cancel" Command="{Binding CancelRunCommand}" IsEnabled="{Binding IsRunning}" MinWidth="90" />
-        <Button Content="Play" Command="{Binding OpenFileCommand}" IsEnabled="{Binding Succeeded}" MinWidth="90" />
-        <Button Content="Open folder" Command="{Binding OpenFolderCommand}" IsEnabled="{Binding Succeeded}" MinWidth="90" />
-        <Button Content="Upload" Command="{Binding UploadCommand}" IsEnabled="{Binding Succeeded}" IsVisible="{Binding ShowUpload}" MinWidth="90" />
-        <Button Content="Close" Command="{Binding CloseWindowCommand}" IsEnabled="{Binding !IsRunning}" MinWidth="90" />
+        <Button Content="{Binding L[Cancel]}" Command="{Binding CancelRunCommand}" IsEnabled="{Binding IsRunning}" MinWidth="90"
+                AutomationProperties.Name="{Binding L[Cancel]}" />
+        <Button Content="{Binding L[Play]}" Command="{Binding OpenFileCommand}" IsEnabled="{Binding Succeeded}" MinWidth="90"
+                AutomationProperties.Name="{Binding L[Play]}" />
+        <Button Content="{Binding L[OpenFolder]}" Command="{Binding OpenFolderCommand}" IsEnabled="{Binding Succeeded}" MinWidth="90"
+                AutomationProperties.Name="{Binding L[OpenFolder]}" />
+        <Button Content="{Binding L[Upload]}" Command="{Binding UploadCommand}" IsEnabled="{Binding Succeeded}" IsVisible="{Binding ShowUpload}" MinWidth="90"
+                AutomationProperties.Name="{Binding L[Upload]}" />
+        <Button Content="{Binding L[Close]}" Command="{Binding CloseWindowCommand}" IsEnabled="{Binding !IsRunning}" MinWidth="90"
+                AutomationProperties.Name="{Binding L[Close]}" />
       </StackPanel>
     </StackPanel>
+    <!-- Live region: ffmpeg output read back by screen readers as it streams. -->
     <TextBox Text="{Binding Log}" IsReadOnly="True" AcceptsReturn="True"
-             FontFamily="monospace" TextWrapping="NoWrap" />
+             FontFamily="monospace" TextWrapping="NoWrap"
+             AutomationProperties.Name="ffmpeg log" />
   </DockPanel>
 </Window>

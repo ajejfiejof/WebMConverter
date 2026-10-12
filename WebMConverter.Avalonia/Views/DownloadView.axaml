@@ -3,21 +3,26 @@
         xmlns:vm="using:WebMConverter.Avalonia.ViewModels"
         x:Class="WebMConverter.Avalonia.Views.DownloadView"
         x:DataType="vm:DownloadViewModel"
-        Title="Downloading…" Width="700" Height="480"
+        Title="{Binding L[Downloading]}" Width="700" Height="480"
         MinWidth="500" MinHeight="350"
         WindowStartupLocation="CenterOwner">
   <DockPanel Margin="8">
     <StackPanel DockPanel.Dock="Bottom" Spacing="8" Margin="0,8,0,0">
       <ProgressBar Value="{Binding ProgressPercent}" Minimum="0" Maximum="100" Height="20"
-                   IsIndeterminate="{Binding ProgressIndeterminate}" />
-      <TextBlock Text="{Binding Status}" />
+                   IsIndeterminate="{Binding ProgressIndeterminate}"
+                   AutomationProperties.Name="{Binding Status}" />
+      <TextBlock Text="{Binding Status}" AutomationProperties.Name="{Binding Status}" />
       <StackPanel Orientation="Horizontal" Spacing="8">
-        <Button Content="Cancel" Command="{Binding CancelRunCommand}" IsEnabled="{Binding IsRunning}" MinWidth="90" />
-        <Button Content="Load" Command="{Binding LoadFileCommand}" IsEnabled="{Binding Succeeded}" MinWidth="90" />
-        <Button Content="Close" Command="{Binding CloseWindowCommand}" IsEnabled="{Binding !IsRunning}" MinWidth="90" />
+        <Button Content="{Binding L[Cancel]}" Command="{Binding CancelRunCommand}" IsEnabled="{Binding IsRunning}" MinWidth="90"
+                AutomationProperties.Name="{Binding L[Cancel]}" />
+        <Button Content="{Binding L[Load]}" Command="{Binding LoadFileCommand}" IsEnabled="{Binding Succeeded}" MinWidth="90"
+                AutomationProperties.Name="{Binding L[Load]}" />
+        <Button Content="{Binding L[Close]}" Command="{Binding CloseWindowCommand}" IsEnabled="{Binding !IsRunning}" MinWidth="90"
+                AutomationProperties.Name="{Binding L[Close]}" />
       </StackPanel>
     </StackPanel>
     <TextBox Text="{Binding Log}" IsReadOnly="True" AcceptsReturn="True"
-             FontFamily="monospace" TextWrapping="NoWrap" />
+             FontFamily="monospace" TextWrapping="NoWrap"
+             AutomationProperties.Name="yt-dlp log" />
   </DockPanel>
 </Window>

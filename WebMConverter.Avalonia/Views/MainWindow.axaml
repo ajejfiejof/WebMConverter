@@ -8,275 +8,329 @@
         Icon="avares://WebMConverter.Avalonia/icon.ico"
         WindowStartupLocation="CenterScreen">
   <DockPanel>
-    <Menu DockPanel.Dock="Top">
-      <MenuItem Header="_File">
-        <MenuItem Header="_Open…" Click="OnOpenClick" />
+    <Menu DockPanel.Dock="Top" AutomationProperties.Name="{Binding L[Menu_File]}">
+      <MenuItem Header="{Binding L[Menu_File]}" InputGesture="Ctrl+O">
+        <MenuItem Header="{Binding L[Menu_Open]}" Click="OnOpenClick"
+                  InputGesture="Ctrl+O" AutomationProperties.Name="{Binding L[Menu_Open]}" />
         <Separator />
-        <MenuItem Header="E_xit" Click="OnExitClick" />
+        <MenuItem Header="{Binding L[Menu_Exit]}" Click="OnExitClick"
+                  InputGesture="Ctrl+Q" AutomationProperties.Name="{Binding L[Menu_Exit]}" />
       </MenuItem>
-      <MenuItem Header="_Help">
-        <MenuItem Header="_About" Click="OnAboutClick" />
+      <MenuItem Header="{Binding L[Menu_Help]}">
+        <MenuItem Header="{Binding L[Menu_About]}" Click="OnAboutClick"
+                  AutomationProperties.Name="{Binding L[Menu_About]}" />
       </MenuItem>
+      <MenuItem Header="{Binding L[Menu_Language]}"
+                Name="LanguageMenu"
+                AutomationProperties.Name="{Binding L[Menu_Language]}" />
     </Menu>
 
     <Border DockPanel.Dock="Bottom" Padding="8,4"
             BorderThickness="0,1,0,0" BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}">
-      <TextBlock Text="{Binding StatusMessage}" TextTrimming="CharacterEllipsis" />
+      <!-- Status line is announced by screen readers as changes occur. -->
+      <TextBlock Text="{Binding StatusMessage}" TextTrimming="CharacterEllipsis"
+                 AutomationProperties.Name="{Binding StatusMessage}" />
     </Border>
 
     <TabControl Margin="8" Name="MainTabs">
-      <TabItem Header="Input / Output">
+      <TabItem Header="{Binding L[Tab_InputOutput]}" AutomationProperties.Name="{Binding L[Tab_InputOutput]}">
         <StackPanel Spacing="8" Margin="8">
-          <TextBlock Text="Input file (URL downloads, or drop a file onto the box):" />
+          <TextBlock Text="{Binding L[InputLabel]}" />
           <Grid ColumnDefinitions="*,Auto">
             <TextBox Grid.Column="0" Text="{Binding InputFile}" DragDrop.AllowDrop="True"
-                     PlaceholderText="Video file or http(s) URL…" />
-            <Button Grid.Column="1" Content="Browse…" Margin="8,0,0,0" Click="OnBrowseInputClick" />
+                     PlaceholderText="{Binding L[InputPlaceholder]}"
+                     AutomationProperties.Name="{Binding L[InputLabel]}"
+                     AutomationProperties.HelpText="{Binding L[InputPlaceholder]}"
+                     KeyDown="OnInputKeyDown" />
+            <Button Grid.Column="1" Content="{Binding L[Browse]}" Margin="8,0,0,0"
+                    Click="OnBrowseInputClick" AutomationProperties.Name="{Binding L[Browse]}" />
           </Grid>
 
-          <TextBlock Text="Output file:" />
+          <TextBlock Text="{Binding L[OutputLabel]}" />
           <Grid ColumnDefinitions="*,Auto">
-            <TextBox Grid.Column="0" Text="{Binding OutputFile}" PlaceholderText="…\name.webm" />
-            <Button Grid.Column="1" Content="Browse…" Margin="8,0,0,0" Click="OnBrowseOutputClick" />
+            <TextBox Grid.Column="0" Text="{Binding OutputFile}" PlaceholderText="{Binding L[OutputPlaceholder]}"
+                     AutomationProperties.Name="{Binding L[OutputLabel]}" />
+            <Button Grid.Column="1" Content="{Binding L[Browse]}" Margin="8,0,0,0"
+                    Click="OnBrowseOutputClick" AutomationProperties.Name="{Binding L[Browse]}" />
           </Grid>
 
-          <TextBlock Text="Title (metadata):" />
-          <TextBox Text="{Binding Title}" />
-          <TextBlock Text="{Binding MediaSummary}" Opacity="0.7" />
+          <TextBlock Text="{Binding L[TitleLabel]}" />
+          <TextBox Text="{Binding Title}" AutomationProperties.Name="{Binding L[TitleLabel]}" />
+          <TextBlock Text="{Binding MediaSummary}" Opacity="0.7"
+                     AutomationProperties.Name="{Binding MediaSummary}" />
 
           <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,8,0,0">
-            <Button Content="Convert" Command="{Binding ConvertCommand}" MinWidth="100" />
-            <Button Content="Preview" Command="{Binding PreviewCommand}" MinWidth="100" />
+            <Button Content="{Binding L[Convert]}" Command="{Binding ConvertCommand}" MinWidth="100"
+                    AutomationProperties.Name="{Binding L[Converting]}"
+                    AutomationProperties.HelpText="{Binding L[Convert]}" />
+            <Button Content="{Binding L[Preview]}" Command="{Binding PreviewCommand}" MinWidth="100"
+                    AutomationProperties.Name="{Binding L[Preview]}" />
           </StackPanel>
         </StackPanel>
       </TabItem>
 
-      <TabItem Header="Processing">
+      <TabItem Header="{Binding L[Tab_Processing]}" AutomationProperties.Name="{Binding L[Tab_Processing]}">
         <DockPanel Margin="8">
           <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="8" Margin="0,8,0,0">
-            <Button Content="Clear all" Command="{Binding ClearFiltersCommand}" />
-            <Button Content="Export .vpy" Command="{Binding ExportVapourSynthCommand}" />
+            <Button Content="{Binding L[ClearAll]}" Command="{Binding ClearFiltersCommand}"
+                    AutomationProperties.Name="{Binding L[ClearAll]}" />
+            <Button Content="{Binding L[ExportVpy]}" Command="{Binding ExportVapourSynthCommand}"
+                    AutomationProperties.Name="{Binding L[ExportVpy]}" />
           </StackPanel>
           <ScrollViewer>
             <StackPanel Spacing="10">
               <StackPanel>
-                <CheckBox Content="Trim (seconds)" IsChecked="{Binding UseTrim}" />
+                <CheckBox Content="{Binding L[Trim]}" IsChecked="{Binding UseTrim}"
+                          AutomationProperties.Name="{Binding L[Trim]}" />
                 <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseTrim}">
-                  <TextBlock Text="Start:" VerticalAlignment="Center" />
-                  <NumericUpDown Value="{Binding TrimStartSeconds}" Minimum="0" Maximum="100000" Increment="1" MinWidth="120" />
-                  <TextBlock Text="End:" VerticalAlignment="Center" />
-                  <NumericUpDown Value="{Binding TrimEndSeconds}" Minimum="0" Maximum="100000" Increment="1" MinWidth="120" />
+                  <TextBlock Text="{Binding L[TrimStart]}" VerticalAlignment="Center" />
+                  <NumericUpDown Value="{Binding TrimStartSeconds}" Minimum="0" Maximum="100000" Increment="1" MinWidth="120"
+                                 AutomationProperties.Name="{Binding L[TrimStart]}" />
+                  <TextBlock Text="{Binding L[TrimEnd]}" VerticalAlignment="Center" />
+                  <NumericUpDown Value="{Binding TrimEndSeconds}" Minimum="0" Maximum="100000" Increment="1" MinWidth="120"
+                                 AutomationProperties.Name="{Binding L[TrimEnd]}" />
                 </StackPanel>
               </StackPanel>
 
               <StackPanel>
-                <TextBlock Text="Multiple trim ranges (seconds):" />
+                <TextBlock Text="{Binding L[MultiTrim]}" />
                 <ItemsControl ItemsSource="{Binding MultiTrimRanges}">
                   <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="vm:TrimRangeEntry">
                       <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
-                        <TextBlock Text="Start:" VerticalAlignment="Center" />
-                        <NumericUpDown Value="{Binding StartSeconds}" Minimum="0" Maximum="100000" MinWidth="120" />
-                        <TextBlock Text="End:" VerticalAlignment="Center" />
-                        <NumericUpDown Value="{Binding EndSeconds}" Minimum="0" Maximum="100000" MinWidth="120" />
-                        <Button Content="Remove" Command="{Binding $parent[Window].DataContext.RemoveTrimRangeCommand}" CommandParameter="{Binding}" />
+                        <NumericUpDown Value="{Binding StartSeconds}" Minimum="0" Maximum="100000" MinWidth="120"
+                                       AutomationProperties.Name="{Binding L[TrimStart]}" />
+                        <NumericUpDown Value="{Binding EndSeconds}" Minimum="0" Maximum="100000" MinWidth="120"
+                                       AutomationProperties.Name="{Binding L[TrimEnd]}" />
+                        <Button Content="{Binding L[Remove]}" Command="{Binding $parent[Window].DataContext.RemoveTrimRangeCommand}"
+                                CommandParameter="{Binding}" AutomationProperties.Name="{Binding L[Remove]}" />
                       </StackPanel>
                     </DataTemplate>
                   </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <Button Content="Add range" Command="{Binding AddTrimRangeCommand}" Margin="0,4,0,0" HorizontalAlignment="Left" />
+                <Button Content="{Binding L[AddRange]}" Command="{Binding AddTrimRangeCommand}" Margin="0,4,0,0"
+                        HorizontalAlignment="Left" AutomationProperties.Name="{Binding L[AddRange]}" />
               </StackPanel>
 
               <StackPanel>
-                <CheckBox Content="Crop (pixels, right/bottom negative to shrink)" IsChecked="{Binding UseCrop}" />
+                <CheckBox Content="{Binding L[Crop]}" IsChecked="{Binding UseCrop}"
+                          AutomationProperties.Name="{Binding L[Crop]}" />
                 <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseCrop}">
-                  <TextBlock Text="L:" VerticalAlignment="Center" />
-                  <NumericUpDown Value="{Binding CropLeft}" MinWidth="90" />
-                  <TextBlock Text="T:" VerticalAlignment="Center" />
-                  <NumericUpDown Value="{Binding CropTop}" MinWidth="90" />
-                  <TextBlock Text="R:" VerticalAlignment="Center" />
-                  <NumericUpDown Value="{Binding CropRight}" MinWidth="90" />
-                  <TextBlock Text="B:" VerticalAlignment="Center" />
-                  <NumericUpDown Value="{Binding CropBottom}" MinWidth="90" />
+                  <NumericUpDown Value="{Binding CropLeft}" MinWidth="90" AutomationProperties.Name="{Binding L[CropLeft]}" />
+                  <NumericUpDown Value="{Binding CropTop}" MinWidth="90" AutomationProperties.Name="{Binding L[CropTop]}" />
+                  <NumericUpDown Value="{Binding CropRight}" MinWidth="90" AutomationProperties.Name="{Binding L[CropRight]}" />
+                  <NumericUpDown Value="{Binding CropBottom}" MinWidth="90" AutomationProperties.Name="{Binding L[CropBottom]}" />
                 </StackPanel>
               </StackPanel>
 
               <StackPanel>
-                <CheckBox Content="Resize" IsChecked="{Binding UseResize}" />
+                <CheckBox Content="{Binding L[Resize]}" IsChecked="{Binding UseResize}"
+                          AutomationProperties.Name="{Binding L[Resize]}" />
                 <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseResize}">
-                  <TextBlock Text="Width:" VerticalAlignment="Center" />
-                  <NumericUpDown Value="{Binding ResizeWidth}" Minimum="0" Maximum="8192" MinWidth="110" />
-                  <TextBlock Text="Height:" VerticalAlignment="Center" />
-                  <NumericUpDown Value="{Binding ResizeHeight}" Minimum="0" Maximum="8192" MinWidth="110" />
+                  <NumericUpDown Value="{Binding ResizeWidth}" Minimum="0" Maximum="8192" MinWidth="110"
+                                 AutomationProperties.Name="{Binding L[Width]}" />
+                  <NumericUpDown Value="{Binding ResizeHeight}" Minimum="0" Maximum="8192" MinWidth="110"
+                                 AutomationProperties.Name="{Binding L[Height]}" />
                 </StackPanel>
               </StackPanel>
 
               <StackPanel>
-                <CheckBox Content="Burn subtitles" IsChecked="{Binding UseSubtitle}" />
+                <CheckBox Content="{Binding L[Subtitles]}" IsChecked="{Binding UseSubtitle}"
+                          AutomationProperties.Name="{Binding L[Subtitles]}" />
                 <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseSubtitle}">
-                  <TextBox Text="{Binding SubtitleFile}" MinWidth="260" />
-                  <Button Content="Browse…" Command="{Binding BrowseSubtitleCommand}" />
-                  <ComboBox SelectedIndex="{Binding SubtitleTypeIndex}" MinWidth="140">
-                    <ComboBoxItem Content="TextSub (.srt/.ass)" />
-                    <ComboBoxItem Content="VobSub" />
-                    <ComboBoxItem Content="PGS" />
+                  <TextBox Text="{Binding SubtitleFile}" MinWidth="260" AutomationProperties.Name="{Binding L[Subtitles]}" />
+                  <Button Content="{Binding L[Browse]}" Command="{Binding BrowseSubtitleCommand}"
+                          AutomationProperties.Name="{Binding L[Browse]}" />
+                  <ComboBox SelectedIndex="{Binding SubtitleTypeIndex}" MinWidth="140"
+                            AutomationProperties.Name="{Binding L[SubtitleType]}">
+                    <ComboBoxItem Content="{Binding L[SubtitleTextSub]}" />
+                    <ComboBoxItem Content="{Binding L[SubtitleVobSub]}" />
+                    <ComboBoxItem Content="{Binding L[SubtitlePgs]}" />
                   </ComboBox>
                 </StackPanel>
                 <ComboBox ItemsSource="{Binding EmbeddedSubtitles}" SelectedItem="{Binding SelectedEmbeddedSubtitle}"
-                          Margin="20,4,0,0" MinWidth="260" PlaceholderText="Embedded tracks (if any)…"
-                          IsVisible="{Binding UseSubtitle}" />
+                          Margin="20,4,0,0" MinWidth="260" PlaceholderText="{Binding L[EmbeddedTracks]}"
+                          IsVisible="{Binding UseSubtitle}"
+                          AutomationProperties.Name="{Binding L[EmbeddedTracks]}" />
               </StackPanel>
 
               <StackPanel>
-                <CheckBox Content="Rate" IsChecked="{Binding UseRate}" />
+                <CheckBox Content="{Binding L[Rate]}" IsChecked="{Binding UseRate}"
+                          AutomationProperties.Name="{Binding L[Rate]}" />
                 <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseRate}">
-                  <TextBlock Text="Multiplier % (100 = 1×):" VerticalAlignment="Center" />
-                  <NumericUpDown Value="{Binding RateMultiplier}" Minimum="1" Maximum="1000" MinWidth="110" />
+                  <NumericUpDown Value="{Binding RateMultiplier}" Minimum="1" Maximum="1000" MinWidth="110"
+                                 AutomationProperties.Name="{Binding L[RateMultiplier]}" />
                 </StackPanel>
               </StackPanel>
 
               <StackPanel>
-                <CheckBox Content="Fade" IsChecked="{Binding UseFade}" />
+                <CheckBox Content="{Binding L[Fade]}" IsChecked="{Binding UseFade}"
+                          AutomationProperties.Name="{Binding L[Fade]}" />
                 <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseFade}">
-                  <CheckBox Content="In" IsChecked="{Binding FadeStart}" />
-                  <CheckBox Content="Out" IsChecked="{Binding FadeEnd}" />
-                  <TextBlock Text="Frames:" VerticalAlignment="Center" />
-                  <NumericUpDown Value="{Binding FadeFrames}" Minimum="1" Maximum="10000" MinWidth="100" />
-                  <CheckBox Content="Keep audio" IsChecked="{Binding FadeKeepAudio}" />
+                  <CheckBox Content="{Binding L[FadeIn]}" IsChecked="{Binding FadeStart}"
+                            AutomationProperties.Name="{Binding L[FadeIn]}" />
+                  <CheckBox Content="{Binding L[FadeOut]}" IsChecked="{Binding FadeEnd}"
+                            AutomationProperties.Name="{Binding L[FadeOut]}" />
+                  <NumericUpDown Value="{Binding FadeFrames}" Minimum="1" Maximum="10000" MinWidth="100"
+                                 AutomationProperties.Name="{Binding L[Frames]}" />
+                  <CheckBox Content="{Binding L[KeepAudio]}" IsChecked="{Binding FadeKeepAudio}"
+                            AutomationProperties.Name="{Binding L[KeepAudio]}" />
                 </StackPanel>
               </StackPanel>
 
               <StackPanel>
-                <CheckBox Content="Rotate / flip" IsChecked="{Binding UseRotate}" />
+                <CheckBox Content="{Binding L[RotateFlip]}" IsChecked="{Binding UseRotate}"
+                          AutomationProperties.Name="{Binding L[RotateFlip]}" />
                 <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseRotate}">
-                  <ComboBox SelectedIndex="{Binding RotateModeIndex}" MinWidth="140">
-                    <ComboBoxItem Content="None" />
-                    <ComboBoxItem Content="Right" />
-                    <ComboBoxItem Content="Twice" />
-                    <ComboBoxItem Content="Left" />
+                  <ComboBox SelectedIndex="{Binding RotateModeIndex}" MinWidth="140"
+                            AutomationProperties.Name="{Binding L[RotateFlip]}">
+                    <ComboBoxItem Content="{Binding L[RotateNone]}" />
+                    <ComboBoxItem Content="{Binding L[RotateRight]}" />
+                    <ComboBoxItem Content="{Binding L[RotateTwice]}" />
+                    <ComboBoxItem Content="{Binding L[RotateLeft]}" />
                   </ComboBox>
-                  <CheckBox Content="Flip H" IsChecked="{Binding RotateFlipH}" />
-                  <CheckBox Content="Flip V" IsChecked="{Binding RotateFlipV}" />
+                  <CheckBox Content="{Binding L[FlipH]}" IsChecked="{Binding RotateFlipH}"
+                            AutomationProperties.Name="{Binding L[FlipH]}" />
+                  <CheckBox Content="{Binding L[FlipV]}" IsChecked="{Binding RotateFlipV}"
+                            AutomationProperties.Name="{Binding L[FlipV]}" />
                 </StackPanel>
               </StackPanel>
 
               <StackPanel Orientation="Horizontal" Spacing="16">
-                <CheckBox Content="Reverse" IsChecked="{Binding UseReverse}" />
-                <CheckBox Content="Deinterlace" IsChecked="{Binding UseDeinterlace}" />
-                <CheckBox Content="Denoise" IsChecked="{Binding UseDenoise}" />
+                <CheckBox Content="{Binding L[Reverse]}" IsChecked="{Binding UseReverse}"
+                          AutomationProperties.Name="{Binding L[Reverse]}" />
+                <CheckBox Content="{Binding L[Deinterlace]}" IsChecked="{Binding UseDeinterlace}"
+                          AutomationProperties.Name="{Binding L[Deinterlace]}" />
+                <CheckBox Content="{Binding L[Denoise]}" IsChecked="{Binding UseDenoise}"
+                          AutomationProperties.Name="{Binding L[Denoise]}" />
               </StackPanel>
 
               <StackPanel>
-                <CheckBox Content="Levels" IsChecked="{Binding UseLevels}" />
+                <CheckBox Content="{Binding L[Levels]}" IsChecked="{Binding UseLevels}"
+                          AutomationProperties.Name="{Binding L[Levels]}" />
                 <ComboBox SelectedIndex="{Binding LevelsIndex}" Margin="20,4,0,0" MinWidth="140"
-                          IsVisible="{Binding UseLevels}">
-                  <ComboBoxItem Content="TV → PC" />
-                  <ComboBoxItem Content="PC → TV" />
+                          IsVisible="{Binding UseLevels}" AutomationProperties.Name="{Binding L[Levels]}">
+                  <ComboBoxItem Content="{Binding L[LevelsTvPc]}" />
+                  <ComboBoxItem Content="{Binding L[LevelsPcTv]}" />
                 </ComboBox>
               </StackPanel>
 
               <StackPanel>
-                <CheckBox Content="Overlay image" IsChecked="{Binding UseOverlay}" />
+                <CheckBox Content="{Binding L[Overlay]}" IsChecked="{Binding UseOverlay}"
+                          AutomationProperties.Name="{Binding L[Overlay]}" />
                 <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseOverlay}">
-                  <TextBox Text="{Binding OverlayFile}" MinWidth="260" />
-                  <Button Content="Browse…" Command="{Binding BrowseOverlayCommand}" />
-                  <TextBlock Text="X:" VerticalAlignment="Center" />
-                  <NumericUpDown Value="{Binding OverlayX}" MinWidth="90" />
-                  <TextBlock Text="Y:" VerticalAlignment="Center" />
-                  <NumericUpDown Value="{Binding OverlayY}" MinWidth="90" />
+                  <TextBox Text="{Binding OverlayFile}" MinWidth="260" AutomationProperties.Name="{Binding L[Overlay]}" />
+                  <Button Content="{Binding L[Browse]}" Command="{Binding BrowseOverlayCommand}"
+                          AutomationProperties.Name="{Binding L[Browse]}" />
+                  <NumericUpDown Value="{Binding OverlayX}" MinWidth="90" AutomationProperties.Name="{Binding L[X]}" />
+                  <NumericUpDown Value="{Binding OverlayY}" MinWidth="90" AutomationProperties.Name="{Binding L[Y]}" />
                 </StackPanel>
               </StackPanel>
 
               <StackPanel>
-                <CheckBox Content="Dub audio" IsChecked="{Binding UseDub}" />
+                <CheckBox Content="{Binding L[Dub]}" IsChecked="{Binding UseDub}"
+                          AutomationProperties.Name="{Binding L[Dub]}" />
                 <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseDub}">
-                  <TextBox Text="{Binding DubFile}" MinWidth="260" />
-                  <Button Content="Browse…" Command="{Binding BrowseDubCommand}" />
-                  <ComboBox SelectedIndex="{Binding DubModeIndex}" MinWidth="140">
-                    <ComboBoxItem Content="Trim audio" />
-                    <ComboBoxItem Content="Loop video" />
-                    <ComboBoxItem Content="Just dub" />
+                  <TextBox Text="{Binding DubFile}" MinWidth="260" AutomationProperties.Name="{Binding L[Dub]}" />
+                  <Button Content="{Binding L[Browse]}" Command="{Binding BrowseDubCommand}"
+                          AutomationProperties.Name="{Binding L[Browse]}" />
+                  <ComboBox SelectedIndex="{Binding DubModeIndex}" MinWidth="140"
+                            AutomationProperties.Name="{Binding L[Dub]}">
+                    <ComboBoxItem Content="{Binding L[DubTrimAudio]}" />
+                    <ComboBoxItem Content="{Binding L[DubLoopVideo]}" />
+                    <ComboBoxItem Content="{Binding L[DubJustDub]}" />
                   </ComboBox>
                 </StackPanel>
               </StackPanel>
 
               <StackPanel>
-                <TextBlock Text="Active filters:" />
-                <ListBox ItemsSource="{Binding ActiveFilters}" MaxHeight="120" />
+                <CheckBox Content="{Binding L[Caption]}" IsChecked="{Binding UseCaption}"
+                          AutomationProperties.Name="{Binding L[Caption]}" />
+                <StackPanel Spacing="4" Margin="20,4,0,0" IsVisible="{Binding UseCaption}">
+                  <TextBox Text="{Binding CaptionText}" PlaceholderText="{Binding L[CaptionPlaceholder]}" MinWidth="260"
+                           AutomationProperties.Name="{Binding L[Caption]}" />
+                  <StackPanel Orientation="Horizontal" Spacing="8">
+                    <NumericUpDown Value="{Binding CaptionX}" MinWidth="90" AutomationProperties.Name="{Binding L[X]}" />
+                    <NumericUpDown Value="{Binding CaptionY}" MinWidth="90" AutomationProperties.Name="{Binding L[Y]}" />
+                    <NumericUpDown Value="{Binding CaptionFontSize}" Minimum="1" Maximum="500" MinWidth="90"
+                                   AutomationProperties.Name="{Binding L[Size]}" />
+                  </StackPanel>
+                  <StackPanel Orientation="Horizontal" Spacing="8">
+                    <TextBox Text="{Binding CaptionFont}" MinWidth="160" AutomationProperties.Name="{Binding L[Font]}" />
+                    <TextBox Text="{Binding CaptionFg}" MinWidth="90" AutomationProperties.Name="{Binding L[TextColor]}" />
+                    <TextBox Text="{Binding CaptionBg}" MinWidth="90" AutomationProperties.Name="{Binding L[BorderColor]}" />
+                    <NumericUpDown Value="{Binding CaptionBorder}" Minimum="0" Maximum="20" MinWidth="80"
+                                   AutomationProperties.Name="{Binding L[Border]}" />
+                  </StackPanel>
+                </StackPanel>
               </StackPanel>
 
               <StackPanel>
-                <CheckBox Content="Caption (burned text)" IsChecked="{Binding UseCaption}" />
-                <StackPanel Spacing="4" Margin="20,4,0,0" IsVisible="{Binding UseCaption}">
-                  <TextBox Text="{Binding CaptionText}" PlaceholderText="Caption text…" MinWidth="260" />
-                  <StackPanel Orientation="Horizontal" Spacing="8">
-                    <TextBlock Text="X:" VerticalAlignment="Center" />
-                    <NumericUpDown Value="{Binding CaptionX}" MinWidth="90" />
-                    <TextBlock Text="Y:" VerticalAlignment="Center" />
-                    <NumericUpDown Value="{Binding CaptionY}" MinWidth="90" />
-                    <TextBlock Text="Size:" VerticalAlignment="Center" />
-                    <NumericUpDown Value="{Binding CaptionFontSize}" Minimum="1" Maximum="500" MinWidth="90" />
-                  </StackPanel>
-                  <StackPanel Orientation="Horizontal" Spacing="8">
-                    <TextBlock Text="Font:" VerticalAlignment="Center" />
-                    <TextBox Text="{Binding CaptionFont}" MinWidth="160" />
-                    <TextBlock Text="Text #:" VerticalAlignment="Center" />
-                    <TextBox Text="{Binding CaptionFg}" MinWidth="90" />
-                    <TextBlock Text="Border #:" VerticalAlignment="Center" />
-                    <TextBox Text="{Binding CaptionBg}" MinWidth="90" />
-                    <TextBlock Text="Border:" VerticalAlignment="Center" />
-                    <NumericUpDown Value="{Binding CaptionBorder}" Minimum="0" Maximum="20" MinWidth="80" />
-                  </StackPanel>
-                </StackPanel>
+                <TextBlock Text="{Binding L[ActiveFilters]}" />
+                <ListBox ItemsSource="{Binding ActiveFilters}" MaxHeight="120"
+                         AutomationProperties.Name="{Binding L[ActiveFilters]}" />
               </StackPanel>
             </StackPanel>
           </ScrollViewer>
         </DockPanel>
       </TabItem>
 
-      <TabItem Header="Encoding">
+      <TabItem Header="{Binding L[Tab_Encoding]}" AutomationProperties.Name="{Binding L[Tab_Encoding]}">
         <ScrollViewer>
           <StackPanel Spacing="8" Margin="8">
-            <TextBlock Text="Mode:" />
-            <ComboBox SelectedIndex="{Binding EncodingModeIndex}" MinWidth="260">
-              <ComboBoxItem Content="Constant quality (bitrate)" />
-              <ComboBoxItem Content="Variable quality (CRF)" />
+            <TextBlock Text="{Binding L[Mode]}" />
+            <ComboBox SelectedIndex="{Binding EncodingModeIndex}" MinWidth="260"
+                      AutomationProperties.Name="{Binding L[Mode]}">
+              <ComboBoxItem Content="{Binding L[ModeConstant]}" />
+              <ComboBoxItem Content="{Binding L[ModeVariable]}" />
             </ComboBox>
-            <TextBlock Text="Codec:" />
-            <ComboBox SelectedIndex="{Binding CodecIndex}" MinWidth="260">
-              <ComboBoxItem Content="VP9 (recommended)" />
-              <ComboBoxItem Content="VP8 (legacy)" />
-              <ComboBoxItem Content="AV1 (experimental)" />
+            <TextBlock Text="{Binding L[Codec]}" />
+            <ComboBox SelectedIndex="{Binding CodecIndex}" MinWidth="260"
+                      AutomationProperties.Name="{Binding L[Codec]}">
+              <ComboBoxItem Content="{Binding L[CodecVp9]}" />
+              <ComboBoxItem Content="{Binding L[CodecVp8]}" />
+              <ComboBoxItem Content="{Binding L[CodecAv1]}" />
             </ComboBox>
-            <TextBlock Text="Size limit (MB, constant mode):" />
-            <TextBox Text="{Binding SizeLimitMb}" MinWidth="200" />
-            <TextBlock Text="Video bitrate (kbit/s, constant mode):" />
-            <TextBox Text="{Binding VideoBitrateK}" PlaceholderText="900" MinWidth="200" />
-            <TextBlock Text="CRF (variable mode, lower is better):" />
-            <NumericUpDown Value="{Binding Crf}" Minimum="0" Maximum="63" Increment="1" MinWidth="200" />
-            <TextBlock Text="CRF tolerance:" />
-            <NumericUpDown Value="{Binding CrfTolerance}" Minimum="0" Maximum="10" Increment="1" MinWidth="200" />
-            <CheckBox Content="Enable audio" IsChecked="{Binding AudioEnabled}" />
-            <TextBlock Text="Audio bitrate (kbit/s, constant mode):" />
-            <TextBox Text="{Binding AudioBitrateK}" PlaceholderText="64" MinWidth="200" IsEnabled="{Binding AudioEnabled}" />
-            <TextBlock Text="Audio quality (variable Vorbis only):" />
-            <NumericUpDown Value="{Binding AudioQuality}" Minimum="0" Maximum="10" Increment="1" MinWidth="200" />
+            <TextBlock Text="{Binding L[SizeLimit]}" />
+            <TextBox Text="{Binding SizeLimitMb}" MinWidth="200" AutomationProperties.Name="{Binding L[SizeLimit]}" />
+            <TextBlock Text="{Binding L[VideoBitrate]}" />
+            <TextBox Text="{Binding VideoBitrateK}" MinWidth="200" AutomationProperties.Name="{Binding L[VideoBitrate]}" />
+            <TextBlock Text="{Binding L[Crf]}" />
+            <NumericUpDown Value="{Binding Crf}" Minimum="0" Maximum="63" Increment="1" MinWidth="200"
+                           AutomationProperties.Name="{Binding L[Crf]}" />
+            <TextBlock Text="{Binding L[CrfTolerance]}" />
+            <NumericUpDown Value="{Binding CrfTolerance}" Minimum="0" Maximum="10" Increment="1" MinWidth="200"
+                           AutomationProperties.Name="{Binding L[CrfTolerance]}" />
+            <CheckBox Content="{Binding L[EnableAudio]}" IsChecked="{Binding AudioEnabled}"
+                      AutomationProperties.Name="{Binding L[EnableAudio]}" />
+            <TextBlock Text="{Binding L[AudioBitrate]}" />
+            <TextBox Text="{Binding AudioBitrateK}" MinWidth="200" IsEnabled="{Binding AudioEnabled}"
+                     AutomationProperties.Name="{Binding L[AudioBitrate]}" />
+            <TextBlock Text="{Binding L[AudioQuality]}" />
+            <NumericUpDown Value="{Binding AudioQuality}" Minimum="0" Maximum="10" Increment="1" MinWidth="200"
+                           AutomationProperties.Name="{Binding L[AudioQuality]}" />
           </StackPanel>
         </ScrollViewer>
       </TabItem>
 
-      <TabItem Header="Advanced">
-        <StackPanel Spacing="8" Margin="8">
-          <CheckBox Content="High-quality mode (2-pass, slower)" IsChecked="{Binding UseHqMode}" />
-          <TextBlock Text="Threads:" />
-          <NumericUpDown Value="{Binding Threads}" Minimum="1" Maximum="64" Increment="1" MinWidth="200" />
-          <TextBlock Text="Slices:" />
-          <NumericUpDown Value="{Binding Slices}" Minimum="1" Maximum="16" Increment="1" MinWidth="200" />
-          <TextBlock Text="Frame rate override (blank = source):" />
-          <TextBox Text="{Binding FrameRate}" MinWidth="200" />
-          <TextBlock Text="Extra ffmpeg arguments:" />
-          <TextBox Text="{Binding ExtraArguments}" PlaceholderText="-lag-in-frames 16 …" />
-        </StackPanel>
+      <TabItem Header="{Binding L[Tab_Advanced]}" AutomationProperties.Name="{Binding L[Tab_Advanced]}">
+        <ScrollViewer>
+          <StackPanel Spacing="8" Margin="8">
+            <CheckBox Content="{Binding L[HqMode]}" IsChecked="{Binding UseHqMode}"
+                      AutomationProperties.Name="{Binding L[HqMode]}" />
+            <TextBlock Text="{Binding L[Threads]}" />
+            <NumericUpDown Value="{Binding Threads}" Minimum="1" Maximum="64" Increment="1" MinWidth="200"
+                           AutomationProperties.Name="{Binding L[Threads]}" />
+            <TextBlock Text="{Binding L[Slices]}" />
+            <NumericUpDown Value="{Binding Slices}" Minimum="1" Maximum="16" Increment="1" MinWidth="200"
+                           AutomationProperties.Name="{Binding L[Slices]}" />
+            <TextBlock Text="{Binding L[FrameRateOverride]}" />
+            <TextBox Text="{Binding FrameRate}" MinWidth="200" AutomationProperties.Name="{Binding L[FrameRateOverride]}" />
+            <TextBlock Text="{Binding L[ExtraArguments]}" />
+            <TextBox Text="{Binding ExtraArguments}" PlaceholderText="{Binding L[ExtraArgsPlaceholder]}"
+                     AutomationProperties.Name="{Binding L[ExtraArguments]}" />
+          </StackPanel>
+        </ScrollViewer>
       </TabItem>
     </TabControl>
   </DockPanel>
