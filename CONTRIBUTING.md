@@ -55,6 +55,16 @@ dotnet run --project WebMConverter.Avalonia -c Release
   E2E tests must degrade to a logged no-op when ffmpeg is absent.
 * Verify GUI changes by launching under Xvfb and screenshotting.
 
+## Adding a language
+
+1. Copy `WebMConverter.Avalonia/Lang/Resources.resx` to
+   `Resources.<culture>.resx` and translate every `<data>` value.
+2. Register it in `LocalizationService.AvailableLanguages` — that is all the
+   wiring a new language needs.
+
+Key parity across cultures is checked by eye, so keep the three files in
+sync when adding keys.
+
 ## Pull requests
 
 * Small, conventionally-committed, with tests for Core changes.

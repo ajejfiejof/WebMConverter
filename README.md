@@ -30,6 +30,10 @@ tests.
 * **Previews** — one-click `ffplay` preview with current filters applied.
 * **ShareX upload** — post-conversion upload button when ShareX is installed
   (Windows).
+* **Languages** — switchable UI (English, 简体中文, 繁體中文) from the Language
+  menu; the choice persists and applies immediately.
+* **Accessible** — screen-reader names and help text on every control,
+  keyboard gestures for open/quit/load, focus-visible throughout.
 
 ## Install
 
@@ -97,7 +101,8 @@ flatpak-builder --force-clean build-dir packaging/flatpak/io.github.ajejfiejof.W
 4. **Convert** — watch the live ffmpeg log; Play / Open folder / Upload
    afterwards. **Preview** checks filters instantly via ffplay.
 
-Settings persist as JSON (`~/.config/WebMConverter/settings.json` on Linux).
+Settings persist as JSON (`~/.config/WebMConverter/settings.json` on Linux),
+including the selected UI language.
 
 ## Project layout
 
@@ -106,7 +111,8 @@ WebMConverter.Core/          UI-free engine: probing, argument builder,
                              conversion/download/preview services, filters,
                              attachments, VapourSynth, settings
 WebMConverter.Core.Tests/    xUnit suite (unit + ffmpeg-gated end-to-end)
-WebMConverter.Avalonia/      Avalonia UI: views, view models, dialogs
+WebMConverter.Avalonia/      Avalonia UI: views, view models, dialogs,
+                             Lang/ (resx) + Services/ (localization)
 packaging/                   .desktop, AppStream, Flatpak, AppImage, icon
 ```
 

@@ -20,6 +20,11 @@ unreleased (Avalonia port)
 - Release process: CycloneDX SBOM (`bom.json`) generated locally per release.
 - Governance: Contributor Covenant Code of Conduct, Conventional Commits
   (CONTRIBUTING.md), security policy (SECURITY.md).
+- Accessibility and i18n pass: runtime switchable UI languages
+  (English, 简体中文, 繁體中文) with live rebinding and persisted choice,
+  plus screen-reader automation names, help text, and keyboard gestures
+  (Ctrl+O open, Ctrl+Q quit, Enter to load) across the main window and
+  both progress dialogs.
 - Platform limits: .avs scripts require Windows; .vpy requires VapourSynth.
 
 v2.26.1
