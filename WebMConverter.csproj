@@ -20,10 +20,13 @@
   <ItemGroup>
     <Compile Remove="Updater\**" />
     <Compile Remove="WebMConverter.Avalonia\**" />
+    <Compile Remove="WebMConverter.Core\**" />
     <EmbeddedResource Remove="Updater\**" />
     <EmbeddedResource Remove="WebMConverter.Avalonia\**" />
+    <EmbeddedResource Remove="WebMConverter.Core\**" />
     <None Remove="Updater\**" />
     <None Remove="WebMConverter.Avalonia\**" />
+    <None Remove="WebMConverter.Core\**" />
   </ItemGroup>
 
   <ItemGroup>
