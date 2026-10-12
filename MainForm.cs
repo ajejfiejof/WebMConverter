@@ -107,7 +107,7 @@ namespace WebMConverter
 
         public MainForm()
         {
-            FFMSSharp.FFMS2.Initialize(Program.GetBinariesPath("Win32"));
+            FFMSSharp.FFMS2.Initialize(Program.GetBinariesPath());
             _temporaryFilesList = new List<string>();
 
             InitializeComponent();
@@ -438,7 +438,7 @@ namespace WebMConverter
                 if (!VideoDownload.Enabled)
                 {
                     var result = MessageBox.Show(
-                       $"Couldn't find Youtube-DL. Either download it and put it somewhere in your %PATH%, or place it next to WebMConverter.exe.{Environment.NewLine}" +
+                       $"Couldn't find Youtube-DL. Either download it and put it somewhere in your %PATH%, or place it next to WebMConverter.{Environment.NewLine}" +
                         "You can download it from yt-dl.org",
                         "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
                     if (result == DialogResult.Retry)
@@ -1851,7 +1851,7 @@ namespace WebMConverter
         {
             using (StreamWriter avscript = new StreamWriter(avsFileName, false))
             {
-                var pluginPath = Program.GetBinariesPath("Win32");
+                var pluginPath = Program.GetBinariesPath();
                 var shortPluginPath = GetCompatiblePath(pluginPath);
 
                 avscript.WriteLine($@"PluginPath = ""{shortPluginPath}\""");

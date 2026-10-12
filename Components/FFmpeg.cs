@@ -12,14 +12,14 @@ namespace WebMConverter
         {
             string folder;
             if (win32)
-                folder = "Win32";
+                folder = "x86";
             else
                 if (Environment.Is64BitOperatingSystem)
-                folder = "Win64";
+                folder = "x64";
             else
-                folder = "Win32";
+                folder = "x86";
 
-            FFmpegPath = Program.GetBinaryPath("ffmpeg.exe", folder);
+            FFmpegPath = Program.GetBinaryPath("ffmpeg", folder);
 
             StartInfo.FileName = FFmpegPath;
             StartInfo.Arguments = "-hide_banner " + argument;

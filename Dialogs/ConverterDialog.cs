@@ -275,14 +275,14 @@ namespace WebMConverter.Dialogs
                     boxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}Conversion cancelled.");
                 else
                 {
-                    boxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}ffmpeg.exe exited with exit code {process.ExitCode}. That's usually bad.");
+                    boxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}ffmpeg exited with exit code {process.ExitCode}. That's usually bad.");
                     boxOutput.AppendText($"{Environment.NewLine}If you have no idea what went wrong, open an issue on GitGud and copy paste the output of this window there.");
                 }
                 taskbarManager?.SetProgressState(TaskbarProgressBarState.Error);
                 pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
 
                 if (process.ExitCode == -1073741819) //This error keeps happening for me if I set threads to anything above 1, might happen for other people too
-                    MessageBox.Show("It appears ffmpeg.exe crashed because of a thread error. Set the amount of threads to 1 in the advanced tab and try again.", "FYI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("It appears ffmpeg crashed because of a thread error. Set the amount of threads to 1 in the advanced tab and try again.", "FYI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {

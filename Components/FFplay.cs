@@ -7,7 +7,7 @@ namespace WebMConverter
 {
     class FFplay : Process
     {
-        public string FFplayPath = Program.GetBinaryPath("ffplay.exe", "Win32");
+        public string FFplayPath = Program.GetBinaryPath("ffplay", "x86");
 
         StringBuilder errorLog;
         public string ErrorLog => errorLog.ToString().Trim();

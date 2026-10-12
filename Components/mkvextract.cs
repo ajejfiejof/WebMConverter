@@ -6,7 +6,7 @@ namespace WebMConverter.Components
 {
     class MkvExtract : Process
     {
-        private readonly string _programPath = Program.GetBinaryPath("mkvextract.exe", "Win32");
+        private readonly string _programPath = Program.GetBinaryPath("mkvextract", "x86");
 
         public MkvExtract(string argument)
         {

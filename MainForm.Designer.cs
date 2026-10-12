@@ -1739,7 +1739,7 @@ namespace WebMConverter
             labelEncodingThreadsHint.Name = "labelEncodingThreadsHint";
             labelEncodingThreadsHint.Size = new System.Drawing.Size(802, 28);
             labelEncodingThreadsHint.TabIndex = 0;
-            labelEncodingThreadsHint.Text = "Determines amount of threads ffmpeg uses. Try setting this to 1 if ffmpeg.exe cra" +
+            labelEncodingThreadsHint.Text = "Determines amount of threads ffmpeg uses. Try setting this to 1 if ffmpeg cra" +
     "shes as soon as you click Convert.";
             labelEncodingThreadsHint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 

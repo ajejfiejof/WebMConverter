@@ -1,16 +1,25 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace WebMConverter
 {
     static class VideoDownload
     {
         public static bool Enabled { get; private set; }
-        public static string ExecutableName { get; private set; } = "yt-dlp.exe";
+        public static string ExecutableName { get; private set; } = "yt-dlp";
 
         public static void CheckEnabled()
         {
-            string[] names = { "yt-dlp.exe", "yt-dlp", "youtube-dl.exe", "youtube-dl" };
+            string[] names;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                names = new[] { "yt-dlp.exe", "yt-dlp", "youtube-dl.exe", "youtube-dl" };
+            }
+            else
+            {
+                names = new[] { "yt-dlp", "youtube-dl" };
+            }
             var candidates = new System.Collections.Generic.List<string>();
             foreach (var name in names)
             {

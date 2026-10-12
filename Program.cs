@@ -141,8 +141,25 @@ namespace WebMConverter
 
         public static string AppDirectory => AppDomain.CurrentDomain.BaseDirectory;
 
-        public static string GetBinariesPath(string folder = "Win32")
+        public static string GetBinariesPath(string folder = null)
         {
+            if (folder == null)
+            {
+                // Auto-detect platform-appropriate folder
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    folder = Environment.Is64BitProcess ? "x64" : "x86";
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    folder = Environment.Is64BitProcess ? "linux-x64" : "linux-x86";
+                }
+                else
+                {
+                    folder = Environment.Is64BitProcess ? "x64" : "x86";
+                }
+            }
+
             string path = Path.Combine(AppDirectory, "Binaries", folder);
             if (Directory.Exists(path))
                 return path;

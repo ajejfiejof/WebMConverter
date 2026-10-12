@@ -128,7 +128,7 @@ namespace WebMConverter.Dialogs
             {
                 if (_filenameGetterProcess.ExitCode != 0)
                 {
-                    boxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}youtube-dl.exe exited with exit code {_filenameGetterProcess.ExitCode}. That's usually bad.");
+                    boxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}youtube-dl exited with exit code {_filenameGetterProcess.ExitCode}. That's usually bad.");
                     boxOutput.AppendText($"{Environment.NewLine}If you have no idea what went wrong, open an issue on GitGud and copy paste the output of this window there.");
                     pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
                     buttonCancel.Enabled = true;
@@ -146,7 +146,7 @@ namespace WebMConverter.Dialogs
 
             if (_downloaderProcess.ExitCode != 0)
             {
-                boxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}youtube-dl.exe exited with exit code {_downloaderProcess.ExitCode}. That's usually bad.");
+                boxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}youtube-dl exited with exit code {_downloaderProcess.ExitCode}. That's usually bad.");
                 boxOutput.AppendText($"{Environment.NewLine}If you have no idea what went wrong, open an issue on GitGud and copy paste the output of this window there.");
                 pictureStatus.BackgroundImage = StatusImages.Images["Failure"];
                 buttonCancel.Enabled = true;
