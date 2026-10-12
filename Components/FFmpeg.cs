@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 
 namespace WebMConverter
 {
-    class FFmpeg : Process //Refactoring, faggots.
+    class FFmpeg : Process
     {
         public string FFmpegPath;
 
