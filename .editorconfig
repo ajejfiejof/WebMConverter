@@ -1,0 +1,66 @@
+# WebMConverter EditorConfig - Code analysis, linting, and style rules
+root = true
+
+# All files
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = unset
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Solution & project files
+[*.{sln,csproj,props,targets}]
+indent_size = 2
+
+# XML files
+[*.{xml,config,manifest,resx}]
+indent_size = 2
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false
+
+# C# files
+[*.cs]
+# Code style defaults
+csharp_prefer_braces = true:suggestion
+csharp_prefer_simple_using_statement = true:suggestion
+csharp_style_namespace_declarations = file_scoped:silent
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_style_expression_bodied_properties = true:suggestion
+csharp_style_null_propagation = true:suggestion
+csharp_style_prefer_null_check_over_type_check = true:suggestion
+
+# Naming conventions
+dotnet_naming_rule.interface_should_start_with_i.symbols = interface_symbols
+dotnet_naming_rule.interface_should_start_with_i.style = i_prefix_style
+dotnet_naming_rule.interface_should_start_with_i.severity = suggestion
+
+dotnet_naming_symbols.interface_symbols.applicable_kinds = interface
+dotnet_naming_style.i_prefix_style.required_prefix = I
+dotnet_naming_style.i_prefix_style.capitalization = pascal_case
+
+# Static Analysis & Diagnostic Severities
+# Security
+dotnet_diagnostic.CA5351.severity = suggestion # MD5 used for file cache keys only
+dotnet_diagnostic.CA5372.severity = suggestion # XPathDocument XML resolution
+
+# Globalization (Progressive modernization)
+dotnet_diagnostic.CA1304.severity = suggestion
+dotnet_diagnostic.CA1305.severity = suggestion
+dotnet_diagnostic.CA1307.severity = suggestion
+dotnet_diagnostic.CA1310.severity = suggestion
+dotnet_diagnostic.CA1311.severity = suggestion
+
+# Performance & Code Quality
+dotnet_diagnostic.CA1822.severity = suggestion # Mark member as static
+dotnet_diagnostic.CA1852.severity = suggestion # Seal internal types
+dotnet_diagnostic.CA1850.severity = suggestion # Prefer static HashData
+dotnet_diagnostic.CA1824.severity = suggestion # NeutralResourcesLanguageAttribute
+
+# Maintainability & Design
+dotnet_diagnostic.CA1051.severity = suggestion # Visible instance fields in legacy models
+dotnet_diagnostic.CA1001.severity = suggestion # Types that own disposable fields
+dotnet_diagnostic.CA1031.severity = silent     # Catch general exception types in UI handlers
