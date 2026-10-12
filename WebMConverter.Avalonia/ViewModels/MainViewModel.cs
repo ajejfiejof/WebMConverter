@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.Input;
 using WebMConverter.Avalonia.Views;
 using WebMConverter.Core;
 using WebMConverter.Core.Filters;
+using WebMConverter.Core.Media;
 
 namespace WebMConverter.Avalonia.ViewModels;
 
@@ -24,11 +25,21 @@ public partial class TrimRangeEntry : ViewModelBase
     private double _endSeconds;
 }
 
+public partial class EmbeddedSubtitleEntry : ViewModelBase
+{
+    public string Name { get; set; } = string.Empty;
+    public string File { get; set; } = string.Empty;
+    public SubtitleType Type { get; set; }
+
+    public override string ToString() => Name;
+}
+
 public partial class MainViewModel : ViewModelBase
 {
     private readonly AppSettings _settings = SettingsStore.Load();
     private MediaInfo? _media;
     private CancellationTokenSource? _probeCts;
+    private FontInstaller.InstalledFonts? _installedFonts;
 
     [ObservableProperty]
     private string _inputFile = string.Empty;
@@ -232,6 +243,20 @@ public partial class MainViewModel : ViewModelBase
 
     public ObservableCollection<TrimRangeEntry> MultiTrimRanges { get; } = new();
     public ObservableCollection<string> ActiveFilters { get; } = new();
+    public ObservableCollection<EmbeddedSubtitleEntry> EmbeddedSubtitles { get; } = new();
+
+    [ObservableProperty]
+    private EmbeddedSubtitleEntry? _selectedEmbeddedSubtitle;
+
+    partial void OnSelectedEmbeddedSubtitleChanged(EmbeddedSubtitleEntry? value)
+    {
+        if (value is not null)
+        {
+            SubtitleFile = value.File;
+            SubtitleTypeIndex = (int)value.Type;
+            UseSubtitle = true;
+        }
+    }
 
     public EncodingMode EncodingMode => EncodingModeIndex == 0 ? EncodingMode.Constant : EncodingMode.Variable;
 
@@ -291,6 +316,14 @@ public partial class MainViewModel : ViewModelBase
             if (cts.IsCancellationRequested)
                 return;
 
+            // Legacy indexing parity: extract attachments + install fonts.
+            AttachmentResult attachments = await Task.Run(() =>
+                MediaAttachmentService.ExtractAttachments(
+                    path, MediaAttachmentService.AttachmentDirectoryFor(path),
+                    log: m => System.Diagnostics.Debug.WriteLine(m)), cts.Token).ConfigureAwait(false);
+            if (cts.IsCancellationRequested)
+                return;
+
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
                 _media = info;
@@ -300,9 +333,37 @@ public partial class MainViewModel : ViewModelBase
                 if (string.IsNullOrWhiteSpace(OutputFile))
                     OutputFile = DefaultOutputFor(path);
                 if (string.IsNullOrWhiteSpace(Title))
-                    Title = Path.GetFileNameWithoutExtension(path);
+                    Title = info.ContainerTitle ?? Path.GetFileNameWithoutExtension(path);
                 MediaSummary = $"{info.Width}×{info.Height} @ {info.Fps:0.##}fps, {info.DurationSeconds:0.#}s, audio: {(info.HasAudio ? "yes" : "no")}";
-                StatusMessage = "Ready";
+
+                var notes = new System.Collections.Generic.List<string>();
+                if (info.IsFrapsYuvj420p)
+                {
+                    UseLevels = true;
+                    LevelsIndex = 1;
+                    notes.Add("FRAPS yuvj420p: levels auto-fixed");
+                }
+
+                if (info.SarCompensatedWidth is int compW && info.SarCompensatedHeight is int compH)
+                {
+                    UseResize = true;
+                    ResizeWidth = compW;
+                    ResizeHeight = compH;
+                    notes.Add($"SAR compensated to {compW}×{compH}");
+                }
+
+                _installedFonts?.Dispose();
+                _installedFonts = FontInstaller.Install(attachments.FontFiles, MediaAttachmentService.AttachmentDirectoryFor(path));
+                if (attachments.FontFiles.Count > 0)
+                    notes.Add($"{attachments.FontFiles.Count} font(s) installed");
+
+                EmbeddedSubtitles.Clear();
+                foreach (var sub in attachments.Subtitles)
+                    EmbeddedSubtitles.Add(new EmbeddedSubtitleEntry { Name = sub.Name, File = sub.File, Type = sub.Type });
+                if (attachments.Subtitles.Count > 0)
+                    notes.Add($"{attachments.Subtitles.Count} embedded subtitle(s) found");
+
+                StatusMessage = notes.Count == 0 ? "Ready" : "Ready (" + string.Join("; ", notes) + ")";
             });
         }
         catch (OperationCanceledException)

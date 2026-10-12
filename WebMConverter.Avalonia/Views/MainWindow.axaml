@@ -113,7 +113,7 @@
               <StackPanel>
                 <CheckBox Content="Burn subtitles" IsChecked="{Binding UseSubtitle}" />
                 <StackPanel Orientation="Horizontal" Spacing="8" Margin="20,4,0,0" IsVisible="{Binding UseSubtitle}">
-                  <TextBox Text="{Binding SubtitleFile}" MinWidth="300" />
+                  <TextBox Text="{Binding SubtitleFile}" MinWidth="260" />
                   <Button Content="Browse…" Command="{Binding BrowseSubtitleCommand}" />
                   <ComboBox SelectedIndex="{Binding SubtitleTypeIndex}" MinWidth="140">
                     <ComboBoxItem Content="TextSub (.srt/.ass)" />
@@ -121,6 +121,9 @@
                     <ComboBoxItem Content="PGS" />
                   </ComboBox>
                 </StackPanel>
+                <ComboBox ItemsSource="{Binding EmbeddedSubtitles}" SelectedItem="{Binding SelectedEmbeddedSubtitle}"
+                          Margin="20,4,0,0" MinWidth="260" PlaceholderText="Embedded tracks (if any)…"
+                          IsVisible="{Binding UseSubtitle}" />
               </StackPanel>
 
               <StackPanel>
