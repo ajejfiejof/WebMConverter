@@ -101,33 +101,24 @@ namespace WebMConverter
 
         public static void KillProcessAndChildren(int pid)
         {
-            var processSearcher = new System.Management.ManagementObjectSearcher
-              ("Select * From Win32_Process Where ParentProcessID=" + pid);
-            var processCollection = processSearcher.Get();
-
             try
             {
                 var proc = System.Diagnostics.Process.GetProcessById(pid);
-                if (!proc.HasExited) proc.Kill();
+                if (!proc.HasExited)
+                    proc.Kill(entireProcessTree: true);
             }
-            catch (ArgumentException)
+            catch (Exception)
             {
-                // Process already exited.
+                // Process already exited or access denied.
             }
-
-            foreach (var mo in processCollection)
-            {
-                KillProcessAndChildren(Convert.ToInt32(mo["ProcessID"])); //kill child processes(also kills childrens of childrens etc.)
-            }
-
         }
 
         public static string GetCompatiblePath(string input)
         {
-            if (string.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(input) || !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 return input;
 
-            // AviSynth and various plugins can't deal with utf-8 paths, so we convert the possibly weird path into 8.3 notation when available
+            // AviSynth and legacy Windows plugins can't deal with utf-8 paths, so we convert into 8.3 notation when available
             var compatible = new StringBuilder(1024);
             int length = NativeMethods.GetShortPathName(@"\\?\" + input, compatible, compatible.Capacity);
             if (length > 0 && compatible.Length > 0)

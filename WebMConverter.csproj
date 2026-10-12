@@ -26,7 +26,6 @@
   <ItemGroup>
     <PackageReference Include="FFMSSharp" Version="3.0.1" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
-    <PackageReference Include="System.Management" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
