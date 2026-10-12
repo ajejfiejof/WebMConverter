@@ -59,8 +59,24 @@ dotnet_diagnostic.CA1822.severity = suggestion # Mark member as static
 dotnet_diagnostic.CA1852.severity = suggestion # Seal internal types
 dotnet_diagnostic.CA1850.severity = suggestion # Prefer static HashData
 dotnet_diagnostic.CA1824.severity = suggestion # NeutralResourcesLanguageAttribute
+dotnet_diagnostic.CA1861.severity = suggestion # Prefer static readonly fields for repeated arrays
+dotnet_diagnostic.CA1863.severity = suggestion # Cache CompositeFormat
+dotnet_diagnostic.CA1838.severity = suggestion # StringBuilder in P/Invoke
+dotnet_diagnostic.CA2101.severity = suggestion # P/Invoke marshaling
+dotnet_diagnostic.CA2201.severity = suggestion # Specific exception types
 
 # Maintainability & Design
 dotnet_diagnostic.CA1051.severity = suggestion # Visible instance fields in legacy models
 dotnet_diagnostic.CA1001.severity = suggestion # Types that own disposable fields
 dotnet_diagnostic.CA1031.severity = silent     # Catch general exception types in UI handlers
+
+# SonarAnalyzer rules
+dotnet_diagnostic.S2696.severity = suggestion # Enclosing instance method set on static field
+dotnet_diagnostic.S112.severity = suggestion  # System.Exception should not be thrown
+dotnet_diagnostic.S1066.severity = suggestion # Merge nested if statements
+dotnet_diagnostic.S1125.severity = suggestion # Remove redundant boolean literal
+dotnet_diagnostic.S1135.severity = suggestion # Track TODOs
+dotnet_diagnostic.S3925.severity = suggestion # ISerializable pattern in modern .NET
+dotnet_diagnostic.S3928.severity = suggestion # ArgumentException constructor parameter names
+dotnet_diagnostic.S1075.severity = suggestion # Hardcoded URIs and paths
+dotnet_diagnostic.S3358.severity = suggestion # Nested ternary operators
