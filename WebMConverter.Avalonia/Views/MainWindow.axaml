@@ -1,0 +1,104 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:WebMConverter.Avalonia.ViewModels"
+        x:Class="WebMConverter.Avalonia.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="WebMConverter" Width="920" Height="660"
+        MinWidth="720" MinHeight="500"
+        WindowStartupLocation="CenterScreen">
+  <DockPanel>
+    <Menu DockPanel.Dock="Top">
+      <MenuItem Header="_File">
+        <MenuItem Header="_Open…" Click="OnOpenClick" />
+        <Separator />
+        <MenuItem Header="E_xit" Click="OnExitClick" />
+      </MenuItem>
+      <MenuItem Header="_Help">
+        <MenuItem Header="_About" Click="OnAboutClick" />
+      </MenuItem>
+    </Menu>
+
+    <Border DockPanel.Dock="Bottom" Padding="8,4"
+            BorderThickness="0,1,0,0" BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}">
+      <TextBlock Text="{Binding StatusMessage}" TextTrimming="CharacterEllipsis" />
+    </Border>
+
+    <TabControl Margin="8">
+      <TabItem Header="Input / Output">
+        <StackPanel Spacing="8" Margin="8">
+          <TextBlock Text="Input file (or drop a file onto the box):" />
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBox Grid.Column="0" Text="{Binding InputFile}" DragDrop.AllowDrop="True"
+                     PlaceholderText="Video file, URL download lands with the engine port…" />
+            <Button Grid.Column="1" Content="Browse…" Margin="8,0,0,0" Click="OnBrowseInputClick" />
+          </Grid>
+
+          <TextBlock Text="Output file:" />
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBox Grid.Column="0" Text="{Binding OutputFile}" PlaceholderText="…\name.webm" />
+            <Button Grid.Column="1" Content="Browse…" Margin="8,0,0,0" Click="OnBrowseOutputClick" />
+          </Grid>
+
+          <TextBlock Text="Title (metadata):" />
+          <TextBox Text="{Binding Title}" />
+
+          <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,8,0,0">
+            <Button Content="Convert" Command="{Binding ConvertCommand}" MinWidth="100" />
+            <Button Content="Cancel" Command="{Binding CancelConvertCommand}" IsEnabled="{Binding IsBusy}" MinWidth="100" />
+            <Button Content="Preview" Command="{Binding PreviewCommand}" MinWidth="100" />
+          </StackPanel>
+
+          <ProgressBar Value="{Binding ProgressValue}" Minimum="0" Maximum="100" Height="20" Margin="0,8,0,0" />
+        </StackPanel>
+      </TabItem>
+
+      <TabItem Header="Processing">
+        <DockPanel Margin="8">
+          <TextBlock DockPanel.Dock="Top" Margin="0,0,0,8" TextWrapping="Wrap"
+                     Text="Filter dialogs (crop, trim, subtitles, …) port here in Phase 2.2. Active filters list below." />
+          <Button DockPanel.Dock="Bottom" Content="Clear" Command="{Binding ClearFiltersCommand}"
+                  HorizontalAlignment="Right" Margin="0,8,0,0" />
+          <ListBox ItemsSource="{Binding ActiveFilters}" />
+        </DockPanel>
+      </TabItem>
+
+      <TabItem Header="Encoding">
+        <StackPanel Spacing="8" Margin="8">
+          <TextBlock Text="Mode:" />
+          <ComboBox SelectedIndex="{Binding EncodingModeIndex}" MinWidth="260">
+            <ComboBoxItem Content="Constant quality (bitrate)" />
+            <ComboBoxItem Content="Variable quality (CRF)" />
+          </ComboBox>
+          <TextBlock Text="Codec:" />
+          <ComboBox SelectedIndex="{Binding CodecIndex}" MinWidth="260">
+            <ComboBoxItem Content="VP9 (recommended)" />
+            <ComboBoxItem Content="VP8 (legacy)" />
+            <ComboBoxItem Content="AV1 (experimental)" />
+          </ComboBox>
+          <TextBlock Text="Video bitrate (kbit/s, constant mode):" />
+          <NumericUpDown Value="{Binding VideoBitrate}" Minimum="100" Maximum="20000" Increment="100" MinWidth="200" />
+          <TextBlock Text="CRF (variable mode, lower is better):" />
+          <NumericUpDown Value="{Binding Crf}" Minimum="0" Maximum="63" Increment="1" MinWidth="200" />
+          <TextBlock Text="CRF tolerance:" />
+          <NumericUpDown Value="{Binding CrfTolerance}" Minimum="0" Maximum="10" Increment="1" MinWidth="200" />
+          <CheckBox Content="Enable audio" IsChecked="{Binding AudioEnabled}" />
+          <TextBlock Text="Audio bitrate (kbit/s):" />
+          <NumericUpDown Value="{Binding AudioBitrate}" Minimum="32" Maximum="512" Increment="16"
+                         IsEnabled="{Binding AudioEnabled}" MinWidth="200" />
+        </StackPanel>
+      </TabItem>
+
+      <TabItem Header="Advanced">
+        <StackPanel Spacing="8" Margin="8">
+          <CheckBox Content="High-quality mode (2-pass, slower)" IsChecked="{Binding UseHqMode}" />
+          <TextBlock Text="Threads:" />
+          <NumericUpDown Value="{Binding Threads}" Minimum="1" Maximum="64" Increment="1" MinWidth="200" />
+          <TextBlock Text="Slices:" />
+          <NumericUpDown Value="{Binding Slices}" Minimum="1" Maximum="16" Increment="1" MinWidth="200" />
+          <TextBlock Text="Extra ffmpeg arguments:" />
+          <TextBox Text="{Binding ExtraArguments}" PlaceholderText="-lag-in-frames 16 …" />
+        </StackPanel>
+      </TabItem>
+    </TabControl>
+  </DockPanel>
+</Window>
