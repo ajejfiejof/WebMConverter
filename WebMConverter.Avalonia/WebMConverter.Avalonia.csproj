@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AvaloniaResource Include="..\icon.ico" Link="icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WebMConverter.Core\WebMConverter.Core.csproj" />
   </ItemGroup>
 

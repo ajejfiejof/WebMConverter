@@ -5,6 +5,7 @@
         x:DataType="vm:MainViewModel"
         Title="WebMConverter" Width="920" Height="660"
         MinWidth="720" MinHeight="500"
+        Icon="avares://WebMConverter.Avalonia/icon.ico"
         WindowStartupLocation="CenterScreen">
   <DockPanel>
     <Menu DockPanel.Dock="Top">
