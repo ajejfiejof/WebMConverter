@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=WebMConverter
+Comment=Convert and edit videos for the WebM format
+Exec=WebMConverter.Avalonia
+Icon=io.github.ajejfiejof.WebMConverter
+Terminal=false
+Type=Application
+Categories=AudioVideo;Video;AudioVideoEditing;
+Keywords=webm;video;convert;ffmpeg;vp9;av1;
+MimeType=video/mp4;video/x-matroska;video/x-msvideo;video/quicktime;video/webm;
+StartupWMClass=WebMConverter.Avalonia
