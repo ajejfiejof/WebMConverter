@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -137,6 +138,30 @@ namespace WebMConverter
         public static List<string> AttachmentList;
 
         public static bool AviSynthAvailable { get; private set; }
+
+        public static string AppDirectory => AppDomain.CurrentDomain.BaseDirectory;
+
+        public static string GetBinariesPath(string folder = "Win32")
+        {
+            string path = Path.Combine(AppDirectory, "Binaries", folder);
+            if (Directory.Exists(path))
+                return path;
+            return Path.Combine(Environment.CurrentDirectory, "Binaries", folder);
+        }
+
+        public static string GetBinaryPath(string filename, string folder = "Win32")
+        {
+            string path = Path.Combine(AppDirectory, "Binaries", folder, filename);
+            if (File.Exists(path))
+                return path;
+            path = Path.Combine(AppDirectory, filename);
+            if (File.Exists(path))
+                return path;
+            path = Path.Combine(Environment.CurrentDirectory, "Binaries", folder, filename);
+            if (File.Exists(path))
+                return path;
+            return filename;
+        }
 
         /// <summary>
         /// The main entry point for the application.

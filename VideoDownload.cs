@@ -10,9 +10,20 @@ namespace WebMConverter
 
         public static void CheckEnabled()
         {
-            string[] candidates = { "yt-dlp.exe", "yt-dlp", "youtube-dl.exe", "youtube-dl" };
+            string[] names = { "yt-dlp.exe", "yt-dlp", "youtube-dl.exe", "youtube-dl" };
+            var candidates = new System.Collections.Generic.List<string>();
+            foreach (var name in names)
+            {
+                candidates.Add(System.IO.Path.Combine(Program.AppDirectory, name));
+                candidates.Add(System.IO.Path.Combine(Program.AppDirectory, "Binaries", name));
+                candidates.Add(name); // Search PATH
+            }
+
             foreach (var candidate in candidates)
             {
+                if (System.IO.Path.IsPathRooted(candidate) && !System.IO.File.Exists(candidate))
+                    continue;
+
                 try
                 {
                     var proc = new YoutubeDL("", candidate);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 
@@ -6,7 +6,7 @@ namespace WebMConverter.Components
 {
     class MkvExtract : Process
     {
-        private readonly string _programPath = Path.Combine(Environment.CurrentDirectory, "Binaries", "Win32", "mkvextract.exe");
+        private readonly string _programPath = Program.GetBinaryPath("mkvextract.exe", "Win32");
 
         public MkvExtract(string argument)
         {

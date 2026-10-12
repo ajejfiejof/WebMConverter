@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -12,8 +12,13 @@ namespace WebMConverter.Components
 
         public Updater()
         {
-            UpdaterPath = Path.Combine(Environment.CurrentDirectory, "WebMConverter.Updater.exe");
-            UpdatedUpdaterPath = Path.Combine(Environment.CurrentDirectory, "WebMConverter.Updater.update.exe");
+            UpdaterPath = Path.Combine(Program.AppDirectory, "WebMConverter.Updater.exe");
+            if (!File.Exists(UpdaterPath))
+                UpdaterPath = Path.Combine(Environment.CurrentDirectory, "WebMConverter.Updater.exe");
+
+            UpdatedUpdaterPath = Path.Combine(Program.AppDirectory, "WebMConverter.Updater.update.exe");
+            if (!File.Exists(UpdatedUpdaterPath))
+                UpdatedUpdaterPath = Path.Combine(Environment.CurrentDirectory, "WebMConverter.Updater.update.exe");
 
             if (File.Exists(UpdatedUpdaterPath))
             {

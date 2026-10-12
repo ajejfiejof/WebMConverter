@@ -106,7 +106,7 @@ namespace WebMConverter
 
         public MainForm()
         {
-            FFMSSharp.FFMS2.Initialize(Path.Combine(Environment.CurrentDirectory, "Binaries", "Win32"));
+            FFMSSharp.FFMS2.Initialize(Program.GetBinariesPath("Win32"));
             _temporaryFilesList = new List<string>();
 
             InitializeComponent();
@@ -1847,7 +1847,7 @@ namespace WebMConverter
         {
             using (StreamWriter avscript = new StreamWriter(avsFileName, false))
             {
-                var pluginPath = Path.Combine(Environment.CurrentDirectory, "Binaries", "Win32");
+                var pluginPath = Program.GetBinariesPath("Win32");
                 var shortPluginPath = GetCompatiblePath(pluginPath);
 
                 avscript.WriteLine($@"PluginPath = ""{shortPluginPath}\""");

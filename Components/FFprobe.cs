@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -9,7 +9,7 @@ namespace WebMConverter
 {
     class FFprobe : Process
     {
-        public string FFmpegPath = Path.Combine(Environment.CurrentDirectory, "Binaries", "Win32", "ffprobe.exe");
+        public string FFmpegPath = Program.GetBinaryPath("ffprobe.exe", "Win32");
         const string templateArguments = "{0} \"{1}\" -of xml{2}";
         // {0} is the format of the input file
         // {1} is the input file

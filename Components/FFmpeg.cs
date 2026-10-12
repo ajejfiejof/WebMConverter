@@ -19,7 +19,7 @@ namespace WebMConverter
                 else
                     folder = "Win32";
 
-            FFmpegPath = Path.Combine(Environment.CurrentDirectory, "Binaries", folder, "ffmpeg.exe");
+            FFmpegPath = Program.GetBinaryPath("ffmpeg.exe", folder);
 
             StartInfo.FileName = FFmpegPath;
             StartInfo.Arguments = "-hide_banner " + argument;

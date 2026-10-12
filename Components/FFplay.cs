@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -7,7 +7,7 @@ namespace WebMConverter
 {
     class FFplay : Process
     {
-        public string FFplayPath = Path.Combine(Environment.CurrentDirectory, "Binaries", "Win32", "ffplay.exe");
+        public string FFplayPath = Program.GetBinaryPath("ffplay.exe", "Win32");
 
         StringBuilder errorLog;
         public string ErrorLog => errorLog.ToString().Trim();

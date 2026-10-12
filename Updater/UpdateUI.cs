@@ -126,7 +126,8 @@ namespace WebMConverter.Updater
             try
             {
                 var source = new DirectoryInfo(updateTempPath);
-                var target = new DirectoryInfo(Environment.CurrentDirectory);
+                string targetDir = AppDomain.CurrentDomain.BaseDirectory;
+                var target = new DirectoryInfo(targetDir);
 
                 CopyAll(source, target);
             }
@@ -142,7 +143,11 @@ namespace WebMConverter.Updater
             }
             catch { }
 
-            Process.Start("WebMConverter.exe");
+            string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WebMConverter.exe");
+            if (File.Exists(exePath))
+                Process.Start(new ProcessStartInfo(exePath) { UseShellExecute = true });
+            else
+                Process.Start(new ProcessStartInfo("WebMConverter.exe") { UseShellExecute = true });
             Application.Exit();
         }
 
