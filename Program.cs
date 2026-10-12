@@ -47,6 +47,77 @@ namespace WebMConverter
             Subtitle = null;
             Trim = null;
         }
+
+        internal static string GetFFmpegVideoFilter(int inputWidth = 0, int inputHeight = 0)
+        {
+            var filters = new List<string>();
+
+            if (Crop != null && inputWidth > 0 && inputHeight > 0)
+            {
+                int w = inputWidth - Crop.Left + Crop.Right;
+                int h = inputHeight - Crop.Top + Crop.Bottom;
+                if (w > 0 && h > 0)
+                    filters.Add($"crop={w}:{h}:{Crop.Left}:{Crop.Top}");
+            }
+
+            if (Resize != null)
+            {
+                filters.Add($"scale={Resize.TargetWidth}:{Resize.TargetHeight}:flags=lanczos");
+            }
+
+            if (Deinterlace != null)
+            {
+                filters.Add("yadif");
+            }
+
+            if (Denoise != null)
+            {
+                filters.Add("hqdn3d");
+            }
+
+            if (Rotate != null)
+            {
+                switch (Rotate.Mode)
+                {
+                    case RotateFilter.RotateMode.Right:
+                        filters.Add("transpose=1");
+                        break;
+                    case RotateFilter.RotateMode.Twice:
+                        filters.Add("transpose=1,transpose=1");
+                        break;
+                    case RotateFilter.RotateMode.Left:
+                        filters.Add("transpose=2");
+                        break;
+                }
+                if (Rotate.FlipHorizontal)
+                    filters.Add("hflip");
+                if (Rotate.FlipVertical)
+                    filters.Add("vflip");
+            }
+
+            if (Reverse != null)
+            {
+                filters.Add("reverse");
+            }
+
+            if (Subtitle != null && !string.IsNullOrEmpty(Subtitle.FileName))
+            {
+                string path = Subtitle.FileName.Replace("\\", "/").Replace(":", "\\:").Replace("'", "\\'");
+                filters.Add($"subtitles='{path}'");
+            }
+
+            return filters.Count > 0 ? string.Join(",", filters) : null;
+        }
+
+        internal static string GetFFmpegAudioFilter()
+        {
+            var filters = new List<string>();
+            if (Reverse != null)
+            {
+                filters.Add("areverse");
+            }
+            return filters.Count > 0 ? string.Join(",", filters) : null;
+        }
     }
     
     #endregion

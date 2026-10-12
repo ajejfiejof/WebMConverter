@@ -1890,22 +1890,40 @@ namespace WebMConverter
 
             ValidateInputFile(input);
 
-            // Generate the script if we're in simple mode
-            if (!boxAdvancedScripting.Checked)
-                GenerateAvisynthScript();
-
-            // Make our temporary file for the AviSynth script
-            string avsFileName = GetTemporaryFile();
-            WriteAvisynthScript(avsFileName, input);
-
-            // Run ffplay
+            bool useAvisynth = (Program.InputType == FileType.Avisynth) || (boxAdvancedScripting.Checked && Program.AviSynthAvailable);
             var disableAudio = boxAudio.Checked ? "" : "-an";
-            var ffplay = new FFplay($@"-window_title Preview -loop 0 -f avisynth -v error {disableAudio} ""{avsFileName}""");
+            FFplay ffplay;
+
+            if (useAvisynth)
+            {
+                // Generate the script if we're in simple mode
+                if (!boxAdvancedScripting.Checked)
+                    GenerateAvisynthScript();
+
+                // Make our temporary file for the AviSynth script
+                string avsFileName = GetTemporaryFile();
+                WriteAvisynthScript(avsFileName, input);
+
+                ffplay = new FFplay($@"-window_title Preview -loop 0 -f avisynth -v error {disableAudio} ""{avsFileName}""");
+            }
+            else
+            {
+                var res = GetResolution();
+                var vf = Filters.GetFFmpegVideoFilter(res.Width, res.Height);
+                var filterArg = string.IsNullOrEmpty(vf) ? "" : $"-vf \"{vf}\"";
+                var trimArg = "";
+                if (Filters.Trim != null)
+                {
+                    var start = FrameToTimeSpan(Filters.Trim.TrimStart);
+                    var dur = Filters.Trim.GetDuration();
+                    trimArg = string.Format(CultureInfo.InvariantCulture, "-ss {0:0.###} -t {1:0.###} ", start.TotalSeconds, dur);
+                }
+                ffplay = new FFplay($@"-window_title Preview -loop 0 {trimArg}{disableAudio} -i ""{input}"" {filterArg}");
+            }
+
             ffplay.Exited += delegate
             {
                 string error = null;
-                // if (ffplay.ExitCode != 0) // There was an error
-                // This is what I would like to do, but ffplay returns 0 even when there's an error in the script.
                 error = ffplay.ErrorLog;
 
                 this.InvokeIfRequired(() =>
@@ -1934,21 +1952,25 @@ namespace WebMConverter
             if (options.Trim() == "" || _argumentError)
                 options = GenerateArguments();
 
-            string avsFileName = null;
-            switch (Program.InputType)
+            string conversionInput = input;
+            bool useAvisynth = (Program.InputType == FileType.Avisynth) || (boxAdvancedScripting.Checked && Program.AviSynthAvailable);
+            if (useAvisynth)
             {
-                case FileType.Video:
-                    // Generate the script if we're in simple mode
-                    if (!boxAdvancedScripting.Checked)
-                        GenerateAvisynthScript();
+                switch (Program.InputType)
+                {
+                    case FileType.Video:
+                        // Generate the script if we're in simple mode
+                        if (!boxAdvancedScripting.Checked)
+                            GenerateAvisynthScript();
 
-                    // Make our temporary file for the AviSynth script
-                    avsFileName = GetTemporaryFile();
-                    WriteAvisynthScript(avsFileName, input);
-                    break;
-                case FileType.Avisynth:
-                    avsFileName = Program.InputFile;
-                    break;
+                        // Make our temporary file for the AviSynth script
+                        conversionInput = GetTemporaryFile();
+                        WriteAvisynthScript(conversionInput, input);
+                        break;
+                    case FileType.Avisynth:
+                        conversionInput = Program.InputFile;
+                        break;
+                }
             }
 
             string[] arguments;
@@ -1965,7 +1987,7 @@ namespace WebMConverter
                     arguments[0] = arguments[0].Replace("-c:v libvpx", "-an -c:v libvpx"); // ugly as hell
             }
 
-            new ConverterDialog(avsFileName, arguments, output).ShowDialog(this);
+            new ConverterDialog(conversionInput, arguments, output).ShowDialog(this);
         }
 
         string GenerateArguments()
@@ -2077,6 +2099,9 @@ namespace WebMConverter
             var vcodec = boxNGOV.Checked ? @"libvpx-vp9" : @"libvpx";
             var acodec = boxNGOV.Checked ? @"libopus" : @"libvorbis";
 
+            if (vcodec == "libvpx-vp9")
+                hq += " -row-mt 1";
+
             string audio;
             if (boxAudio.Checked)
             {
@@ -2095,7 +2120,27 @@ namespace WebMConverter
                 framerate = @" -r " + boxFrameRate.Text;
             }
 
-            return string.Format(TemplateArguments, audio, threads, slices, metadataTitle, hq, vcodec, acodec, framerate, qualityarguments);
+            bool useAvisynth = (Program.InputType == FileType.Avisynth) || (boxAdvancedScripting.Checked && Program.AviSynthAvailable);
+            var extraFilters = "";
+            if (!useAvisynth)
+            {
+                var res = GetResolution();
+                var vf = Filters.GetFFmpegVideoFilter(res.Width, res.Height);
+                var af = Filters.GetFFmpegAudioFilter();
+                if (!string.IsNullOrEmpty(vf))
+                    extraFilters += $" -vf \"{vf}\"";
+                if (!string.IsNullOrEmpty(af) && boxAudio.Checked)
+                    extraFilters += $" -af \"{af}\"";
+
+                if (Filters.Trim != null)
+                {
+                    var start = FrameToTimeSpan(Filters.Trim.TrimStart);
+                    var dur = Filters.Trim.GetDuration();
+                    extraFilters = string.Format(CultureInfo.InvariantCulture, " -ss {0:0.###} -t {1:0.###}", start.TotalSeconds, dur) + extraFilters;
+                }
+            }
+
+            return string.Format(TemplateArguments, audio, threads, slices, metadataTitle, hq, vcodec, acodec, framerate, qualityarguments) + extraFilters;
         }
 
         /// <summary>

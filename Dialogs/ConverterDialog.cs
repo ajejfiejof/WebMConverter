@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -50,7 +50,7 @@ namespace WebMConverter.Dialogs
             _infile = input;
             _outfile = output;
             _arguments = args;
-            _needToPipe = Environment.Is64BitOperatingSystem;
+            _needToPipe = Environment.Is64BitOperatingSystem && input.EndsWith(".avs", StringComparison.OrdinalIgnoreCase);
 
             for (var i = 0; i < args.Length; i++)
             {
@@ -118,7 +118,7 @@ namespace WebMConverter.Dialogs
                 argument = _arguments[0];
             }
 
-            _induration = ProbeDuration(_infile, true);
+            _induration = ProbeDuration(_infile, _infile.EndsWith(".avs", StringComparison.OrdinalIgnoreCase));
 
             if (_twopass)
             {
@@ -140,9 +140,13 @@ namespace WebMConverter.Dialogs
             {
                 argument = $@"-f nut -i pipe:0 {argument}";
             }
-            else
+            else if (_infile.EndsWith(".avs", StringComparison.OrdinalIgnoreCase))
             {
                 argument = $@"-f avisynth -i ""{_infile}"" {argument}";
+            }
+            else
+            {
+                argument = $@"-i ""{_infile}"" {argument}";
             }
         }
 
