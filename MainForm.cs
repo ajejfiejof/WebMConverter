@@ -265,7 +265,7 @@ namespace WebMConverter
                     using (var noticeChecker = new WebClient())
                     {
                         const string caption = "Notice";
-                        var result = await noticeChecker.DownloadStringTaskAsync(@"https://nixx.is-fantabulo.us/WebM for Retards/NOTICE");
+                        var result = await noticeChecker.DownloadStringTaskAsync(@"https://nixx.is-fantabulo.us/WebM Converter/NOTICE");
                         var urlAndMessage = result.Split(new[] { '\n' }, 2);
                         switch (MessageBox.Show(urlAndMessage[1], caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                         {

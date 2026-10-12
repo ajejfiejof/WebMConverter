@@ -59,7 +59,7 @@
             this.Controls.Add(this.progressBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "UpdateUI";
-            this.Text = "WebM for Retards Updater";
+            this.Text = "WebM Converter Updater";
             this.Load += new System.EventHandler(this.UpdateUI_Load);
             this.ResumeLayout(false);
 

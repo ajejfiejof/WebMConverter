@@ -14,7 +14,7 @@ namespace WebMConverter.Dialogs
 
             InitializeComponent();
 
-            label1.Text = string.Format(label1.Text, "WebM for Retards");
+            label1.Text = string.Format(label1.Text, "WebM Converter");
         }
 
         void panel1_Resize(object sender, EventArgs e)

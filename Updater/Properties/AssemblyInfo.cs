@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WebM for Retards Updater")]
+[assembly: AssemblyTitle("WebM Converter Updater")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("nixx quality")]
-[assembly: AssemblyProduct("WebM for Retards Updater")]
+[assembly: AssemblyProduct("WebM Converter Updater")]
 [assembly: AssemblyCopyright("Copyright © nixx quality 2015 - 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
