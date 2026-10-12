@@ -203,6 +203,33 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private int _dubModeIndex;
 
+    [ObservableProperty]
+    private bool _useCaption;
+
+    [ObservableProperty]
+    private string _captionText = string.Empty;
+
+    [ObservableProperty]
+    private double _captionX = 20;
+
+    [ObservableProperty]
+    private double _captionY = 20;
+
+    [ObservableProperty]
+    private double _captionFontSize = 24;
+
+    [ObservableProperty]
+    private string _captionFont = "DejaVu Sans";
+
+    [ObservableProperty]
+    private string _captionFg = "#FFFFFF";
+
+    [ObservableProperty]
+    private string _captionBg = "#000000";
+
+    [ObservableProperty]
+    private double _captionBorder = 1;
+
     public ObservableCollection<TrimRangeEntry> MultiTrimRanges { get; } = new();
     public ObservableCollection<string> ActiveFilters { get; } = new();
 
@@ -405,6 +432,20 @@ public partial class MainViewModel : ViewModelBase
             filters.Dub = new DubFilter(DubFile, indexFile, (DubMode)DubModeIndex);
         }
 
+        if (UseCaption)
+        {
+            if (string.IsNullOrWhiteSpace(CaptionText))
+                throw new ArgumentException("Caption text is empty.");
+            filters.Caption = new CaptionFilter(
+                new FilterPoint((int)CaptionX, (int)CaptionY),
+                CaptionText,
+                fontFamily: string.IsNullOrWhiteSpace(CaptionFont) ? "DejaVu Sans" : CaptionFont,
+                fontSize: Math.Max(1, (int)CaptionFontSize),
+                textColorArgb: CaptionFilter.ParseHexColor(CaptionFg),
+                borderColorArgb: CaptionFilter.ParseHexColor(CaptionBg),
+                borderThickness: Math.Max(0, (int)CaptionBorder));
+        }
+
         return filters;
     }
 
@@ -432,6 +473,7 @@ public partial class MainViewModel : ViewModelBase
         Add(UseLevels, "Levels");
         Add(UseOverlay, "Overlay");
         Add(UseDub, "Dub");
+        Add(UseCaption, "Caption");
     }
 
     [RelayCommand(CanExecute = nameof(CanStart))]
@@ -589,7 +631,7 @@ public partial class MainViewModel : ViewModelBase
     private void ClearFilters()
     {
         UseTrim = UseCrop = UseResize = UseSubtitle = UseRate = UseFade = UseRotate
-            = UseReverse = UseDeinterlace = UseDenoise = UseLevels = UseOverlay = UseDub = false;
+            = UseReverse = UseDeinterlace = UseDenoise = UseLevels = UseOverlay = UseDub = UseCaption = false;
         MultiTrimRanges.Clear();
         RefreshActiveFilters();
     }

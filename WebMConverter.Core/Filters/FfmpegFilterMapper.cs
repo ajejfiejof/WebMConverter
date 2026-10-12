@@ -5,8 +5,9 @@ namespace WebMConverter.Core.Filters;
 /// <summary>
 /// Translates a <see cref="FilterSet"/> into ffmpeg -vf/-af chains.
 /// Exact port of Program.Filters.GetFFmpegVideoFilter/GetFFmpegAudioFilter.
-/// Note: Caption/Overlay/Trim/MultipleTrim/Rate/Fade/Dub/Levels are
-/// AviSynth-only and intentionally have no mapping here.
+/// Note: Overlay/Trim/MultipleTrim/Rate/Fade/Dub/Levels are
+/// AviSynth-only and intentionally have no mapping here. Caption maps to
+/// drawtext (cross-platform); the legacy GDI+ PNG variant is gone.
 /// </summary>
 public static class FfmpegFilterMapper
 {
@@ -60,6 +61,9 @@ public static class FfmpegFilterMapper
             string path = filters.Subtitle.FileName.Replace("\\", "/").Replace(":", "\\:").Replace("'", "\\'");
             chain.Add($"subtitles='{path}'");
         }
+
+        if (filters.Caption is not null && !string.IsNullOrEmpty(filters.Caption.Text))
+            chain.Add(filters.Caption.ToDrawtext());
 
         return chain.Count > 0 ? string.Join(",", chain) : null;
     }

@@ -55,7 +55,6 @@
         <DockPanel Margin="8">
           <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="8" Margin="0,8,0,0">
             <Button Content="Clear all" Command="{Binding ClearFiltersCommand}" />
-            <TextBlock Text="Caption is Windows-only for now." VerticalAlignment="Center" Opacity="0.7" />
           </StackPanel>
           <ScrollViewer>
             <StackPanel Spacing="10">
@@ -200,6 +199,31 @@
               <StackPanel>
                 <TextBlock Text="Active filters:" />
                 <ListBox ItemsSource="{Binding ActiveFilters}" MaxHeight="120" />
+              </StackPanel>
+
+              <StackPanel>
+                <CheckBox Content="Caption (burned text)" IsChecked="{Binding UseCaption}" />
+                <StackPanel Spacing="4" Margin="20,4,0,0" IsVisible="{Binding UseCaption}">
+                  <TextBox Text="{Binding CaptionText}" PlaceholderText="Caption text…" MinWidth="260" />
+                  <StackPanel Orientation="Horizontal" Spacing="8">
+                    <TextBlock Text="X:" VerticalAlignment="Center" />
+                    <NumericUpDown Value="{Binding CaptionX}" MinWidth="90" />
+                    <TextBlock Text="Y:" VerticalAlignment="Center" />
+                    <NumericUpDown Value="{Binding CaptionY}" MinWidth="90" />
+                    <TextBlock Text="Size:" VerticalAlignment="Center" />
+                    <NumericUpDown Value="{Binding CaptionFontSize}" Minimum="1" Maximum="500" MinWidth="90" />
+                  </StackPanel>
+                  <StackPanel Orientation="Horizontal" Spacing="8">
+                    <TextBlock Text="Font:" VerticalAlignment="Center" />
+                    <TextBox Text="{Binding CaptionFont}" MinWidth="160" />
+                    <TextBlock Text="Text #:" VerticalAlignment="Center" />
+                    <TextBox Text="{Binding CaptionFg}" MinWidth="90" />
+                    <TextBlock Text="Border #:" VerticalAlignment="Center" />
+                    <TextBox Text="{Binding CaptionBg}" MinWidth="90" />
+                    <TextBlock Text="Border:" VerticalAlignment="Center" />
+                    <NumericUpDown Value="{Binding CaptionBorder}" Minimum="0" Maximum="20" MinWidth="80" />
+                  </StackPanel>
+                </StackPanel>
               </StackPanel>
             </StackPanel>
           </ScrollViewer>

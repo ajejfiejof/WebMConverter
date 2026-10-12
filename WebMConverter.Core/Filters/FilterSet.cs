@@ -6,6 +6,7 @@ namespace WebMConverter.Core.Filters;
 /// </summary>
 public sealed class FilterSet
 {
+    public CaptionFilter? Caption { get; set; }
     public CropFilter? Crop { get; set; }
     public DeinterlaceFilter? Deinterlace { get; set; }
     public DenoiseFilter? Denoise { get; set; }
@@ -23,6 +24,7 @@ public sealed class FilterSet
 
     public void Reset()
     {
+        Caption = null;
         Crop = null;
         Deinterlace = null;
         Denoise = null;
@@ -40,7 +42,7 @@ public sealed class FilterSet
     }
 
     public bool IsEmpty =>
-        Crop is null && Deinterlace is null && Denoise is null && Dub is null
+        Caption is null && Crop is null && Deinterlace is null && Denoise is null && Dub is null
         && Fade is null && Levels is null && MultipleTrim is null && Overlay is null
         && Rate is null && Resize is null && Reverse is null && Rotate is null
         && Subtitle is null && Trim is null;

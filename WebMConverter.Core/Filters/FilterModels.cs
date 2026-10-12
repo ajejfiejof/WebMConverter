@@ -11,8 +11,8 @@ public readonly record struct FilterPoint(int X, int Y);
 /// <summary>
 /// Pure filter parameter models with AviSynth script generation.
 /// Exact port of the model classes in Filters/*.cs (editor Forms excluded).
-/// CaptionFilter is intentionally absent: its state and BeforeEncode render
-/// depend on GDI+ (System.Drawing) and stay Windows-only for now.
+/// CaptionFilter lives in its own file: the GDI+ PNG-overlay variant was
+/// Windows-only, so caption is now a portable drawtext model.
 /// </summary>
 public sealed class TrimFilter
 {

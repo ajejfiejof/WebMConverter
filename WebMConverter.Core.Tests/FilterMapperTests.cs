@@ -59,6 +59,28 @@ public sealed class FilterMapperTests
     }
 
     [Fact]
+    public void CaptionMapsToDrawtext()
+    {
+        var filters = new FilterSet
+        {
+            Caption = new CaptionFilter(new FilterPoint(20, 30), "Hello: world", fontSize: 24),
+        };
+        Assert.Equal(
+            "drawtext=font='DejaVu Sans':text='Hello\\: world':x=20:y=30:fontsize=24:fontcolor=0xFFFFFF:borderw=1:bordercolor=0x000000",
+            FfmpegFilterMapper.GetVideoFilter(filters, 640, 480));
+    }
+
+    [Fact]
+    public void CaptionEscaping()
+    {
+        Assert.Equal(@"a\:b\,c\'d\%e\\f", CaptionFilter.EscapeText("a:b,c'd%e\\f"));
+        Assert.Equal(@"line1\nline2", CaptionFilter.EscapeText("line1\nline2"));
+        Assert.Equal(0xFFFF0000u, CaptionFilter.ParseHexColor("#FF0000"));
+        Assert.Equal(0x80FF0000u, CaptionFilter.ParseHexColor("80FF0000"));
+        Assert.Throws<ArgumentException>(() => CaptionFilter.ParseHexColor("red"));
+    }
+
+    [Fact]
     public void ModelToStringShapes()
     {
         Assert.Equal("Trim(10, 20)", new TrimFilter(10, 20).ToString());
