@@ -161,7 +161,7 @@ namespace WebMConverter
         {
             if (obj.InvokeRequired)
             {
-                var args = new object[0];
+                var args = Array.Empty<object>();
                 obj.Invoke(action, args);
             }
             else

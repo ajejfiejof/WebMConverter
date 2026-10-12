@@ -507,9 +507,9 @@ namespace WebMConverter
             }
 
             // access the values of the numeric boxes to force TextChanged to happen
-            var junk = numericCrf.Value;
-            junk = numericCrfTolerance.Value;
-            junk = numericAudioQuality.Value;
+            _ = numericCrf.Value;
+            _ = numericCrfTolerance.Value;
+            _ = numericAudioQuality.Value;
 
             try
             {
@@ -2374,7 +2374,7 @@ namespace WebMConverter
 
         private string GetTemporaryFile()
         {
-            var temporaryFile = Path.GetTempFileName();
+            var temporaryFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N") + ".tmp");
             _temporaryFilesList.Add(temporaryFile);
             return temporaryFile;
         }

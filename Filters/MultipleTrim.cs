@@ -46,7 +46,6 @@ namespace WebMConverter
         private void MoveListViewItem(ListView sender, MoveDirection direction) // http://stackoverflow.com/a/11623992
         {
             int dir = (int)direction;
-            int opp = dir * -1;
 
             // We don't need to check if it's valid.
 
