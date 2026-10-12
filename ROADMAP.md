@@ -15,10 +15,10 @@
 - [x] Updated all `GetBinariesPath()` calls to use auto-detection
 
 ### 1.2 Executable Extension Handling ✅
-- [x] Updated `VideoDownload.cs` for platform-specific names (yt-dlp.exe vs yt-dlp)
-- [x] Updated `FFmpeg.cs`, `FFplay.cs`, `FFprobe.cs`, `mkvextract.cs` for new folder names
-- [x] Removed hardcoded `.exe` from error messages
-- [x] `GetBinaryPath()` handles platform extensions correctly
+- [x] Updated `VideoDownload.cs` to use platform-appropriate executable name
+- [x] Updated `FFmpeg.cs`, `FFplay.cs`, `FFprobe.cs`, `mkvextract.cs` for platform extensions
+- [x] Updated error messages to not hardcode `.exe`
+- [x] Ensure `GetBinaryPath()` handles all cases correctly
 
 ### 1.3 Abstract Platform-Specific Operations (In Progress)
 - [ ] Create `IPlatformServices` interface for:
@@ -98,31 +98,110 @@
 
 ## Summary of Completed Work
 
-### Platform-Agnostic Binary Structure
+### Phase 1.1 - Platform-Agnostic Binary Structure ✅
 - ✅ Renamed `Binaries/Win32` → `Binaries/x86`
 - ✅ Renamed `Binaries/Win64` → `Binaries/x64`
 - ✅ Updated `GetBinariesPath()` to auto-detect platform folder
-- ✅ Updated all binary path calls
+- ✅ Updated all `GetBinariesPath()` calls
 
-### Executable Extension Handling
+### Phase 1.2 - Executable Extension Handling ✅
 - ✅ Updated `VideoDownload.cs` for platform-specific executable names
 - ✅ Updated `FFmpeg.cs`, `FFplay.cs`, `FFprobe.cs`, `mkvextract.cs` for platform extensions
 - ✅ Removed hardcoded `.exe` from error messages
 - ✅ `GetBinaryPath()` handles platform extensions correctly
 
+### Phase 1.3 - Platform Abstraction Layer (In Progress)
+- ✅ Created `Platform/IPlatformServices.cs` interface
+- ✅ Created `Platform/WindowsPlatformServices.cs` implementation
+- ✅ Created `Platform/LinuxPlatformServices.cs` implementation
+- ✅ Created `Platform/PlatformServices.cs` factory
+- ✅ Updated `MainForm.cs` to use `PlatformServices.Instance` instead of direct NativeMethods/TaskbarManager calls
+- ✅ Updated `ShareXUpload.cs` to use `PlatformServices.Instance.GetRegistryValue()` instead of direct Registry access
+- ⚠️ Dialog files (DownloadDialog.cs, ConverterDialog.cs) need updating - complex due to UI coupling
+
 ### Cross-Platform Runtime Checks (Previously Done)
-- ✅ Removed System.Management dependency for process killing
+- ✅ Removed System.Management dependency
 - ✅ Added Windows platform checks for TaskbarManager initialization
 - ✅ Added null-conditional operators (`?.`) to all TaskbarManager calls
 - ✅ Added Windows platform checks for font loading/unloading
 - ✅ Added Windows platform checks for registry access (ShareX)
 - ✅ Added Windows platform checks for SendMessage calls
 
-### Current Status
-- **Build**: Succeeds with 0 errors
-- **Phase 1.1-1.2**: Complete
-- **Phase 1.3**: In Progress (PlatformServices abstraction - complex, may require redesign)
-- **Phase 2**: BLOCKER - Windows Forms is Windows-only, requires UI framework migration
-- **Phase 3-4**: Not Started
+## Phase 2: Cross-Platform UI Framework Migration (BLOCKER)
 
-The fundamental blocker for full GNU/Linux support is the Windows Forms UI framework. Without rewriting the UI in a cross-platform framework (Avalonia, Eto.Gui, Gtk#, etc.), the application cannot run natively on Linux.
+### 2.1 Framework Selection
+The fundamental blocker is Windows Forms. Options:
+- **Avalonia UI**: Modern, cross-platform, XAML-based. Supports Windows, Linux, macOS. Has learning curve but active development.
+- **Eto.Gui**: Cross-platform, wraps native UI toolkits (GTK#, WinForms, Cocoa). More native feel but potentially more complex.
+- **Gtk#**: Mature Linux native UI. Windows/macOS support via third-party. Limited active development.
+
+### 2.2 UI Migration
+- Migrate `MainForm` to chosen framework
+- Migrate `ConverterDialog` to chosen framework
+- Migrate `DownloadDialog` to chosen framework
+- Migrate all other dialogs and custom controls
+
+### 2.3 Project Configuration
+- Change `WebMConverter.csproj` from `net8.0-windows` to `net8.0`
+- Change `Updater/Updater.csproj` from `net8.0-windows` to `net8.0`
+- Make `Microsoft-WindowsAPICodePack-Shell` conditional on Windows target
+
+## Phase 3: Linux-Specific Features
+
+### 3.1 Font Loading
+- Implement Linux font loading using fontconfig library
+- Test font attachment loading from video files (AviSynth/VapourSynth scripts)
+
+### 3.2 Package Manager Integration
+- Create AppImage/Flatpak/Snap packaging
+- Implement update mechanism using package manager or built-in updater
+- Handle dependencies (ffmpeg, ffprobe, vapoursynth, etc.)
+
+### 3.3 VapourSynth Support
+- Implement VapourSynth script generator (AviSynth alternative)
+- Test VapourSynth plugin loading
+- Document VapourSynth setup for users
+
+## Phase 4: Testing & Polish
+
+### 4.1 Linux Testing
+- Test on major distributions (Ubuntu 22.04+, Fedora 38+, Arch Linux)
+- Test all conversion workflows
+- Test video download functionality (yt-dlp)
+- Test subtitle handling (VobSub, PGS, SSA/ASS)
+
+### 4.2 Documentation
+- Update README with Linux installation instructions
+- Document Linux-specific requirements (ffmpeg, ffprobe, yt-dlp, optional: vapoursynth)
+- Create troubleshooting guide
+
+### 4.3 CI/CD
+- Add Linux build to CI pipeline
+- Add Linux testing to CI pipeline
+- Set up automated package building (AppImage, Flatpak)
+
+## Current Status
+
+### Completed
+- ✅ Phase 1.1: Platform-Agnostic Binary Structure
+- ✅ Phase 1.2: Executable Extension Handling
+- ✅ Phase 1.3: Platform Abstraction Layer (interface + Windows impl + Linux impl + factory)
+- ✅ Updated MainForm.cs to use PlatformServices
+- ✅ Updated ShareXUpload.cs to use PlatformServices
+- ✅ Cross-Platform Runtime Checks (TaskbarManager, fonts, registry, SendMessage)
+
+### In Progress
+- ⚠️ Dialog files (DownloadDialog.cs, ConverterDialog.cs) need PlatformServices integration
+- ⚠️ Full UI framework migration (Phase 2) is the fundamental blocker
+
+### Not Started
+- ❌ Phase 3: Linux-Specific Features
+- ❌ Phase 4: Testing & Polish
+
+## Next Steps
+
+1. **Complete Phase 1.3**: Update DownloadDialog.cs and ConverterDialog.cs to use PlatformServices (taskbar progress, font loading, registry)
+2. **Start Phase 2**: Evaluate UI frameworks (Avalonia recommended) and create proof-of-concept
+3. **Plan Phase 3-4**: Linux font loading, package management, testing infrastructure
+
+The platform abstraction layer (Phase 1.3) is now in place and working for MainForm and ShareXUpload. The remaining dialog files need similar treatment, after which the UI framework migration can proceed.
