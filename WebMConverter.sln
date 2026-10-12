@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMConverter.Avalonia", "W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMConverter.Core", "WebMConverter.Core\WebMConverter.Core.csproj", "{0EBEA9D1-FA96-472B-A17F-E9D5AF901680}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMConverter.Core.Tests", "WebMConverter.Core.Tests\WebMConverter.Core.Tests.csproj", "{BE8EC5B5-7510-41D7-BCD8-23F03CB3DF3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{0EBEA9D1-FA96-472B-A17F-E9D5AF901680}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EBEA9D1-FA96-472B-A17F-E9D5AF901680}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EBEA9D1-FA96-472B-A17F-E9D5AF901680}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE8EC5B5-7510-41D7-BCD8-23F03CB3DF3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE8EC5B5-7510-41D7-BCD8-23F03CB3DF3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE8EC5B5-7510-41D7-BCD8-23F03CB3DF3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE8EC5B5-7510-41D7-BCD8-23F03CB3DF3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

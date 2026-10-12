@@ -5,4 +5,7 @@
     <RootNamespace>WebMConverter.Core</RootNamespace>
     <AssemblyName>WebMConverter.Core</AssemblyName>
   </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="WebMConverter.Core.Tests" />
+  </ItemGroup>
 </Project>
