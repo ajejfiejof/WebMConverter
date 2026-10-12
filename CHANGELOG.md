@@ -1,5 +1,7 @@
 unreleased (Avalonia port)
 ======================
+- Fix crop filter being applied twice in the ffmpeg chain (legacy quirk:
+  the crop-adjusted probe resolution was fed back into the crop mapper).
 - Cross-platform UI: migrated from Windows Forms to Avalonia (Linux/Windows/macOS).
 - All conversion logic extracted into UI-free WebMConverter.Core; argument
   builder is an exact port, verified against legacy vectors and end-to-end

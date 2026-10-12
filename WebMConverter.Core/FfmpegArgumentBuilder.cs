@@ -67,7 +67,11 @@ public static class FfmpegArgumentBuilder
         return duration;
     }
 
-    /// <summary>Output resolution after Resize (and Crop, mirroring legacy).</summary>
+    /// <summary>
+    /// Output resolution after Resize (and Crop). Kept for slice sizing and
+    /// API compatibility; the -vf chain itself takes raw input dimensions so
+    /// crop is applied exactly once (see BuildOptions).
+    /// </summary>
     public static (int Width, int Height) EffectiveResolution(MediaInfo media, FilterSet filters)
     {
         if (filters.Resize is not null)
@@ -212,8 +216,10 @@ public static class FfmpegArgumentBuilder
             framerate = @" -r " + settings.FrameRate;
 
         // Direct ffmpeg path (the AviSynth path is Windows-only and handled elsewhere).
-        var (resW, resH) = EffectiveResolution(media, filters);
-        string vf = FfmpegFilterMapper.GetVideoFilter(filters, resW, resH) ?? "";
+        // NOTE: the crop filter needs the TRUE input dimensions. The legacy app
+        // passed the already crop-adjusted resolution here, applying crop twice.
+        // Fixed: raw media dimensions in, crop applied exactly once by the mapper.
+        string vf = FfmpegFilterMapper.GetVideoFilter(filters, media.Width, media.Height) ?? "";
         string af = FfmpegFilterMapper.GetAudioFilter(filters) ?? "";
         string extraFilters = "";
         if (!string.IsNullOrEmpty(vf))
