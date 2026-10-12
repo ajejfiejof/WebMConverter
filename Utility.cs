@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -124,11 +124,20 @@ namespace WebMConverter
 
         public static string GetCompatiblePath(string input)
         {
-            // AviSynth and various plugins can't deal with utf-8 paths, so we convert the possibly weird path into 8.3 notation
-            var compatible = new StringBuilder(255);
-            NativeMethods.GetShortPathName(@"\\?\" + input, compatible, compatible.Capacity);
-            // the \\?\ is added because GetShortPathName will fail if input is longer than 256 characters otherwise.
-            return compatible.ToString();
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            // AviSynth and various plugins can't deal with utf-8 paths, so we convert the possibly weird path into 8.3 notation when available
+            var compatible = new StringBuilder(1024);
+            int length = NativeMethods.GetShortPathName(@"\\?\" + input, compatible, compatible.Capacity);
+            if (length > 0 && compatible.Length > 0)
+            {
+                var result = compatible.ToString();
+                if (result.StartsWith(@"\\?\"))
+                    result = result.Substring(4);
+                return result;
+            }
+            return input;
         }
     }
     
