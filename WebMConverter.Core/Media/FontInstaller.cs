@@ -39,8 +39,11 @@ public static class FontInstaller
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                log?.Invoke($"Loading font {name}");
-                NativeMethods.AddFontResourceEx(source, 0, IntPtr.Zero);
+                int added = NativeMethods.AddFontResourceEx(source, 0, IntPtr.Zero);
+                if (added == 0)
+                    log?.Invoke($"Loading font {name} reported no additions");
+                else
+                    log?.Invoke($"Loading font {name}");
                 installed.WindowsFiles.Add(source);
                 continue;
             }

@@ -1,14 +1,26 @@
 unreleased (Avalonia port)
 ======================
-- Fix crop filter being applied twice in the ffmpeg chain (legacy quirk:
-  the crop-adjusted probe resolution was fed back into the crop mapper).
 - Cross-platform UI: migrated from Windows Forms to Avalonia (Linux/Windows/macOS).
 - All conversion logic extracted into UI-free WebMConverter.Core; argument
   builder is an exact port, verified against legacy vectors and end-to-end
   with real ffmpeg on Linux (single-pass, HQ two-pass, trim/crop).
 - Settings now stored as JSON instead of WinForms user settings.
 - Removed the built-in auto-updater (use releases / package manager).
-- Platform limits: .avs scripts and Caption filter require Windows.
+- Fix crop filter being applied twice in the ffmpeg chain (legacy quirk:
+  the crop-adjusted probe resolution was fed back into the crop mapper).
+- Caption filter reimplemented cross-platform via ffmpeg drawtext
+  (replaces the Windows-only GDI+ PNG overlay).
+- Font attachments install through fontconfig on Linux/macOS
+  (AddFontResourceEx on Windows); embedded subtitles auto-extract.
+- Input intelligence parity: SAR compensation, FRAPS level fix,
+  container-title default, embedded subtitle picker.
+- VapourSynth: generate .vpy scripts, convert via vspipe piping,
+  Export .vpy button.
+- Packaging: Flatpak manifest, AppImage script, .desktop + AppStream metadata.
+- CI builds/tests on Linux+Windows and publishes a CycloneDX SBOM.
+- Governance: Contributor Covenant Code of Conduct, Conventional Commits
+  (CONTRIBUTING.md), security policy (SECURITY.md).
+- Platform limits: .avs scripts require Windows; .vpy requires VapourSynth.
 
 v2.26.1
 =======
