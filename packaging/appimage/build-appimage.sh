@@ -29,13 +29,27 @@ cp "$ROOT/packaging/icon.png" "$APPDIR/$APPID.png"
 for bin in ffmpeg ffprobe ffplay yt-dlp; do
   if command -v "$bin" >/dev/null; then
     cp "$(command -v "$bin")" "$APPDIR/usr/bin/"
+    # pip-installed scripts often carry a brittle absolute python shebang;
+    # normalize it so the bundle works wherever python3 exists.
+    if head -1 "$APPDIR/usr/bin/$bin" 2>/dev/null | grep -q "^#!.*python"; then
+      sed -i '1s|^#!.*python.*|#!/usr/bin/env python3|' "$APPDIR/usr/bin/$bin"
+    fi
     echo "bundled: $bin"
   else
     echo "warning: $bin not found on host, AppImage will rely on PATH" >&2
   fi
 done
 
+# libcoreclrtraceptprovider is .NET's optional tracing provider and the only
+# file pulling in liblttng-ust (which modern distros ship as .so.1 while
+# .NET 8 wants .so.0). The runtime works fine without it, so drop it before
+# linuxdeploy walks the tree.
+rm -f "$APPDIR/usr/bin/libcoreclrtraceptprovider.so"
+
 linuxdeploy --appdir "$APPDIR" --desktop-file "$APPDIR/$APPID.desktop" --icon-file "$APPDIR/$APPID.png" \
   --output appimage
+
+# linuxdeploy writes the AppImage to the current directory; relocate it.
+mv -f ./*.AppImage "$OUT/" 2>/dev/null || true
 
 echo "AppImage written to $OUT"
