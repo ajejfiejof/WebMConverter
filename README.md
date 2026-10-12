@@ -1,21 +1,24 @@
-WebM Converter [![Build status](https://ci.appveyor.com/api/projects/status/g0gybayk8rw86aa1/branch/master?svg=true)](https://ci.appveyor.com/project/nixxquality/webmconverter/branch/master)
-=============
-A wrapper around ffmpeg and AviSynth made for converting videos to WebM without having to use the command line.
+WebM Converter
+==============
+A GUI wrapper around FFmpeg designed for converting and editing videos for WebM without needing command-line tools.
 
-- **Download it [here][LatestDownload].**
-- And I shouldn't have to tell you to extract the zip file first.
+### Features
+* **Modern Codecs**: Supports **AV1** (`libsvtav1`) and **VP9** (`libvpx-vp9`) with high-fidelity **Opus** audio, with fallback to legacy VP8/Vorbis.
+* **Standalone & Portable**: Powered by native FFmpeg filtergraphs for cropping, resizing, trimming, rotating, captions, deinterlacing, and subtitles. No external AviSynth installation required for standard conversions.
+* **Optional AviSynth+ Support**: Power users can still load `.avs` scripts and write custom AviSynth expressions when AviSynth+ is installed.
+* **Modern Windows Integration**:
+  * Built on **.NET 8** for high performance and 64-bit architecture.
+  * **Per-Monitor V2 DPI Awareness** for sharp scaling on modern 1440p and 4K displays.
+  * Long path support (>260 characters).
+* **Video Downloader**: Built-in support for downloading online videos via **yt-dlp** (with youtube-dl fallback).
+* **Automated Updates**: Seamless updates directly from GitHub Releases.
 
-Important to know:
-* Requires .NET Framework 4.5 (Windows 7 comes with 3.5, so you might want to [update][DotNet45])
-* Requires [AviSynth][AviSynth] (2.6.0, 32-bit)
-* Already includes ffmpeg
-* Only works on Windows (I assume Linux users don't need GUIs)
+### Requirements
+* Windows 10 or Windows 11 (64-bit recommended)
+* [.NET 8 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0)
+* *(Optional)* [AviSynth+](https://github.com/AviSynth/AviSynthPlus/releases) only if you work with `.avs` script files.
 
-This software is released under the MIT license. See LICENSE.md.
+### License
+Released under the MIT License. See [LICENSE.md](LICENSE.md).
 
-If you have any issues with this program, you may report them on [GitGud][NewIssue] or you can email me at `nixx@is-fantabulo.us`.
-
- [LatestDownload]: https://nixx.is-fantabulo.us/WebM%20Converter/latest.zip
- [DotNet45]: https://www.microsoft.com/en-us/download/details.aspx?id=30653
- [AviSynth]: http://avisynth.nl/index.php/Main_Page#Official_builds
- [NewIssue]: https://gitgud.io/nixx/WebMConverter/issues/new
+Issues and pull requests can be opened at [https://github.com/ajejfiejof/WebMConverter](https://github.com/ajejfiejof/WebMConverter).
