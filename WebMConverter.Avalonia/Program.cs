@@ -3,10 +3,10 @@ using Avalonia;
 
 namespace WebMConverter.Avalonia;
 
-internal sealed class Program
+internal static class Program
 {
-    // Avalonia entry point. Do not call any WinForms/WPF APIs from here;
-    // this head must stay runnable on Linux (net8.0, no Windows targeting).
+    // Cross-platform entry point. Keep WinForms and WPF APIs out of this
+    // head so the app starts on Linux, macOS, and Windows alike.
     [STAThread]
     public static void Main(string[] args) => BuildAvaloniaApp()
         .StartWithClassicDesktopLifetime(args);
