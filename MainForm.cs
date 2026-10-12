@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -1291,6 +1291,14 @@ namespace WebMConverter
 
             if (Path.GetExtension(path) == ".avs")
             {
+                if (!Program.AviSynthAvailable)
+                {
+                    MessageBox.Show(
+                        $"Loading an AviSynth (.avs) script requires AviSynth, but AviSynth was not detected on this system.{Environment.NewLine}Please install AviSynth+ to open .avs files directly, or load a standard video file instead.",
+                        "AviSynth Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 Program.InputFile = path;
                 Program.InputType = FileType.Avisynth;
 

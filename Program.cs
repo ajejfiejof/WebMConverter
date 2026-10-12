@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -65,22 +65,22 @@ namespace WebMConverter
         public static Dictionary<int, Tuple<string, SubtitleType, string>> SubtitleTracks; // stream id, <tag:title OR codec_name, textsub/vobsub, extension>
         public static List<string> AttachmentList;
 
+        public static bool AviSynthAvailable { get; private set; }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            // Check for AviSynth
-            if (NativeMethods.LoadLibrary("avisynth") == IntPtr.Zero)
+            // Check for AviSynth availability without preventing application startup
+            try
             {
-                var errorMessage = new Win32Exception(Marshal.GetLastWin32Error()).Message;
-                MessageBox.Show(
-                   $"Failed to load AviSynth: {errorMessage}.{Environment.NewLine}" + 
-                    "I'll open the download page, go ahead and install it.",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Process.Start("http://avisynth.nl/index.php/Main_Page#Official_builds");
-                return;
+                AviSynthAvailable = NativeMethods.LoadLibrary("avisynth") != IntPtr.Zero;
+            }
+            catch
+            {
+                AviSynthAvailable = false;
             }
 
             // Upgrade Application Settings if applicable
@@ -91,7 +91,14 @@ namespace WebMConverter
                 Properties.Settings.Default.Save();
             }
 
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            try
+            {
+                ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+            }
+            catch
+            {
+                // Rely on system default
+            }
 
             Task.Factory.StartNew(VideoDownload.CheckEnabled);
             Task.Factory.StartNew(ShareXUpload.CheckEnabled);
