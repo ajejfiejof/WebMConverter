@@ -390,7 +390,7 @@ namespace WebMConverter
 
         private void opusQualityScalingTooltip()
         {
-            if (boxNGOV.Checked && boxAudio.Checked && boxVariable.Checked)
+            if ((boxNGOV.Checked || boxAV1.Checked) && boxAudio.Checked && boxVariable.Checked)
                 showToolTip("Audio quality scaling disabled -- Opus doesn't support it!", 5000);
         }
 
@@ -1196,11 +1196,25 @@ namespace WebMConverter
             UpdateArguments(sender, e);
         }
 
+        private void boxAV1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (boxAV1.Checked)
+            {
+                boxNGOV.Checked = false;
+            }
+            numericAudioQuality.Enabled = !boxAV1.Checked && !boxNGOV.Checked;
+            UpdateArguments(sender, e);
+            opusQualityScalingTooltip();
+        }
+
         private void boxNGOV_CheckedChanged(object sender, EventArgs e)
         {
-            numericAudioQuality.Enabled = !(sender as CheckBox).Checked;
+            if (boxNGOV.Checked)
+            {
+                boxAV1.Checked = false;
+            }
+            numericAudioQuality.Enabled = !(sender as CheckBox).Checked && !boxAV1.Checked;
             UpdateArguments(sender, e);
-
             opusQualityScalingTooltip();
         }
 
@@ -1221,8 +1235,10 @@ namespace WebMConverter
             boxHQ.Checked =
             boxDeinterlace.Checked =
             boxDenoise.Checked =
-            boxNGOV.Checked =
+            boxAV1.Checked =
                 false;
+
+            boxNGOV.Checked = true; // VP9 modern WebM standard default for 2026
 
             boxAudio.Checked = Properties.Settings.Default.AudioEnabled;
 
@@ -1984,7 +2000,11 @@ namespace WebMConverter
                 arguments[1] = string.Format(Template, output, options, string.Format(PassArgument, 2, passlogfile));
 
                 if (!arguments[0].Contains("-an")) // skip audio encoding on the first pass
-                    arguments[0] = arguments[0].Replace("-c:v libvpx", "-an -c:v libvpx"); // ugly as hell
+                {
+                    arguments[0] = arguments[0].Replace("-c:v libvpx-vp9", "-an -c:v libvpx-vp9")
+                                               .Replace("-c:v libsvtav1", "-an -c:v libsvtav1")
+                                               .Replace("-c:v libvpx", "-an -c:v libvpx");
+                }
             }
 
             new ConverterDialog(conversionInput, arguments, output).ShowDialog(this);
@@ -2045,27 +2065,6 @@ namespace WebMConverter
                             throw new ArgumentException("Your size constraints are too tight! Trim your video or lower your audio bitrate.");
                     }
 
-                    /*
-                     * ffmpeg doesn't let you input the cbr arguments manually (I think) so we do a bit of math here.
-                     * ffmpeg lists this in the documentation (https://ffmpeg.org/ffmpeg-all.html#libvpx):
-                     *  rc_buf_sz         = (bufsize * 1000 / vb)
-                     *  rc_buf_optimal_sz = (bufsize * 1000 / vb * 5 / 6)
-                     *  rc_buf_initial_sz = (rc_init_occupancy * 1000 / vb)
-                     * libvpx lists this in the documentation (https://www.webmproject.org/docs/encoder-parameters/#vbr-cbr-and-cq-mode):
-                     *  --buf-initial-sz=<arg>
-                     *  --buf-optimal-sz=<arg>
-                     *  --buf-sz=<arg>
-                     *  These three parameters set (respectively) the initial assumed buffer level,
-                     *   the optimal level and an upper limit that the codec should try not to exceed.
-                     *  The numbers given are in 'milliseconds worth of data' so the actual number of bits
-                     *   that these number represent depends also on the target bit rate that the user has set.
-                     *  Typical recommended values for these three parameters might be 4000, 5000 and 6000 ms, respectively.
-                     * a bit of algebra leads us to the following conclusion:
-                     *  bufsize           = vb * 6
-                     *  rc_init_occupancy = vb * 4
-                     * However, because ffmpeg is really weird or something, init_occupancy doesn't seem to work properly
-                     *  unless we divide bufsize by 10. Don't ask me why! I don't know!
-                     */
                     var bufsize = videobitrate * 6 / 10;
                     var initoccupancy = videobitrate * 4;
 
@@ -2079,7 +2078,7 @@ namespace WebMConverter
                     var qmax = Math.Min(63, (int)(numericCrf.Value + numericCrfTolerance.Value));
 
                     qualityarguments = string.Format(VariableVideoArguments, qmin, numericCrf.Value, qmax);
-                    if (boxAudio.Checked &! boxNGOV.Checked) // only for vorbis
+                    if (boxAudio.Checked && !boxNGOV.Checked && !boxAV1.Checked) // only for vorbis
                         qualityarguments += string.Format(VariableAudioArguments, numericAudioQuality.Value);
 
                     break;
@@ -2096,11 +2095,25 @@ namespace WebMConverter
             if (boxHQ.Checked)
                 hq = @" -lag-in-frames 16 -auto-alt-ref 1";
 
-            var vcodec = boxNGOV.Checked ? @"libvpx-vp9" : @"libvpx";
-            var acodec = boxNGOV.Checked ? @"libopus" : @"libvorbis";
-
-            if (vcodec == "libvpx-vp9")
+            string vcodec;
+            string acodec;
+            if (boxAV1.Checked)
+            {
+                vcodec = "libsvtav1";
+                acodec = "libopus";
+                hq += " -preset 6 -svtav1-params tune=0";
+            }
+            else if (boxNGOV.Checked)
+            {
+                vcodec = "libvpx-vp9";
+                acodec = "libopus";
                 hq += " -row-mt 1";
+            }
+            else
+            {
+                vcodec = "libvpx";
+                acodec = "libvorbis";
+            }
 
             string audio;
             if (boxAudio.Checked)

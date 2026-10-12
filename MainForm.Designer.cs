@@ -86,6 +86,7 @@ namespace WebMConverter
             System.Windows.Forms.Label labelEncodingFrameRateHint;
             System.Windows.Forms.Label labelEncodingFrameRate;
             System.Windows.Forms.Label labelEncodingNGOVHint;
+            System.Windows.Forms.Label labelEncodingAV1Hint;
             System.Windows.Forms.Label labelEncodingThreads;
             System.Windows.Forms.Label labelEncodingThreadsHint;
             System.Windows.Forms.Label labelEncodingSlices;
@@ -138,6 +139,8 @@ namespace WebMConverter
             this.boxDenoise = new System.Windows.Forms.CheckBox();
             this.boxFrameRate = new System.Windows.Forms.TextBox();
             this.boxNGOV = new System.Windows.Forms.CheckBox();
+            this.boxAV1 = new System.Windows.Forms.CheckBox();
+            labelEncodingAV1Hint = new System.Windows.Forms.Label();
             this.trackThreads = new System.Windows.Forms.TrackBar();
             this.labelThreads = new System.Windows.Forms.Label();
             this.trackSlices = new System.Windows.Forms.TrackBar();
@@ -1579,6 +1582,8 @@ namespace WebMConverter
             tableAdvancedEncoding.Controls.Add(labelEncodingFrameRate, 0, 2);
             tableAdvancedEncoding.Controls.Add(labelEncodingNGOVHint, 3, 3);
             tableAdvancedEncoding.Controls.Add(this.boxNGOV, 0, 3);
+            tableAdvancedEncoding.Controls.Add(labelEncodingAV1Hint, 3, 4);
+            tableAdvancedEncoding.Controls.Add(this.boxAV1, 0, 4);
             tableAdvancedEncoding.Controls.Add(labelEncodingThreads, 0, 0);
             tableAdvancedEncoding.Controls.Add(this.trackThreads, 1, 0);
             tableAdvancedEncoding.Controls.Add(this.labelThreads, 2, 0);
@@ -1587,19 +1592,20 @@ namespace WebMConverter
             tableAdvancedEncoding.Controls.Add(this.trackSlices, 1, 1);
             tableAdvancedEncoding.Controls.Add(this.labelSlices, 2, 1);
             tableAdvancedEncoding.Controls.Add(labelEncodingSlicesHint, 3, 1);
-            tableAdvancedEncoding.Controls.Add(labelEncodingArguments, 0, 4);
-            tableAdvancedEncoding.Controls.Add(this.boxArguments, 1, 4);
+            tableAdvancedEncoding.Controls.Add(labelEncodingArguments, 0, 5);
+            tableAdvancedEncoding.Controls.Add(this.boxArguments, 1, 5);
             tableAdvancedEncoding.Dock = System.Windows.Forms.DockStyle.Fill;
             tableAdvancedEncoding.Location = new System.Drawing.Point(3, 16);
             tableAdvancedEncoding.Name = "tableAdvancedEncoding";
-            tableAdvancedEncoding.RowCount = 5;
+            tableAdvancedEncoding.RowCount = 6;
+            tableAdvancedEncoding.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             tableAdvancedEncoding.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             tableAdvancedEncoding.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             tableAdvancedEncoding.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             tableAdvancedEncoding.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             tableAdvancedEncoding.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             tableAdvancedEncoding.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableAdvancedEncoding.Size = new System.Drawing.Size(1035, 138);
+            tableAdvancedEncoding.Size = new System.Drawing.Size(1035, 166);
             tableAdvancedEncoding.TabIndex = 0;
             // 
             // boxFrameRate
@@ -1645,9 +1651,7 @@ namespace WebMConverter
             labelEncodingNGOVHint.Name = "labelEncodingNGOVHint";
             labelEncodingNGOVHint.Size = new System.Drawing.Size(802, 28);
             labelEncodingNGOVHint.TabIndex = 0;
-            labelEncodingNGOVHint.Text = "Use the next-gen VP9/Opus encoders instead of the standard VP8/Vorbis. Will resul" +
-    "t in extremely long encoding times and less compatibility.\r\nKeep this disabled u" +
-    "ntil Moot allows VP9 WebMs.";
+            labelEncodingNGOVHint.Text = "Use VP9/Opus (standard modern WebM format) instead of legacy VP8/Vorbis.";
             labelEncodingNGOVHint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // boxNGOV
@@ -1664,6 +1668,32 @@ namespace WebMConverter
             this.boxNGOV.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.boxNGOV.UseVisualStyleBackColor = true;
             this.boxNGOV.CheckedChanged += new System.EventHandler(this.boxNGOV_CheckedChanged);
+            // 
+            // labelEncodingAV1Hint
+            // 
+            labelEncodingAV1Hint.AutoSize = true;
+            labelEncodingAV1Hint.Dock = System.Windows.Forms.DockStyle.Fill;
+            labelEncodingAV1Hint.Location = new System.Drawing.Point(230, 112);
+            labelEncodingAV1Hint.Name = "labelEncodingAV1Hint";
+            labelEncodingAV1Hint.Size = new System.Drawing.Size(802, 28);
+            labelEncodingAV1Hint.TabIndex = 9;
+            labelEncodingAV1Hint.Text = "Use modern AV1 encoding (via SVT-AV1) for superior quality and compression efficiency.";
+            labelEncodingAV1Hint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // boxAV1
+            // 
+            this.boxAV1.AutoSize = true;
+            this.boxAV1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            tableAdvancedEncoding.SetColumnSpan(this.boxAV1, 3);
+            this.boxAV1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.boxAV1.Location = new System.Drawing.Point(3, 115);
+            this.boxAV1.Name = "boxAV1";
+            this.boxAV1.Size = new System.Drawing.Size(221, 22);
+            this.boxAV1.TabIndex = 5;
+            this.boxAV1.Text = "AV1/Opus (Next-Gen):";
+            this.boxAV1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.boxAV1.UseVisualStyleBackColor = true;
+            this.boxAV1.CheckedChanged += new System.EventHandler(this.boxAV1_CheckedChanged);
             // 
             // labelEncodingThreads
             // 
@@ -2004,6 +2034,7 @@ namespace WebMConverter
         private System.Windows.Forms.TrackBar trackThreads;
         private System.Windows.Forms.Label labelThreads;
         private System.Windows.Forms.CheckBox boxNGOV;
+        private System.Windows.Forms.CheckBox boxAV1;
         private System.Windows.Forms.RadioButton boxConstant;
         private System.Windows.Forms.RadioButton boxVariable;
         private System.Windows.Forms.TableLayoutPanel tableVideoConstantOptions;
