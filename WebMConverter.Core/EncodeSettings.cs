@@ -50,6 +50,13 @@ public sealed class MediaInfo
         ? Math.Max(1, (int)Math.Round(DurationSeconds * Fps))
         : 0;
 
+    /// <summary>SAR-compensated dimensions when the container needs it (legacy parity).</summary>
+    public int? SarCompensatedWidth { get; set; }
+    public int? SarCompensatedHeight { get; set; }
+    public bool IsFrapsYuvj420p { get; set; }
+    public bool HasWeirdPixelFormat { get; set; }
+    public string? ContainerTitle { get; set; }
+
     public TimeSpan FrameToTime(int frame) =>
         Fps > 0 ? TimeSpan.FromSeconds(frame / Fps) : TimeSpan.Zero;
 }

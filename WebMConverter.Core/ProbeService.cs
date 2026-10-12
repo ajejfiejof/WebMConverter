@@ -89,6 +89,31 @@ public static class ProbeService
 
             info.HasAudio = nav.SelectSingleNode("//ffprobe/streams/stream[@codec_type='audio']") is not null;
 
+            string codec = video.GetAttribute("codec_name", "");
+            string pixFmt = video.GetAttribute("pix_fmt", "");
+            if (codec == "fraps" && pixFmt == "yuvj420p")
+                info.IsFrapsYuvj420p = true;
+            if (pixFmt.StartsWith("yuv444p"))
+                info.HasWeirdPixelFormat = true;
+
+            var sarComp = TryCompensateSar(
+                info.Width, info.Height,
+                video.GetAttribute("sample_aspect_ratio", ""),
+                video.GetAttribute("display_aspect_ratio", ""));
+            if (sarComp is not null)
+            {
+                info.SarCompensatedWidth = sarComp.Value.Width;
+                info.SarCompensatedHeight = sarComp.Value.Height;
+            }
+
+            var titleTag = nav.SelectSingleNode("//ffprobe/format/tag[@key='title']");
+            if (titleTag is not null)
+            {
+                string title = titleTag.GetAttribute("value", "");
+                if (!string.IsNullOrEmpty(title))
+                    info.ContainerTitle = title;
+            }
+
             if (info.Width <= 0 || info.Height <= 0)
                 throw new ProbeException($"ffprobe returned no resolution for '{inputFile}'.", xml);
 
@@ -102,6 +127,35 @@ public static class ProbeService
         {
             throw new ProbeException($"Failed to probe file '{inputFile}': {ex.Message}", xml);
         }
+    }
+
+    /// <summary>
+    /// Legacy SAR compensation: non-1:1 sample aspect ratios get a resize to
+    /// the display dimensions. Returns null when no compensation is needed.
+    /// </summary>
+    internal static (int Width, int Height)? TryCompensateSar(int width, int height, string sar, string dar)
+    {
+        string[] s = (sar ?? "").Split(':');
+        string[] d = (dar ?? "").Split(':');
+        if (s.Length != 2 || d.Length != 2)
+            return null;
+        if (!float.TryParse(s[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float sarNum)
+            || !float.TryParse(s[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float sarDen)
+            || !float.TryParse(d[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float darNum)
+            || !float.TryParse(d[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float darDen))
+            return null;
+        if ((sarNum == 1 && sarDen == 1) || sarNum == 0 || sarDen == 0)
+            return null;
+        if (sarDen == 0)
+            return null;
+
+        int compW = width;
+        int compH = height;
+        if (darNum < darDen)
+            compH = (int)(compH / (sarNum / sarDen));
+        else
+            compW = (int)(compW * (sarNum / sarDen));
+        return (compW, compH);
     }
 
     internal static double ParseFrameRate(string value)
